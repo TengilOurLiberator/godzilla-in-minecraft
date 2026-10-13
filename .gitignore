@@ -1,0 +1,13 @@
+# third-party programs and the running server (Minecraft, Fabric, Vivecraft, the JDK are not ours to redistribute)
+/downloads/
+/server/
+/game/
+/jdk/
+
+# build output and scratch
+/mod/build/
+/mod/.gradle/
+/mod/run/
+/work/
+__pycache__/
+*.wav
