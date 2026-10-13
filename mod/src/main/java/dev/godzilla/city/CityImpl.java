@@ -264,6 +264,9 @@ public final class CityImpl implements City {
 		if (failure.get() != null) {
 			throw new IllegalStateException("city stamp failed while building sections", failure.get());
 		}
+		for (LevelChunk c : chunks) {
+			c.markUnsaved();
+		}
 		long t3 = System.nanoTime();
 
 		// 4. light
@@ -336,8 +339,7 @@ public final class CityImpl implements City {
 		chunk.getSkyLightSources().fillFrom(chunk);
 		Heightmap.primeHeightmaps(chunk, EnumSet.of(Heightmap.Types.MOTION_BLOCKING, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
 				Heightmap.Types.OCEAN_FLOOR, Heightmap.Types.WORLD_SURFACE));
-		chunk.markUnsaved();
-		return changed;
+		return changed; // markUnsaved is NOT thread safe (ChunkMap.unsavedChunks): the caller does it after the parallel loop
 	}
 
 	private static int intern(List<BlockState> entries, IdentityHashMap<BlockState, Integer> ids, BlockState s) {
