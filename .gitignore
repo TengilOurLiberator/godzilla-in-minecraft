@@ -11,3 +11,6 @@
 /work/
 __pycache__/
 *.wav
+
+# which instance this checkout/worktree uses (tools\dev.ps1 instance N)
+/.gz_instance

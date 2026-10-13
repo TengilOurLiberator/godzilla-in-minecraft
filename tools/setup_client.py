@@ -18,7 +18,11 @@ entry that would be added is printed. The first version of the file is kept as l
 """
 import argparse, datetime, json, os, shutil, struct
 
-ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+import sys
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))     # python -I does not add the script's folder
+import gz_env  # noqa: E402
+
+ROOT = gz_env.MAIN          # the real VR client folder game\, downloads\ and server\ are shared and live in the main checkout
 GAME = os.path.join(ROOT, "game")
 DOWNLOADS = os.path.join(ROOT, "downloads")
 GENESIS_GAME = r"D:\genesis-vr\game"
@@ -75,7 +79,7 @@ def install_mods(game):
     for f in sorted(os.listdir(DOWNLOADS)):
         if f.startswith(("fabric-api", "vivecraft")) and f.endswith(".jar"):
             wanted.append(os.path.join(DOWNLOADS, f))
-    libs = os.path.join(ROOT, "mod", "build", "libs")
+    libs = gz_env.LIBS if os.path.isdir(gz_env.LIBS) else os.path.join(ROOT, "mod", "build", "libs")
     ours = sorted((f for f in os.listdir(libs) if f.startswith("godzilla-") and f.endswith(".jar") and "-sources" not in f),
                   key=lambda f: os.path.getmtime(os.path.join(libs, f)), reverse=True) if os.path.isdir(libs) else []
     if ours:

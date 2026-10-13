@@ -3,11 +3,15 @@
     D:\\voice-assistant\\.venv\\Scripts\\python.exe -I tools\\rcon.py "list" "godzilla ping"
 
 Each argument is one command; output is printed as "> command" followed by the reply.
+Talks to this instance's server (set $env:GZ_INSTANCE=N, or tools\dev.ps1 instance N once per worktree; default instance 0).
 As a module:  from rcon import Rcon; r = Rcon(); print(r.cmd("list"))
 """
 import os, socket, struct, sys
 
-SERVER = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "server")
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))     # python -I does not add the script's folder
+import gz_env  # noqa: E402  (instance selection: GZ_INSTANCE or <worktree>\.gz_instance; default 0)
+
+SERVER = gz_env.SERVER_DIR      # this instance's server folder: its server.properties has the RCON port and password
 
 
 def server_properties():

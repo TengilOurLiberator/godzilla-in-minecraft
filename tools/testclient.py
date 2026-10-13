@@ -1,4 +1,4 @@
-﻿"""A flat, silent, offline desktop Minecraft client for automated tests (NO Vivecraft). It launches through the Fabric loader
+"""A flat, silent, offline desktop Minecraft client for automated tests (NO Vivecraft). One per instance (GZ_INSTANCE, see tools\\gz_env.py). It launches through the Fabric loader
 with fabric-api + our mod + the Patrix pack, auto-joins the local server, and saves screenshots of the game window.
 
     D:\\voice-assistant\\.venv\\Scripts\\python.exe -I tools\\testclient.py start [--port 25567] [--name Tester] [--width 1280 --height 720] [--no-wait]
@@ -11,19 +11,23 @@ The server must run with online-mode=false:  powershell tools\\server.ps1 -Offli
 Typical script:  server.ps1 -Offline -Background; testclient.py start; rcon.py "gamemode creative Tester" "tp Tester ..." ;
                  testclient.py shot a; testclient.py stop; server.ps1 -Stop
 
-The game runs from its own scratch folder work\\testgame (options are rewritten on every start: silent, no bobbing/fov effects).
+The game runs from its own scratch folder work\\testgame, or work\\inst<N>\\testgame for instance N (options are rewritten on every start: silent, no bobbing/fov effects).
 The client process is detached: it keeps running after this script returns, until `stop`.
 """
 import argparse, ctypes, ctypes.wintypes as wt, glob, json, os, re, shutil, subprocess, sys, time
 
-ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-WORK = os.path.join(ROOT, "work")
-GAME = os.path.join(WORK, "testgame")
-SHOTS = os.path.join(WORK, "shots")
-STATE = os.path.join(WORK, "testclient.json")
-DOWNLOADS = os.path.join(ROOT, "downloads")
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))     # python -I does not add the script's folder
+import gz_env  # noqa: E402
+
+# Instance and checkout (tools\gz_env.py): GZ_INSTANCE=N (or <worktree>\.gz_instance) selects work\inst<N>\{testgame,shots},
+# port 25567+N, player Tester<N>; instance 0 is the classic layout. Mod jar = THIS checkout's build; jdk, downloads = main checkout.
+INSTANCE = gz_env.INSTANCE
+GAME = gz_env.GAME_DIR
+SHOTS = gz_env.SHOTS
+STATE = os.path.join(gz_env.WORK, "testclient.json")
+DOWNLOADS = gz_env.DOWNLOADS
 MC = os.path.join(os.environ["APPDATA"], ".minecraft")                       # read-only use of the installed game
-JAVA = os.path.join(ROOT, "jdk", "bin", "java.exe")
+JAVA = os.path.join(gz_env.JDK, "bin", "java.exe")
 VERSION = "26.3"
 FABRIC_PROFILE = "fabric-loader-0.19.5-26.3"
 PATRIX = "Patrix_26.3_32x_basic.zip"
@@ -63,11 +67,11 @@ def prepare(width, height, vivecraft=False):
     for f in os.listdir(DOWNLOADS):                           # fabric-api only: NO vivecraft in the flat client (unless --vivecraft)
         if (f.startswith("fabric-api") or (vivecraft and f.startswith("vivecraft"))) and f.endswith(".jar"):
             shutil.copy2(os.path.join(DOWNLOADS, f), mods)
-    libs = os.path.join(ROOT, "mod", "build", "libs")
+    libs = gz_env.LIBS
     ours = sorted((f for f in os.listdir(libs) if f.startswith("godzilla-") and f.endswith(".jar") and "-sources" not in f),
                   key=lambda f: os.path.getmtime(os.path.join(libs, f)), reverse=True) if os.path.isdir(libs) else []
     if not ours:
-        sys.exit("no godzilla jar in mod\\build\\libs: run tools\\build.ps1 first")
+        sys.exit(f"no godzilla jar in {libs}: run tools\\build.ps1 first")
     shutil.copy2(os.path.join(libs, ours[0]), mods)
     rp = os.path.join(GAME, "resourcepacks")
     os.makedirs(rp, exist_ok=True)
@@ -126,11 +130,16 @@ def load_state():
 
 
 def pid_alive(pid):
-    out = subprocess.run(["tasklist", "/FI", f"PID eq {pid}", "/NH", "/FO", "CSV"], capture_output=True, text=True).stdout
-    return f'"{pid}"' in out
+    """True only if pid is a live process whose command line names THIS instance's game folder (a stale or reused pid is not ours)."""
+    out = subprocess.run(["powershell", "-NoProfile", "-Command",
+                          f"(Get-CimInstance Win32_Process -Filter 'ProcessId={int(pid)}' -ErrorAction SilentlyContinue).CommandLine"],
+                         capture_output=True, text=True).stdout
+    return os.path.normcase(GAME) in os.path.normcase(out)
 
 
 def game_window(pid):
+    """The biggest visible top-level window owned by the process pid (found by process id, never by title, so several clients
+    on one machine are never mixed up)."""
     found = []
 
     @ctypes.WINFUNCTYPE(ctypes.c_bool, ctypes.c_void_p, ctypes.c_void_p)
@@ -139,14 +148,15 @@ def game_window(pid):
             return True
         p = wt.DWORD()
         user32.GetWindowThreadProcessId(hwnd, ctypes.byref(p))
-        buf = ctypes.create_unicode_buffer(200)
-        user32.GetWindowTextW(hwnd, buf, 200)
-        if p.value == pid and buf.value.startswith("Minecraft"):
-            found.append(hwnd)
+        if p.value == pid:
+            rc = (ctypes.c_long * 4)()
+            user32.GetClientRect(ctypes.c_void_p(hwnd), rc)
+            found.append((rc[2] * rc[3], hwnd))
         return True
 
     user32.EnumWindows(each, 0)
-    return found[0] if found else None
+    found = [f for f in found if f[0] > 0]
+    return max(found)[1] if found else None
 
 
 def client_size(hwnd):
@@ -263,7 +273,7 @@ def cmd_shot(a):
             img, how = alt, "F2 (PrintWindow was uniform)"
     out = os.path.join(SHOTS, a.name + ".png")
     img.save(out)
-    print(f"{out}  {img.size[0]}x{img.size[1]}  via {how}" + ("  WARNING: picture is uniform" if uniform(img) else ""))
+    print(f"{out}  {img.size[0]}x{img.size[1]}  via {how}  (instance {INSTANCE}, client pid {st['pid']}, window {hwnd:#x})" + ("  WARNING: picture is uniform" if uniform(img) else ""))
 
 
 def cmd_status(a):
@@ -271,7 +281,7 @@ def cmd_status(a):
     if not st or not pid_alive(st["pid"]):
         print("not running")
         return
-    print(f"running pid {st['pid']}, joined={joined(client_log())}, window={'yes' if game_window(st['pid']) else 'no'}")
+    print(f"instance {INSTANCE}: running pid {st['pid']}, joined={joined(client_log())}, window={'yes' if game_window(st['pid']) else 'no'}")
 
 
 def cmd_log(a):
@@ -282,9 +292,9 @@ def cmd_stop(a):
     st = load_state()
     if st and pid_alive(st["pid"]):
         subprocess.run(["taskkill", "/F", "/T", "/PID", str(st["pid"])], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
-        print("test client stopped")
+        print(f"test client of instance {INSTANCE} stopped")
     else:
-        print("test client was not running")
+        print(f"test client of instance {INSTANCE} was not running")
     try:
         os.remove(STATE)
     except OSError:
@@ -295,11 +305,11 @@ def main():
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     sub = ap.add_subparsers(dest="cmd", required=True)
     s = sub.add_parser("start")
-    s.add_argument("--port", type=int, default=25567)
-    s.add_argument("--name", default="Tester")
+    s.add_argument("--port", type=int, default=gz_env.PORT)
+    s.add_argument("--name", default=gz_env.NAME)
     s.add_argument("--width", type=int, default=1280)
     s.add_argument("--height", type=int, default=720)
-    s.add_argument("--xmx", default="4G")
+    s.add_argument("--xmx", default=gz_env.CLIENT_XMX)
     s.add_argument("--timeout", type=int, default=240)
     s.add_argument("--settle", type=float, default=8.0, help="seconds to wait after joining so chunks and entities arrive")
     s.add_argument("--no-wait", action="store_true")

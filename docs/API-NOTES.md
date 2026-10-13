@@ -16,29 +16,60 @@ in the sources (section 2) before writing calls from memory: 26.x differs from m
 | Vivecraft | `compileOnly` and `clientCompileOnly` of `downloads\vivecraft-26.3-1.3.17-fabric.jar` (a plain `files(...)`), `suggests` (not `depends`) in `fabric.mod.json` |
 | Generated content | `processResources` copies `city\out\tokyo.gzc` + `tokyo.json` to `data/godzilla/city/` and `audio\out\**` (except `*.wav`) to `assets/godzilla/` (`sounds.json` ends up at `assets/godzilla/sounds.json`, ogg files under `assets/godzilla/sounds/`). A missing folder is fine (`from()` of a missing directory is empty). Do NOT add `inputs.dir(...)` for them: that fails when the folder is absent |
 
-Scripts (run from anywhere; Python is `D:\voice-assistant\.venv\Scripts\python.exe -I`):
+### Instances and worktrees (several agents at once)
+
+Every script works on one **instance** (0..9) of one **checkout** (the main checkout `D:\godzilla-vr` or a git worktree of it).
+The checkout is the folder the script lives in: its `mod\src` is compiled and its `mod\build\libs` jar is deployed.
+The shared untracked things always come from the main checkout, whatever the checkout: `jdk`, `downloads` (Vivecraft jar, Patrix,
+fabric-api), the template `server`, `work`, `game`. `GZ_MAIN` overrides the main checkout path (not needed).
+
+| | instance 0 (main checkout, classic) | instance N = 1..9 (one per worktree) |
+|---|---|---|
+| server folder | `D:\godzilla-vr\server` | `D:\godzilla-vr\work\inst<N>\server` (created on first use from a copy of `server\` without world/logs/godzilla jar) |
+| server / RCON port | 25567 / 25577 | 25567+N / 25577+N |
+| world | `server\godzilla-world` | `work\inst<N>\server\godzilla-world` |
+| test client folder, screenshots | `work\testgame`, `work\shots` | `work\inst<N>\testgame`, `work\inst<N>\shots` |
+| player name | `Tester` | `Tester<N>` (use it in every RCON command) |
+| memory | server 4-10G, client 4G | server `-Xmx3G`, client `-Xmx3G`, Gradle JVM `-Xmx2G` |
+| jar deployed by build.ps1 | `server\mods`, `work\testgame\mods`, `game\mods` (the VR client) | the instance's `server\mods` and `testgame\mods` |
+
+The instance comes from `$env:GZ_INSTANCE`, else from the file `<worktree>\.gz_instance` (git-ignored), else 0. Because each tool call
+may be a fresh shell, write the file once per worktree instead of setting the variable: `powershell -File tools\dev.ps1 instance 2`.
+Worktree agents must never use instance 0 (it is the main checkout's server). Do not use instance numbers above 9 (the ports would
+collide with instance 0's RCON port).
+
+**One-command loop** (from the worktree root; add `-Instance N` to any verb to override for that call):
+```
+powershell -NoProfile -File tools\dev.ps1 instance 2                  # once per worktree
+powershell -NoProfile -File tools\dev.ps1 up                          # build + new offline world + server + test client joined (about 45 s)
+powershell -NoProfile -File tools\dev.ps1 rcon "gamemode spectator Tester2" "tp Tester2 8 66 12 0 8" "summon godzilla:test_dummy 8 64 20 {NoAI:1b,NoGravity:1b}"
+powershell -NoProfile -File tools\dev.ps1 shot a                      # then read D:\godzilla-vr\work\inst2\shots\a.png
+powershell -NoProfile -File tools\dev.ps1 rebuild                     # after code changes: stop both, build, start both, KEEP the world
+powershell -NoProfile -File tools\dev.ps1 down                        # stop this instance's client and server (nothing else)
+powershell -NoProfile -File tools\dev.ps1 status                      # also: log [N] for the client log tail
+```
+`up` first stops this instance's leftovers, `rebuild` does not delete the world, `down` only touches the processes recorded for this
+instance (the server's pid file plus a `-Dgodzilla.instance=N` marker in its command line, the client's pid plus its game folder in the
+command line), so another instance is never stopped, even if a pid was reused. Server log: `<server folder>\logs\latest.log`.
+
+Individual scripts (all honour the instance; Python is `D:\voice-assistant\.venv\Scripts\python.exe -I`):
 
 | Script | Use |
 |---|---|
-| `powershell tools\build.ps1 [-Clean] [-Sources]` | Gradle build with the project JDK (`--no-daemon`, so no java process stays behind), then copies `mod\build\libs\godzilla-<ver>.jar` to `server\mods` and `game\mods` replacing older `godzilla-*.jar`. On Windows a running server/game holds its jar open: stop it first (the script warns instead of failing) |
-| `powershell tools\server.ps1 [-NewWorld] [-Offline] [-Background]` / `-Stop` | Starts the server (port 25567, RCON 25577, world `server\godzilla-world`). `-Offline` = online-mode and enforce-secure-profile false (needed for the test client). `-Background` runs hidden and returns when RCON answers (created through WMI so it holds none of the caller's pipe handles, otherwise a tool waiting for the pipes to close hangs). Log: `server\logs\latest.log`. `-Stop` sends RCON `stop` |
-| `python tools\rcon.py "cmd1" "cmd2"` | RCON; port and password come from `server\server.properties`. As a module: `from rcon import Rcon` |
-| `python tools\testclient.py start [--vivecraft] [--no-wait]` / `shot <name>` / `status` / `log [N]` / `stop` | Flat silent offline Fabric client in `work\testgame` (fabric-api + our jar + Patrix, no Vivecraft unless `--vivecraft`, which still stays flat because `vrEnabled=false`). Auto-joins `localhost:25567` as `Tester`. `start` returns when the S2C ping round trip shows in the client log. `shot` writes `work\shots\<name>.png` (1280x720) with PrintWindow (works on this machine, the window need not be in front; if it ever returns a uniform picture the script falls back to the game's own F2 screenshot, which needs the window in front, untested). The process is detached: it lives until `stop` |
-| `python tools\setup_client.py [--install-profile]` | Prepares `game\` for the real VR client (see section 8). Without the flag it only prints the launcher profile it would add |
-| `powershell tools\sources.ps1 [-Force]` | Makes the sources browsable (section 2) |
-| `python tools\make_test_texture.py` | Regenerates the test entity's texture |
+| `powershell tools\build.ps1 [-Clean] [-Sources]` | Gradle build of this checkout with the project JDK (`--no-daemon`, so no java process stays behind), then copies the jar as in the table above, replacing older `godzilla-*.jar`. On Windows a running server/game holds its jar open: stop it first (the script warns instead of failing). `-Sources` runs `tools\sources.ps1` |
+| `powershell tools\server.ps1 [-NewWorld] [-Offline] [-Background]` / `-Stop` | Starts the instance's server. `-Offline` = online-mode and enforce-secure-profile false (needed for the test client). `-Background` runs hidden and returns when RCON answers (created through WMI so it holds none of the caller's pipe handles, otherwise a tool waiting for the pipes to close hangs). Before starting it copies this checkout's built jar into the server's `mods`, and re-applies the Vivecraft server config rules (below). In a brand-new world it also runs `forceload add 0 0` and `setworldspawn 0 64 0`: without that the world spawns the player at y=-63 inside the stone and he suffocates a minute after joining. `-Stop` sends RCON `stop` |
+| `python tools\rcon.py "cmd1" "cmd2"` | RCON of the instance; port and password come from its `server.properties`. As a module: `from rcon import Rcon` |
+| `python tools\testclient.py start [--vivecraft] [--no-wait]` / `shot <name>` / `status` / `log [N]` / `stop` | Flat silent offline Fabric client (fabric-api + this checkout's jar + Patrix, no Vivecraft unless `--vivecraft`, which still stays flat because `vrEnabled=false`). Auto-joins the instance's port as the instance's player name. `start` returns when the S2C ping round trip shows in the client log. `shot` finds the window by the launched process id (never by title) and writes `<shots folder>\<name>.png` (1280x720) with PrintWindow (works here, the window need not be in front; a uniform picture would trigger a fallback to the game's own F2 screenshot, which needs the window in front, untested). The process is detached and lives until `stop` |
+| `python tools\setup_client.py [--install-profile]` | Prepares the shared `game\` for the real VR client (section 8); main checkout paths whatever the checkout. Without the flag it only prints the launcher profile it would add |
+| `powershell tools\sources.ps1 [-Force]` | Makes the sources browsable (section 2). Always writes to the main checkout's `work\`; treat the result as read-only, do not run it from a worktree unless it is missing |
+| `python tools\make_test_texture.py` | Regenerates the test entity's texture in this checkout |
 
-Typical agent loop:
-```
-powershell tools\server.ps1 -NewWorld -Offline -Background
-python tools\testclient.py start
-python tools\rcon.py "gamemode spectator Tester" "tp Tester 8 66 12 0 8" "summon godzilla:test_dummy 8 64 20 {NoAI:1b,NoGravity:1b}"
-python tools\testclient.py shot a            # then read work\shots\a.png
-python tools\testclient.py stop ; powershell tools\server.ps1 -Stop
-```
-Notes from running it: the new world's spawn point is at y=-63 (inside the stone: a void-biome flat world has no sensible spawn), so
-`tp` the player before looking at anything (`setworldspawn` fixes it for new joins). Chat messages show in the test client's screenshots;
-use `gamemode spectator` to fly. Kill nothing but the processes the scripts started: other agents run java processes too.
+Build details that matter in a worktree:
+* `mod\build.gradle` takes `downloads\vivecraft-...jar` from the checkout if present there, otherwise from the main checkout; `city\out` and `audio\out` likewise (a worktree that tracks them uses its own).
+* Each worktree gets its own `mod\.gradle` (Loom cache) on the first build; Minecraft itself comes from the shared `~\.gradle` cache. Measured here: first build in a fresh worktree 11 s (Gradle's own time), `dev.ps1 up` from nothing about 45 s including copying the server template, starting the server and the client joining. Later builds are about 5 s. `genSources` (decompiling) is NOT part of a normal build and is not needed in a worktree.
+* Several builds at once are fine (shared Gradle caches are lock-protected). Nothing in `mod\.gradle`, `mod\build` or `.gz_instance` is tracked.
+* Vivecraft server config: `server.ps1` sets `[teleport] enabled = false` and `[climbey] enabled = false` and keeps `[worldScale] limitRange = false` in every instance's `config\vivecraft-server-config.toml` (and in the template). The file is only created by Vivecraft on a server's first start, so the very first start of a server that never ran has the defaults until its next start.
+* Chat messages show in the test client's screenshots; use `gamemode spectator` to fly. Kill nothing but the processes the scripts started: other agents run java processes too.
 
 ## 2. Browsing the sources
 
@@ -114,7 +145,7 @@ Caveats: the section path does not run any block logic, does not fix the light, 
 `python tools\setup_client.py` builds `D:\godzilla-vr\game` and never writes to `D:\genesis-vr`:
 `mods\` = fabric-api, vivecraft, our jar (the jar is refreshed by `tools\build.ps1`); `resourcepacks\Patrix_26.3_32x_basic.zip`, enabled in `options.txt` (`resourcePacks:["vanilla","file/Patrix_26.3_32x_basic.zip"]`; view distance 24, simulation 16); `servers.dat` entry "Godzilla" at `localhost:25567`; `config\` and `openvr\` copied from Genesis's game folder only where missing (Vivecraft client config; `vrEnabled` is `"false"` there, VR is switched on from Vivecraft's own menu in the game, as in Genesis).
 `--install-profile` adds the launcher profile "Godzilla VR" (key `godzilla-vr`, Fabric loader 0.19.5-26.3, gameDir `D:\godzilla-vr\game`, the JVM args of the "Genesis VR" profile, backup `launcher_profiles.json.before-godzilla`). Not run by the agent.
-Server side, `server\config\vivecraft-server-config.toml` is created on first start with defaults. For the game consider: `[teleport] enabled = false` (the Quest left trigger is teleport), `[climbey] enabled = false`, `vrFun = false`; keep `[worldScale] limitRange = false` (see section 9).
+Server side, `server\config\vivecraft-server-config.toml` is created on first start with defaults. `tools\server.ps1` now sets `[teleport] enabled = false` (the Quest left trigger is teleport) and `[climbey] enabled = false` and keeps `[worldScale] limitRange = false` (see section 9); `vrFun = false` is still a suggestion.
 
 ## 9. Vivecraft 26.3-1.3.17
 

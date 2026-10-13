@@ -7,7 +7,9 @@
 param([switch]$Force)
 
 $ErrorActionPreference = "Stop"
-$root = Split-Path $PSScriptRoot -Parent
+# Always works on the MAIN checkout (D:\godzilla-vr, or GZ_MAIN): the output in its work\ is shared and read-only for everybody,
+# and the Loom cache that has the decompiled sources is the main checkout's mod\.gradle.
+$root = if ($env:GZ_MAIN) { $env:GZ_MAIN } else { "D:\godzilla-vr" }
 $mod = Join-Path $root "mod"
 $work = Join-Path $root "work"
 $jdk = Join-Path $root "jdk"
