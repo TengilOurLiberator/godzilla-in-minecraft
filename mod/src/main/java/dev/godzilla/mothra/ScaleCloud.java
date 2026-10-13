@@ -97,7 +97,7 @@ public class ScaleCloud extends Entity implements Smashable {
 		// damage over time while Godzilla's head or chest is inside
 		double inside = Math.min(g.getEyePosition().distanceTo(position()), g.getEyePosition().add(0, -9, 0).distanceTo(position()));
 		if (inside < RADIUS + 3) {
-			dmgAcc += 0.07f;
+			dmgAcc += 0.09f;
 			if (dmgAcc >= 1.2f) {
 				Gz.game().hurtGodzilla(dmgAcc, position());
 				dmgAcc = 0;

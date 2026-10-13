@@ -40,7 +40,7 @@ public final class Popups {
 	private static final int LIFE_TICKS = 46;
 	private static final int MAX_LIVE = 40;
 	/** Master size factor of all popups (text display scale 1 is a quarter block per line). */
-	public static final float SIZE = 3.2f;
+	public static final float SIZE = 4.0f;
 
 	private record Key(int x, int y, int z, int group) {
 	}

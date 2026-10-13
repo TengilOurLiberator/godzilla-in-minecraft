@@ -38,7 +38,7 @@ import java.util.List;
  */
 public class Mothra extends Entity implements Smashable {
 	// ---- tuning --------------------------------------------------------------------------------------------------
-	public static final float MAX_HP = 1000f;
+	public static final float MAX_HP = 900f;
 	static final double CIRCLE_RADIUS = 44;
 	static final double CIRCLE_SPEED = 0.95; // blocks per tick along the circle
 	static final float BEAM_DAMAGE_PER_POWER = 0.85f;
@@ -47,8 +47,8 @@ public class Mothra extends Entity implements Smashable {
 	static final float BODY_DAMAGE = 20f;
 	static final float SWAT_DAMAGE = 170f;
 	static final float COLLAPSE_DAMAGE = 25f;
-	static final float DIVE_HIT_DAMAGE = 20f;
-	static final float GUST_DAMAGE_TOTAL = 6f;
+	static final float DIVE_HIT_DAMAGE = 24f;
+	static final float GUST_DAMAGE_TOTAL = 8f;
 	public static final double BODY_HEIGHT = 6;
 	/** Test commands set this so a simulated hit counts from any distance. */
 	public static boolean debugNoRange;
@@ -534,7 +534,7 @@ public class Mothra extends Entity implements Smashable {
 	private void backToCircle(Player g, int next) {
 		theta = Math.atan2(center().z - g.getZ(), center().x - g.getX());
 		dir = random.nextBoolean() ? 1 : -1;
-		attackIn = (int) ((120 + next + random.nextInt(80)) * (enraged ? 0.65 : 1.0));
+		attackIn = (int) ((90 + next + random.nextInt(60)) * (enraged ? 0.65 : 1.0));
 		enter(Mode.RETREAT);
 	}
 
@@ -643,12 +643,12 @@ public class Mothra extends Entity implements Smashable {
 		setPos(p.x, p.y, p.z);
 		vel = newDir.scale(speed);
 		face(vel);
-		if (modeTicks % 2 == 0 && center().y < 98) {
+		if (modeTicks % 3 == 0 && center().y < 98) {
 			// she tears through the upper storeys on the way down: the damage is hers
 			var game = GameModule.game();
 			game.suppressScore(true);
 			try {
-				Gz.destruction().smashSphere(sl, center(), 7, vel.scale(0.6), Cause.MOTHRA);
+				Gz.destruction().smashSphere(sl, center(), 5, vel.scale(0.6), Cause.MOTHRA);
 			} finally {
 				game.suppressScore(false);
 			}

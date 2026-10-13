@@ -104,11 +104,11 @@ public final class GameImpl implements Game {
 
 	public void playerLeft(ServerPlayer p) {
 		if (p.getUUID().equals(godzilla)) {
+			godzilla = null; // first, so nothing is sent to the connection that is closing
 			if (phase != Phase.IDLE) {
 				stop();
 			}
 			discardSign();
-			godzilla = null;
 		}
 	}
 
