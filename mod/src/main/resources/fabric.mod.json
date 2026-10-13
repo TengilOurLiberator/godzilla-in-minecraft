@@ -1,0 +1,23 @@
+{
+	"schemaVersion": 1,
+	"id": "godzilla",
+	"version": "${version}",
+	"name": "Godzilla VR",
+	"description": "A VR arcade game: you are Godzilla, wrecking a miniature Tokyo.",
+	"authors": ["Godzilla VR"],
+	"license": "CC0-1.0",
+	"environment": "*",
+	"entrypoints": {
+		"main": ["dev.godzilla.core.GodzillaMod"],
+		"client": ["dev.godzilla.client.GodzillaClient"]
+	},
+	"depends": {
+		"fabricloader": ">=0.19.5",
+		"minecraft": "~26.3",
+		"java": ">=25",
+		"fabric-api": "*"
+	},
+	"suggests": {
+		"vivecraft": "*"
+	}
+}

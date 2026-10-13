@@ -1,0 +1,66 @@
+plugins {
+	id 'net.fabricmc.fabric-loom' version "${loom_version}"
+}
+
+base {
+	archivesName = 'godzilla'
+}
+
+loom {
+	// src/main = common (server + client), src/client = client only
+	splitEnvironmentSourceSets()
+
+	mods {
+		"godzilla" {
+			sourceSet sourceSets.main
+			sourceSet sourceSets.client
+		}
+	}
+}
+
+dependencies {
+	minecraft "com.mojang:minecraft:${project.minecraft_version}"
+	implementation "net.fabricmc:fabric-loader:${project.loader_version}"
+	implementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_api_version}"
+
+	// Vivecraft is optional at runtime: compile against the API only. Every reference lives in dev.godzilla.vr.*
+	// and is only touched after FabricLoader says "vivecraft" is loaded.
+	compileOnly files("../downloads/vivecraft-26.3-1.3.17-fabric.jar")
+	clientCompileOnly files("../downloads/vivecraft-26.3-1.3.17-fabric.jar")
+}
+
+processResources {
+	def version = project.version
+	inputs.property "version", version
+	filesMatching("fabric.mod.json") {
+		expand "version": version
+	}
+}
+
+// Generated content from the sibling generators. A missing folder is not an error.
+def cityOut = file("../city/out")
+def audioOut = file("../audio/out")
+
+tasks.named('processResources') {
+	// from() of a folder that does not exist is simply empty, so a missing city/audio output never fails the build
+	from(cityOut) {
+		include 'tokyo.gzc', 'tokyo.json'
+		into 'data/godzilla/city'
+	}
+	// audio/out/sounds/*.ogg -> assets/godzilla/sounds/*.ogg, audio/out/sounds.json -> assets/godzilla/sounds.json
+	from(audioOut) {
+		exclude '**/*.wav'
+		into 'assets/godzilla'
+	}
+}
+
+tasks.withType(JavaCompile).configureEach {
+	it.options.release = 25
+	it.options.encoding = 'UTF-8'
+}
+
+java {
+	withSourcesJar()
+	sourceCompatibility = JavaVersion.VERSION_25
+	targetCompatibility = JavaVersion.VERSION_25
+}
