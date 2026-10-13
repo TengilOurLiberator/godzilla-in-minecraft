@@ -1,0 +1,892 @@
+{
+ "breath.charge": {
+  "sounds": [
+   {
+    "name": "godzilla:breath/charge_1",
+    "attenuation_distance": 96
+   },
+   {
+    "name": "godzilla:breath/charge_2",
+    "attenuation_distance": 96
+   }
+  ]
+ },
+ "breath.end": {
+  "sounds": [
+   {
+    "name": "godzilla:breath/end_1",
+    "attenuation_distance": 96
+   },
+   {
+    "name": "godzilla:breath/end_2",
+    "attenuation_distance": 96
+   }
+  ]
+ },
+ "breath.impact_loop": {
+  "sounds": [
+   {
+    "name": "godzilla:breath/impact_loop",
+    "attenuation_distance": 100
+   }
+  ]
+ },
+ "breath.loop": {
+  "sounds": [
+   {
+    "name": "godzilla:breath/loop",
+    "attenuation_distance": 120
+   }
+  ]
+ },
+ "car.alarm": {
+  "sounds": [
+   {
+    "name": "godzilla:car/alarm_1",
+    "attenuation_distance": 90
+   },
+   {
+    "name": "godzilla:car/alarm_2",
+    "attenuation_distance": 90
+   }
+  ]
+ },
+ "car.horn": {
+  "sounds": [
+   {
+    "name": "godzilla:car/horn_1",
+    "attenuation_distance": 100
+   },
+   {
+    "name": "godzilla:car/horn_2",
+    "attenuation_distance": 100
+   },
+   {
+    "name": "godzilla:car/horn_3",
+    "attenuation_distance": 100
+   },
+   {
+    "name": "godzilla:car/horn_4",
+    "attenuation_distance": 100
+   }
+  ]
+ },
+ "car.skid": {
+  "sounds": [
+   {
+    "name": "godzilla:car/skid_1",
+    "attenuation_distance": 90
+   },
+   {
+    "name": "godzilla:car/skid_2",
+    "attenuation_distance": 90
+   },
+   {
+    "name": "godzilla:car/skid_3",
+    "attenuation_distance": 90
+   }
+  ]
+ },
+ "collapse.rumble": {
+  "sounds": [
+   {
+    "name": "godzilla:collapse/rumble_1",
+    "attenuation_distance": 160
+   },
+   {
+    "name": "godzilla:collapse/rumble_2",
+    "attenuation_distance": 160
+   },
+   {
+    "name": "godzilla:collapse/rumble_3",
+    "attenuation_distance": 160
+   }
+  ]
+ },
+ "collapse.settle": {
+  "sounds": [
+   {
+    "name": "godzilla:collapse/settle_1",
+    "attenuation_distance": 100
+   },
+   {
+    "name": "godzilla:collapse/settle_2",
+    "attenuation_distance": 100
+   },
+   {
+    "name": "godzilla:collapse/settle_3",
+    "attenuation_distance": 100
+   }
+  ]
+ },
+ "explosion.car": {
+  "sounds": [
+   {
+    "name": "godzilla:explosion/car_1",
+    "attenuation_distance": 100
+   },
+   {
+    "name": "godzilla:explosion/car_2",
+    "attenuation_distance": 100
+   },
+   {
+    "name": "godzilla:explosion/car_3",
+    "attenuation_distance": 100
+   },
+   {
+    "name": "godzilla:explosion/car_4",
+    "attenuation_distance": 100
+   }
+  ]
+ },
+ "explosion.fuel": {
+  "sounds": [
+   {
+    "name": "godzilla:explosion/fuel_1",
+    "attenuation_distance": 240
+   },
+   {
+    "name": "godzilla:explosion/fuel_2",
+    "attenuation_distance": 240
+   }
+  ]
+ },
+ "explosion.large": {
+  "sounds": [
+   {
+    "name": "godzilla:explosion/large_1",
+    "attenuation_distance": 190
+   },
+   {
+    "name": "godzilla:explosion/large_2",
+    "attenuation_distance": 190
+   },
+   {
+    "name": "godzilla:explosion/large_3",
+    "attenuation_distance": 190
+   }
+  ]
+ },
+ "fire.loop": {
+  "sounds": [
+   {
+    "name": "godzilla:fire/loop",
+    "attenuation_distance": 60
+   }
+  ]
+ },
+ "godzilla.death": {
+  "sounds": [
+   {
+    "name": "godzilla:godzilla/death",
+    "attenuation_distance": 320
+   }
+  ]
+ },
+ "godzilla.footstep": {
+  "sounds": [
+   {
+    "name": "godzilla:godzilla/footstep_1",
+    "attenuation_distance": 110
+   },
+   {
+    "name": "godzilla:godzilla/footstep_2",
+    "attenuation_distance": 110
+   },
+   {
+    "name": "godzilla:godzilla/footstep_3",
+    "attenuation_distance": 110
+   },
+   {
+    "name": "godzilla:godzilla/footstep_4",
+    "attenuation_distance": 110
+   }
+  ]
+ },
+ "godzilla.hand_swoosh": {
+  "sounds": [
+   {
+    "name": "godzilla:godzilla/hand_swoosh_1",
+    "attenuation_distance": 64
+   },
+   {
+    "name": "godzilla:godzilla/hand_swoosh_2",
+    "attenuation_distance": 64
+   },
+   {
+    "name": "godzilla:godzilla/hand_swoosh_3",
+    "attenuation_distance": 64
+   },
+   {
+    "name": "godzilla:godzilla/hand_swoosh_4",
+    "attenuation_distance": 64
+   }
+  ]
+ },
+ "godzilla.hurt": {
+  "sounds": [
+   {
+    "name": "godzilla:godzilla/hurt_1",
+    "attenuation_distance": 200
+   },
+   {
+    "name": "godzilla:godzilla/hurt_2",
+    "attenuation_distance": 200
+   },
+   {
+    "name": "godzilla:godzilla/hurt_3",
+    "attenuation_distance": 200
+   }
+  ]
+ },
+ "godzilla.roar": {
+  "sounds": [
+   {
+    "name": "godzilla:godzilla/roar_1",
+    "attenuation_distance": 320
+   },
+   {
+    "name": "godzilla:godzilla/roar_2",
+    "attenuation_distance": 320
+   },
+   {
+    "name": "godzilla:godzilla/roar_3",
+    "attenuation_distance": 320
+   }
+  ]
+ },
+ "godzilla.roar_short": {
+  "sounds": [
+   {
+    "name": "godzilla:godzilla/roar_short_1",
+    "attenuation_distance": 256
+   },
+   {
+    "name": "godzilla:godzilla/roar_short_2",
+    "attenuation_distance": 256
+   },
+   {
+    "name": "godzilla:godzilla/roar_short_3",
+    "attenuation_distance": 256
+   }
+  ]
+ },
+ "godzilla.splash_step": {
+  "sounds": [
+   {
+    "name": "godzilla:godzilla/splash_step_1",
+    "attenuation_distance": 110
+   },
+   {
+    "name": "godzilla:godzilla/splash_step_2",
+    "attenuation_distance": 110
+   },
+   {
+    "name": "godzilla:godzilla/splash_step_3",
+    "attenuation_distance": 110
+   },
+   {
+    "name": "godzilla:godzilla/splash_step_4",
+    "attenuation_distance": 110
+   }
+  ]
+ },
+ "godzilla.surface": {
+  "sounds": [
+   {
+    "name": "godzilla:godzilla/surface",
+    "attenuation_distance": 200
+   }
+  ]
+ },
+ "godzilla.tail_swoosh": {
+  "sounds": [
+   {
+    "name": "godzilla:godzilla/tail_swoosh_1",
+    "attenuation_distance": 80
+   },
+   {
+    "name": "godzilla:godzilla/tail_swoosh_2",
+    "attenuation_distance": 80
+   },
+   {
+    "name": "godzilla:godzilla/tail_swoosh_3",
+    "attenuation_distance": 80
+   }
+  ]
+ },
+ "godzilla.underwater_loop": {
+  "sounds": [
+   {
+    "name": "godzilla:godzilla/underwater_loop",
+    "stream": true
+   }
+  ]
+ },
+ "mil.heli_loop": {
+  "sounds": [
+   {
+    "name": "godzilla:mil/heli_loop",
+    "attenuation_distance": 170
+   }
+  ]
+ },
+ "mil.jet_pass": {
+  "sounds": [
+   {
+    "name": "godzilla:mil/jet_pass_1",
+    "attenuation_distance": 260
+   },
+   {
+    "name": "godzilla:mil/jet_pass_2",
+    "attenuation_distance": 260
+   }
+  ]
+ },
+ "mil.maser_charge": {
+  "sounds": [
+   {
+    "name": "godzilla:mil/maser_charge_1",
+    "attenuation_distance": 140
+   },
+   {
+    "name": "godzilla:mil/maser_charge_2",
+    "attenuation_distance": 140
+   }
+  ]
+ },
+ "mil.maser_loop": {
+  "sounds": [
+   {
+    "name": "godzilla:mil/maser_loop",
+    "attenuation_distance": 140
+   }
+  ]
+ },
+ "mil.mg": {
+  "sounds": [
+   {
+    "name": "godzilla:mil/mg_1",
+    "attenuation_distance": 130
+   },
+   {
+    "name": "godzilla:mil/mg_2",
+    "attenuation_distance": 130
+   },
+   {
+    "name": "godzilla:mil/mg_3",
+    "attenuation_distance": 130
+   },
+   {
+    "name": "godzilla:mil/mg_4",
+    "attenuation_distance": 130
+   }
+  ]
+ },
+ "mil.missile": {
+  "sounds": [
+   {
+    "name": "godzilla:mil/missile_1",
+    "attenuation_distance": 150
+   },
+   {
+    "name": "godzilla:mil/missile_2",
+    "attenuation_distance": 150
+   },
+   {
+    "name": "godzilla:mil/missile_3",
+    "attenuation_distance": 150
+   }
+  ]
+ },
+ "mil.shell_hit": {
+  "sounds": [
+   {
+    "name": "godzilla:mil/shell_hit_1",
+    "attenuation_distance": 100
+   },
+   {
+    "name": "godzilla:mil/shell_hit_2",
+    "attenuation_distance": 100
+   },
+   {
+    "name": "godzilla:mil/shell_hit_3",
+    "attenuation_distance": 100
+   },
+   {
+    "name": "godzilla:mil/shell_hit_4",
+    "attenuation_distance": 100
+   }
+  ]
+ },
+ "mil.ship_cannon": {
+  "sounds": [
+   {
+    "name": "godzilla:mil/ship_cannon_1",
+    "attenuation_distance": 300
+   },
+   {
+    "name": "godzilla:mil/ship_cannon_2",
+    "attenuation_distance": 300
+   }
+  ]
+ },
+ "mil.tank_engine_loop": {
+  "sounds": [
+   {
+    "name": "godzilla:mil/tank_engine_loop",
+    "attenuation_distance": 100
+   }
+  ]
+ },
+ "mil.tank_fire": {
+  "sounds": [
+   {
+    "name": "godzilla:mil/tank_fire_1",
+    "attenuation_distance": 180
+   },
+   {
+    "name": "godzilla:mil/tank_fire_2",
+    "attenuation_distance": 180
+   },
+   {
+    "name": "godzilla:mil/tank_fire_3",
+    "attenuation_distance": 180
+   }
+  ]
+ },
+ "mothra.cry": {
+  "sounds": [
+   {
+    "name": "godzilla:mothra/cry_1",
+    "attenuation_distance": 300
+   },
+   {
+    "name": "godzilla:mothra/cry_2",
+    "attenuation_distance": 300
+   },
+   {
+    "name": "godzilla:mothra/cry_3",
+    "attenuation_distance": 300
+   },
+   {
+    "name": "godzilla:mothra/cry_4",
+    "attenuation_distance": 300
+   }
+  ]
+ },
+ "mothra.death": {
+  "sounds": [
+   {
+    "name": "godzilla:mothra/death",
+    "attenuation_distance": 320
+   }
+  ]
+ },
+ "mothra.dive": {
+  "sounds": [
+   {
+    "name": "godzilla:mothra/dive_1",
+    "attenuation_distance": 280
+   },
+   {
+    "name": "godzilla:mothra/dive_2",
+    "attenuation_distance": 280
+   }
+  ]
+ },
+ "mothra.gust": {
+  "sounds": [
+   {
+    "name": "godzilla:mothra/gust_1",
+    "attenuation_distance": 240
+   },
+   {
+    "name": "godzilla:mothra/gust_2",
+    "attenuation_distance": 240
+   },
+   {
+    "name": "godzilla:mothra/gust_3",
+    "attenuation_distance": 240
+   }
+  ]
+ },
+ "mothra.hurt": {
+  "sounds": [
+   {
+    "name": "godzilla:mothra/hurt_1",
+    "attenuation_distance": 260
+   },
+   {
+    "name": "godzilla:mothra/hurt_2",
+    "attenuation_distance": 260
+   },
+   {
+    "name": "godzilla:mothra/hurt_3",
+    "attenuation_distance": 260
+   }
+  ]
+ },
+ "mothra.scales": {
+  "sounds": [
+   {
+    "name": "godzilla:mothra/scales_1",
+    "attenuation_distance": 200
+   },
+   {
+    "name": "godzilla:mothra/scales_2",
+    "attenuation_distance": 200
+   },
+   {
+    "name": "godzilla:mothra/scales_3",
+    "attenuation_distance": 200
+   }
+  ]
+ },
+ "mothra.wing_loop": {
+  "sounds": [
+   {
+    "name": "godzilla:mothra/wing_loop",
+    "attenuation_distance": 200
+   }
+  ]
+ },
+ "music.defeat": {
+  "sounds": [
+   {
+    "name": "godzilla:music/defeat",
+    "stream": true
+   }
+  ]
+ },
+ "music.mothra_arrival": {
+  "sounds": [
+   {
+    "name": "godzilla:music/mothra_arrival",
+    "stream": true
+   }
+  ]
+ },
+ "music.mothra_fight": {
+  "sounds": [
+   {
+    "name": "godzilla:music/mothra_fight",
+    "stream": true
+   }
+  ]
+ },
+ "music.rampage": {
+  "sounds": [
+   {
+    "name": "godzilla:music/rampage",
+    "stream": true
+   }
+  ]
+ },
+ "music.rampage_intense": {
+  "sounds": [
+   {
+    "name": "godzilla:music/rampage_intense",
+    "stream": true
+   }
+  ]
+ },
+ "music.results_loop": {
+  "sounds": [
+   {
+    "name": "godzilla:music/results_loop",
+    "stream": true
+   }
+  ]
+ },
+ "music.rise": {
+  "sounds": [
+   {
+    "name": "godzilla:music/rise",
+    "stream": true
+   }
+  ]
+ },
+ "music.victory": {
+  "sounds": [
+   {
+    "name": "godzilla:music/victory",
+    "stream": true
+   }
+  ]
+ },
+ "people.crowd_panic_loop": {
+  "sounds": [
+   {
+    "name": "godzilla:people/crowd_panic_loop",
+    "attenuation_distance": 70
+   }
+  ]
+ },
+ "people.scream": {
+  "sounds": [
+   {
+    "name": "godzilla:people/scream_1",
+    "attenuation_distance": 60
+   },
+   {
+    "name": "godzilla:people/scream_2",
+    "attenuation_distance": 60
+   },
+   {
+    "name": "godzilla:people/scream_3",
+    "attenuation_distance": 60
+   },
+   {
+    "name": "godzilla:people/scream_4",
+    "attenuation_distance": 60
+   },
+   {
+    "name": "godzilla:people/scream_5",
+    "attenuation_distance": 60
+   },
+   {
+    "name": "godzilla:people/scream_6",
+    "attenuation_distance": 60
+   },
+   {
+    "name": "godzilla:people/scream_7",
+    "attenuation_distance": 60
+   },
+   {
+    "name": "godzilla:people/scream_8",
+    "attenuation_distance": 60
+   },
+   {
+    "name": "godzilla:people/scream_9",
+    "attenuation_distance": 60
+   },
+   {
+    "name": "godzilla:people/scream_10",
+    "attenuation_distance": 60
+   }
+  ]
+ },
+ "people.squish": {
+  "sounds": [
+   {
+    "name": "godzilla:people/squish_1",
+    "attenuation_distance": 50
+   },
+   {
+    "name": "godzilla:people/squish_2",
+    "attenuation_distance": 50
+   },
+   {
+    "name": "godzilla:people/squish_3",
+    "attenuation_distance": 50
+   },
+   {
+    "name": "godzilla:people/squish_4",
+    "attenuation_distance": 50
+   }
+  ]
+ },
+ "rubble.hit": {
+  "sounds": [
+   {
+    "name": "godzilla:rubble/hit_1",
+    "attenuation_distance": 60
+   },
+   {
+    "name": "godzilla:rubble/hit_2",
+    "attenuation_distance": 60
+   },
+   {
+    "name": "godzilla:rubble/hit_3",
+    "attenuation_distance": 60
+   },
+   {
+    "name": "godzilla:rubble/hit_4",
+    "attenuation_distance": 60
+   },
+   {
+    "name": "godzilla:rubble/hit_5",
+    "attenuation_distance": 60
+   }
+  ]
+ },
+ "siren.city_loop": {
+  "sounds": [
+   {
+    "name": "godzilla:siren/city_loop",
+    "attenuation_distance": 220
+   }
+  ]
+ },
+ "siren.police": {
+  "sounds": [
+   {
+    "name": "godzilla:siren/police_1",
+    "attenuation_distance": 140
+   },
+   {
+    "name": "godzilla:siren/police_2",
+    "attenuation_distance": 140
+   }
+  ]
+ },
+ "smash.glass": {
+  "sounds": [
+   {
+    "name": "godzilla:smash/glass_1",
+    "attenuation_distance": 70
+   },
+   {
+    "name": "godzilla:smash/glass_2",
+    "attenuation_distance": 70
+   },
+   {
+    "name": "godzilla:smash/glass_3",
+    "attenuation_distance": 70
+   },
+   {
+    "name": "godzilla:smash/glass_4",
+    "attenuation_distance": 70
+   }
+  ]
+ },
+ "smash.large": {
+  "sounds": [
+   {
+    "name": "godzilla:smash/large_1",
+    "attenuation_distance": 130
+   },
+   {
+    "name": "godzilla:smash/large_2",
+    "attenuation_distance": 130
+   },
+   {
+    "name": "godzilla:smash/large_3",
+    "attenuation_distance": 130
+   }
+  ]
+ },
+ "smash.medium": {
+  "sounds": [
+   {
+    "name": "godzilla:smash/medium_1",
+    "attenuation_distance": 90
+   },
+   {
+    "name": "godzilla:smash/medium_2",
+    "attenuation_distance": 90
+   },
+   {
+    "name": "godzilla:smash/medium_3",
+    "attenuation_distance": 90
+   },
+   {
+    "name": "godzilla:smash/medium_4",
+    "attenuation_distance": 90
+   }
+  ]
+ },
+ "smash.small": {
+  "sounds": [
+   {
+    "name": "godzilla:smash/small_1",
+    "attenuation_distance": 70
+   },
+   {
+    "name": "godzilla:smash/small_2",
+    "attenuation_distance": 70
+   },
+   {
+    "name": "godzilla:smash/small_3",
+    "attenuation_distance": 70
+   },
+   {
+    "name": "godzilla:smash/small_4",
+    "attenuation_distance": 70
+   }
+  ]
+ },
+ "train.pass": {
+  "sounds": [
+   {
+    "name": "godzilla:train/pass_1",
+    "attenuation_distance": 160
+   },
+   {
+    "name": "godzilla:train/pass_2",
+    "attenuation_distance": 160
+   }
+  ]
+ },
+ "ui.big_bonus": {
+  "sounds": [
+   {
+    "name": "godzilla:ui/big_bonus"
+   }
+  ]
+ },
+ "ui.combo_break": {
+  "sounds": [
+   {
+    "name": "godzilla:ui/combo_break_1"
+   },
+   {
+    "name": "godzilla:ui/combo_break_2"
+   }
+  ]
+ },
+ "ui.combo_up": {
+  "sounds": [
+   {
+    "name": "godzilla:ui/combo_up_1"
+   },
+   {
+    "name": "godzilla:ui/combo_up_2"
+   },
+   {
+    "name": "godzilla:ui/combo_up_3"
+   },
+   {
+    "name": "godzilla:ui/combo_up_4"
+   }
+  ]
+ },
+ "ui.game_over": {
+  "sounds": [
+   {
+    "name": "godzilla:ui/game_over"
+   }
+  ]
+ },
+ "ui.score_tick": {
+  "sounds": [
+   {
+    "name": "godzilla:ui/score_tick_1"
+   },
+   {
+    "name": "godzilla:ui/score_tick_2"
+   },
+   {
+    "name": "godzilla:ui/score_tick_3"
+   },
+   {
+    "name": "godzilla:ui/score_tick_4"
+   }
+  ]
+ },
+ "ui.title_hit": {
+  "sounds": [
+   {
+    "name": "godzilla:ui/title_hit"
+   }
+  ]
+ },
+ "ui.victory_sting": {
+  "sounds": [
+   {
+    "name": "godzilla:ui/victory_sting"
+   }
+  ]
+ }
+}

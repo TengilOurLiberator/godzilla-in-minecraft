@@ -1,0 +1,2520 @@
+{
+ "breath.charge": {
+  "event": "godzilla:breath.charge",
+  "seconds": 1.0,
+  "ticks": 20.0,
+  "loop": false,
+  "stream": false,
+  "channels": 1,
+  "variants_count": 2,
+  "lufs": -11.34,
+  "true_peak": -1.33,
+  "atten": 96,
+  "note": "about 1 s, rising: the dorsal plates charge, an electric whine climbs and the air starts to roar",
+  "variants": [
+   {
+    "file": "breath/charge_1",
+    "seconds": 1.0,
+    "ticks": 20.0,
+    "lufs": -11.43,
+    "true_peak": -1.49,
+    "bytes": 17092,
+    "index": 0
+   },
+   {
+    "file": "breath/charge_2",
+    "seconds": 1.0,
+    "ticks": 20.0,
+    "lufs": -11.24,
+    "true_peak": -1.33,
+    "bytes": 17204,
+    "index": 1
+   }
+  ]
+ },
+ "breath.end": {
+  "event": "godzilla:breath.end",
+  "seconds": 1.4,
+  "ticks": 28.0,
+  "loop": false,
+  "stream": false,
+  "channels": 1,
+  "variants_count": 2,
+  "lufs": -15.91,
+  "true_peak": -1.03,
+  "atten": 96,
+  "note": "the beam cuts out: falling whine, a last gust of steam and a bass thump",
+  "variants": [
+   {
+    "file": "breath/end_1",
+    "seconds": 1.4,
+    "ticks": 28.0,
+    "lufs": -16.16,
+    "true_peak": -1.8,
+    "bytes": 21853,
+    "index": 0
+   },
+   {
+    "file": "breath/end_2",
+    "seconds": 1.4,
+    "ticks": 28.0,
+    "lufs": -15.66,
+    "true_peak": -1.03,
+    "bytes": 22036,
+    "index": 1
+   }
+  ]
+ },
+ "breath.impact_loop": {
+  "event": "godzilla:breath.impact_loop",
+  "seconds": 1.5,
+  "ticks": 30.0,
+  "loop": true,
+  "stream": false,
+  "channels": 1,
+  "variants_count": 1,
+  "lufs": -19.16,
+  "true_peak": -9.65,
+  "atten": 100,
+  "note": "where the beam lands: a seamless 1.5 s of crackling fire, hissing steam and low detonation rumble",
+  "variants": [
+   {
+    "file": "breath/impact_loop",
+    "seconds": 1.5,
+    "ticks": 30.0,
+    "lufs": -19.16,
+    "true_peak": -9.65,
+    "bytes": 25543,
+    "index": 0
+   }
+  ]
+ },
+ "breath.loop": {
+  "event": "godzilla:breath.loop",
+  "seconds": 1.5,
+  "ticks": 30.0,
+  "loop": true,
+  "stream": false,
+  "channels": 1,
+  "variants_count": 1,
+  "lufs": -17.13,
+  "true_peak": -9.84,
+  "atten": 120,
+  "note": "the beam: a seamless 1.5 s roaring column of energy; replay it every 30 ticks while the trigger is held",
+  "variants": [
+   {
+    "file": "breath/loop",
+    "seconds": 1.5,
+    "ticks": 30.0,
+    "lufs": -17.13,
+    "true_peak": -9.84,
+    "bytes": 20203,
+    "index": 0
+   }
+  ]
+ },
+ "car.alarm": {
+  "event": "godzilla:car.alarm",
+  "seconds": 4.0,
+  "ticks": 80.0,
+  "loop": false,
+  "stream": false,
+  "channels": 1,
+  "variants_count": 2,
+  "lufs": -15.26,
+  "true_peak": -7.77,
+  "atten": 90,
+  "note": "car alarm, 4 s: pattern is seamless if replayed",
+  "variants": [
+   {
+    "file": "car/alarm_1",
+    "seconds": 4.0,
+    "ticks": 80.0,
+    "lufs": -16.3,
+    "true_peak": -7.77,
+    "bytes": 46232,
+    "index": 0
+   },
+   {
+    "file": "car/alarm_2",
+    "seconds": 4.0,
+    "ticks": 80.0,
+    "lufs": -14.21,
+    "true_peak": -7.95,
+    "bytes": 41785,
+    "index": 1
+   }
+  ]
+ },
+ "car.horn": {
+  "event": "godzilla:car.horn",
+  "seconds": 1.95,
+  "ticks": 39.0,
+  "loop": false,
+  "stream": false,
+  "channels": 1,
+  "variants_count": 4,
+  "lufs": -16.81,
+  "true_peak": -5.89,
+  "atten": 100,
+  "note": "car horns: two-tone, single, double beep, a long blare",
+  "variants": [
+   {
+    "file": "car/horn_1",
+    "seconds": 1.55,
+    "ticks": 31.0,
+    "lufs": -17.11,
+    "true_peak": -5.93,
+    "bytes": 14640,
+    "index": 0
+   },
+   {
+    "file": "car/horn_2",
+    "seconds": 1.25,
+    "ticks": 25.0,
+    "lufs": -16.28,
+    "true_peak": -5.89,
+    "bytes": 12375,
+    "index": 1
+   },
+   {
+    "file": "car/horn_3",
+    "seconds": 1.1,
+    "ticks": 22.0,
+    "lufs": -17.13,
+    "true_peak": -5.94,
+    "bytes": 11048,
+    "index": 2
+   },
+   {
+    "file": "car/horn_4",
+    "seconds": 1.95,
+    "ticks": 39.0,
+    "lufs": -16.74,
+    "true_peak": -5.93,
+    "bytes": 16682,
+    "index": 3
+   }
+  ]
+ },
+ "car.skid": {
+  "event": "godzilla:car.skid",
+  "seconds": 1.9,
+  "ticks": 38.0,
+  "loop": false,
+  "stream": false,
+  "channels": 1,
+  "variants_count": 3,
+  "lufs": -15.62,
+  "true_peak": -4.52,
+  "atten": 90,
+  "note": "tyres screaming on asphalt",
+  "variants": [
+   {
+    "file": "car/skid_1",
+    "seconds": 1.5,
+    "ticks": 30.0,
+    "lufs": -15.36,
+    "true_peak": -5.14,
+    "bytes": 21906,
+    "index": 0
+   },
+   {
+    "file": "car/skid_2",
+    "seconds": 1.7,
+    "ticks": 34.0,
+    "lufs": -16.51,
+    "true_peak": -5.45,
+    "bytes": 24786,
+    "index": 1
+   },
+   {
+    "file": "car/skid_3",
+    "seconds": 1.9,
+    "ticks": 38.0,
+    "lufs": -14.99,
+    "true_peak": -4.52,
+    "bytes": 27482,
+    "index": 2
+   }
+  ]
+ },
+ "collapse.rumble": {
+  "event": "godzilla:collapse.rumble",
+  "seconds": 6.0,
+  "ticks": 120.0,
+  "loop": false,
+  "stream": false,
+  "channels": 1,
+  "variants_count": 3,
+  "lufs": -16.23,
+  "true_peak": -1.16,
+  "atten": 160,
+  "note": "a building coming down: groans, a swelling avalanche, glass and slab impacts, a final thud; 3.6 / 4.8 / 6.0 s",
+  "variants": [
+   {
+    "file": "collapse/rumble_1",
+    "seconds": 3.6,
+    "ticks": 72.0,
+    "lufs": -16.15,
+    "true_peak": -1.35,
+    "bytes": 59122,
+    "index": 0
+   },
+   {
+    "file": "collapse/rumble_2",
+    "seconds": 4.8,
+    "ticks": 96.0,
+    "lufs": -16.16,
+    "true_peak": -1.32,
+    "bytes": 74545,
+    "index": 1
+   },
+   {
+    "file": "collapse/rumble_3",
+    "seconds": 6.0,
+    "ticks": 120.0,
+    "lufs": -16.38,
+    "true_peak": -1.16,
+    "bytes": 91952,
+    "index": 2
+   }
+  ]
+ },
+ "collapse.settle": {
+  "event": "godzilla:collapse.settle",
+  "seconds": 3.8,
+  "ticks": 76.0,
+  "loop": false,
+  "stream": false,
+  "channels": 1,
+  "variants_count": 3,
+  "lufs": -22.03,
+  "true_peak": -1.35,
+  "atten": 100,
+  "note": "the rubble settling after a collapse: slumps, trickles, a last ticking",
+  "variants": [
+   {
+    "file": "collapse/settle_1",
+    "seconds": 3.0,
+    "ticks": 60.0,
+    "lufs": -22.11,
+    "true_peak": -1.35,
+    "bytes": 45726,
+    "index": 0
+   },
+   {
+    "file": "collapse/settle_2",
+    "seconds": 3.4,
+    "ticks": 68.0,
+    "lufs": -22.0,
+    "true_peak": -2.47,
+    "bytes": 51999,
+    "index": 1
+   },
+   {
+    "file": "collapse/settle_3",
+    "seconds": 3.8,
+    "ticks": 76.0,
+    "lufs": -21.97,
+    "true_peak": -2.48,
+    "bytes": 55608,
+    "index": 2
+   }
+  ]
+ },
+ "explosion.car": {
+  "event": "godzilla:explosion.car",
+  "seconds": 3.0,
+  "ticks": 60.0,
+  "loop": false,
+  "stream": false,
+  "channels": 1,
+  "variants_count": 4,
+  "lufs": -22.15,
+  "true_peak": -1.12,
+  "atten": 100,
+  "note": "a car going up: a sharp whump, metal and glass flying, tyres popping",
+  "variants": [
+   {
+    "file": "explosion/car_1",
+    "seconds": 3.0,
+    "ticks": 60.0,
+    "lufs": -23.07,
+    "true_peak": -1.19,
+    "bytes": 34399,
+    "index": 0
+   },
+   {
+    "file": "explosion/car_2",
+    "seconds": 3.0,
+    "ticks": 60.0,
+    "lufs": -21.57,
+    "true_peak": -1.12,
+    "bytes": 32278,
+    "index": 1
+   },
+   {
+    "file": "explosion/car_3",
+    "seconds": 3.0,
+    "ticks": 60.0,
+    "lufs": -21.65,
+    "true_peak": -1.59,
+    "bytes": 30653,
+    "index": 2
+   },
+   {
+    "file": "explosion/car_4",
+    "seconds": 3.0,
+    "ticks": 60.0,
+    "lufs": -22.3,
+    "true_peak": -1.74,
+    "bytes": 30515,
+    "index": 3
+   }
+  ]
+ },
+ "explosion.fuel": {
+  "event": "godzilla:explosion.fuel",
+  "seconds": 8.0,
+  "ticks": 160.0,
+  "loop": false,
+  "stream": false,
+  "channels": 1,
+  "variants_count": 2,
+  "lufs": -22.52,
+  "true_peak": -1.44,
+  "atten": 240,
+  "note": "a huge fireball: ignition whump, a long roaring bloom, a rolling thunder, crackle",
+  "variants": [
+   {
+    "file": "explosion/fuel_1",
+    "seconds": 8.0,
+    "ticks": 160.0,
+    "lufs": -22.08,
+    "true_peak": -1.44,
+    "bytes": 117053,
+    "index": 0
+   },
+   {
+    "file": "explosion/fuel_2",
+    "seconds": 8.0,
+    "ticks": 160.0,
+    "lufs": -22.97,
+    "true_peak": -1.71,
+    "bytes": 112205,
+    "index": 1
+   }
+  ]
+ },
+ "explosion.large": {
+  "event": "godzilla:explosion.large",
+  "seconds": 6.0,
+  "ticks": 120.0,
+  "loop": false,
+  "stream": false,
+  "channels": 1,
+  "variants_count": 3,
+  "lufs": -23.01,
+  "true_peak": -1.04,
+  "atten": 190,
+  "note": "a big blast (fuel tank, building, ship): the whole street shakes",
+  "variants": [
+   {
+    "file": "explosion/large_1",
+    "seconds": 6.0,
+    "ticks": 120.0,
+    "lufs": -23.19,
+    "true_peak": -1.04,
+    "bytes": 94747,
+    "index": 0
+   },
+   {
+    "file": "explosion/large_2",
+    "seconds": 6.0,
+    "ticks": 120.0,
+    "lufs": -22.82,
+    "true_peak": -1.34,
+    "bytes": 90403,
+    "index": 1
+   },
+   {
+    "file": "explosion/large_3",
+    "seconds": 6.0,
+    "ticks": 120.0,
+    "lufs": -23.01,
+    "true_peak": -1.56,
+    "bytes": 88405,
+    "index": 2
+   }
+  ]
+ },
+ "fire.loop": {
+  "event": "godzilla:fire.loop",
+  "seconds": 3.0,
+  "ticks": 60.0,
+  "loop": true,
+  "stream": false,
+  "channels": 1,
+  "variants_count": 1,
+  "lufs": -26.13,
+  "true_peak": -10.22,
+  "atten": 60,
+  "note": "a burning building: crackle, a low flame roar, hiss and pops; 3 s seamless",
+  "variants": [
+   {
+    "file": "fire/loop",
+    "seconds": 3.0,
+    "ticks": 60.0,
+    "lufs": -26.13,
+    "true_peak": -10.22,
+    "bytes": 48359,
+    "index": 0
+   }
+  ]
+ },
+ "godzilla.death": {
+  "event": "godzilla:godzilla.death",
+  "seconds": 7.0,
+  "ticks": 140.0,
+  "loop": false,
+  "stream": false,
+  "channels": 1,
+  "variants_count": 1,
+  "lufs": -14.91,
+  "true_peak": -1.35,
+  "atten": 320,
+  "note": "the fall: a long failing roar sinking to a rattling breath, then the enormous body hitting the ground",
+  "variants": [
+   {
+    "file": "godzilla/death",
+    "seconds": 7.0,
+    "ticks": 140.0,
+    "lufs": -14.91,
+    "true_peak": -1.35,
+    "bytes": 87186,
+    "index": 0
+   }
+  ]
+ },
+ "godzilla.footstep": {
+  "event": "godzilla:godzilla.footstep",
+  "seconds": 2.4,
+  "ticks": 48.0,
+  "loop": false,
+  "stream": false,
+  "channels": 1,
+  "variants_count": 4,
+  "lufs": -22.82,
+  "true_peak": -1.13,
+  "atten": 110,
+  "note": "heavy sub-bass thud with ground rattle",
+  "variants": [
+   {
+    "file": "godzilla/footstep_1",
+    "seconds": 2.4,
+    "ticks": 48.0,
+    "lufs": -23.52,
+    "true_peak": -1.13,
+    "bytes": 24729,
+    "index": 0
+   },
+   {
+    "file": "godzilla/footstep_2",
+    "seconds": 2.4,
+    "ticks": 48.0,
+    "lufs": -21.95,
+    "true_peak": -1.17,
+    "bytes": 27009,
+    "index": 1
+   },
+   {
+    "file": "godzilla/footstep_3",
+    "seconds": 2.4,
+    "ticks": 48.0,
+    "lufs": -22.98,
+    "true_peak": -1.44,
+    "bytes": 22675,
+    "index": 2
+   },
+   {
+    "file": "godzilla/footstep_4",
+    "seconds": 2.4,
+    "ticks": 48.0,
+    "lufs": -22.82,
+    "true_peak": -1.24,
+    "bytes": 25508,
+    "index": 3
+   }
+  ]
+ },
+ "godzilla.hand_swoosh": {
+  "event": "godzilla:godzilla.hand_swoosh",
+  "seconds": 1.05,
+  "ticks": 21.0,
+  "loop": false,
+  "stream": false,
+  "channels": 1,
+  "variants_count": 4,
+  "lufs": -18.83,
+  "true_peak": -5.0,
+  "atten": 64,
+  "note": "a claw hand swung fast: airy whoosh with a low body",
+  "variants": [
+   {
+    "file": "godzilla/hand_swoosh_1",
+    "seconds": 0.9,
+    "ticks": 18.0,
+    "lufs": -18.16,
+    "true_peak": -5.0,
+    "bytes": 14171,
+    "index": 0
+   },
+   {
+    "file": "godzilla/hand_swoosh_2",
+    "seconds": 0.95,
+    "ticks": 19.0,
+    "lufs": -18.3,
+    "true_peak": -5.02,
+    "bytes": 14901,
+    "index": 1
+   },
+   {
+    "file": "godzilla/hand_swoosh_3",
+    "seconds": 1.0,
+    "ticks": 20.0,
+    "lufs": -19.54,
+    "true_peak": -5.33,
+    "bytes": 15398,
+    "index": 2
+   },
+   {
+    "file": "godzilla/hand_swoosh_4",
+    "seconds": 1.05,
+    "ticks": 21.0,
+    "lufs": -19.32,
+    "true_peak": -5.45,
+    "bytes": 15929,
+    "index": 3
+   }
+  ]
+ },
+ "godzilla.hurt": {
+  "event": "godzilla:godzilla.hurt",
+  "seconds": 2.4,
+  "ticks": 48.0,
+  "loop": false,
+  "stream": false,
+  "channels": 1,
+  "variants_count": 3,
+  "lufs": -16.37,
+  "true_peak": -1.2,
+  "atten": 200,
+  "note": "Godzilla is struck: a strained pained grunt-roar",
+  "variants": [
+   {
+    "file": "godzilla/hurt_1",
+    "seconds": 2.2,
+    "ticks": 44.0,
+    "lufs": -15.52,
+    "true_peak": -1.2,
+    "bytes": 23531,
+    "index": 0
+   },
+   {
+    "file": "godzilla/hurt_2",
+    "seconds": 2.0,
+    "ticks": 40.0,
+    "lufs": -17.17,
+    "true_peak": -1.63,
+    "bytes": 21560,
+    "index": 1
+   },
+   {
+    "file": "godzilla/hurt_3",
+    "seconds": 2.4,
+    "ticks": 48.0,
+    "lufs": -16.41,
+    "true_peak": -1.22,
+    "bytes": 25839,
+    "index": 2
+   }
+  ]
+ },
+ "godzilla.roar": {
+  "event": "godzilla:godzilla.roar",
+  "seconds": 7.7,
+  "ticks": 154.0,
+  "loop": false,
+  "stream": false,
+  "channels": 1,
+  "variants_count": 3,
+  "lufs": -17.27,
+  "true_peak": -1.17,
+  "atten": 320,
+  "note": "the signature roar: v1 rising bellow, v2 double bark then scream, v3 low falling growl",
+  "variants": [
+   {
+    "file": "godzilla/roar_1",
+    "seconds": 7.1,
+    "ticks": 142.0,
+    "lufs": -16.42,
+    "true_peak": -1.27,
+    "bytes": 63775,
+    "index": 0
+   },
+   {
+    "file": "godzilla/roar_2",
+    "seconds": 6.9,
+    "ticks": 138.0,
+    "lufs": -16.16,
+    "true_peak": -1.17,
+    "bytes": 61411,
+    "index": 1
+   },
+   {
+    "file": "godzilla/roar_3",
+    "seconds": 7.7,
+    "ticks": 154.0,
+    "lufs": -19.23,
+    "true_peak": -1.47,
+    "bytes": 70861,
+    "index": 2
+   }
+  ]
+ },
+ "godzilla.roar_short": {
+  "event": "godzilla:godzilla.roar_short",
+  "seconds": 2.5,
+  "ticks": 50.0,
+  "loop": false,
+  "stream": false,
+  "channels": 1,
+  "variants_count": 3,
+  "lufs": -17.42,
+  "true_peak": -1.39,
+  "atten": 256,
+  "note": "a short sharp bark for combos and hits",
+  "variants": [
+   {
+    "file": "godzilla/roar_short_1",
+    "seconds": 2.3,
+    "ticks": 46.0,
+    "lufs": -17.12,
+    "true_peak": -1.54,
+    "bytes": 23516,
+    "index": 0
+   },
+   {
+    "file": "godzilla/roar_short_2",
+    "seconds": 2.1,
+    "ticks": 42.0,
+    "lufs": -17.1,
+    "true_peak": -1.39,
+    "bytes": 22587,
+    "index": 1
+   },
+   {
+    "file": "godzilla/roar_short_3",
+    "seconds": 2.5,
+    "ticks": 50.0,
+    "lufs": -18.04,
+    "true_peak": -1.4,
+    "bytes": 26058,
+    "index": 2
+   }
+  ]
+ },
+ "godzilla.splash_step": {
+  "event": "godzilla:godzilla.splash_step",
+  "seconds": 2.4,
+  "ticks": 48.0,
+  "loop": false,
+  "stream": false,
+  "channels": 1,
+  "variants_count": 4,
+  "lufs": -21.95,
+  "true_peak": -1.04,
+  "atten": 110,
+  "note": "a foot coming down in shallow water: thump plus a big slap and spray",
+  "variants": [
+   {
+    "file": "godzilla/splash_step_1",
+    "seconds": 2.4,
+    "ticks": 48.0,
+    "lufs": -21.92,
+    "true_peak": -1.04,
+    "bytes": 31116,
+    "index": 0
+   },
+   {
+    "file": "godzilla/splash_step_2",
+    "seconds": 2.4,
+    "ticks": 48.0,
+    "lufs": -21.46,
+    "true_peak": -1.16,
+    "bytes": 31224,
+    "index": 1
+   },
+   {
+    "file": "godzilla/splash_step_3",
+    "seconds": 2.4,
+    "ticks": 48.0,
+    "lufs": -22.67,
+    "true_peak": -1.35,
+    "bytes": 31114,
+    "index": 2
+   },
+   {
+    "file": "godzilla/splash_step_4",
+    "seconds": 2.4,
+    "ticks": 48.0,
+    "lufs": -21.75,
+    "true_peak": -1.13,
+    "bytes": 31230,
+    "index": 3
+   }
+  ]
+ },
+ "godzilla.surface": {
+  "event": "godzilla:godzilla.surface",
+  "seconds": 7.0,
+  "ticks": 140.0,
+  "loop": false,
+  "stream": false,
+  "channels": 1,
+  "variants_count": 1,
+  "lufs": -17.54,
+  "true_peak": -1.16,
+  "atten": 200,
+  "note": "bursting out of the sea: a boil, the breach, then water pouring off for seconds",
+  "variants": [
+   {
+    "file": "godzilla/surface",
+    "seconds": 7.0,
+    "ticks": 140.0,
+    "lufs": -17.54,
+    "true_peak": -1.16,
+    "bytes": 76920,
+    "index": 0
+   }
+  ]
+ },
+ "godzilla.tail_swoosh": {
+  "event": "godzilla:godzilla.tail_swoosh",
+  "seconds": 1.7,
+  "ticks": 34.0,
+  "loop": false,
+  "stream": false,
+  "channels": 1,
+  "variants_count": 3,
+  "lufs": -13.71,
+  "true_peak": -3.71,
+  "atten": 80,
+  "note": "the tail sweeping through the air: a heavy low whoomp",
+  "variants": [
+   {
+    "file": "godzilla/tail_swoosh_1",
+    "seconds": 1.7,
+    "ticks": 34.0,
+    "lufs": -14.23,
+    "true_peak": -3.78,
+    "bytes": 22987,
+    "index": 0
+   },
+   {
+    "file": "godzilla/tail_swoosh_2",
+    "seconds": 1.7,
+    "ticks": 34.0,
+    "lufs": -13.3,
+    "true_peak": -3.71,
+    "bytes": 23242,
+    "index": 1
+   },
+   {
+    "file": "godzilla/tail_swoosh_3",
+    "seconds": 1.7,
+    "ticks": 34.0,
+    "lufs": -13.61,
+    "true_peak": -3.85,
+    "bytes": 23642,
+    "index": 2
+   }
+  ]
+ },
+ "godzilla.underwater_loop": {
+  "event": "godzilla:godzilla.underwater_loop",
+  "seconds": 12.0,
+  "ticks": 240.0,
+  "loop": true,
+  "stream": true,
+  "channels": 2,
+  "variants_count": 1,
+  "lufs": -30.07,
+  "true_peak": -14.36,
+  "atten": 0,
+  "note": "what the head hears under the bay: pressure, a deep hum, slow groans and muffled bubbles",
+  "variants": [
+   {
+    "file": "godzilla/underwater_loop",
+    "seconds": 12.0,
+    "ticks": 240.0,
+    "lufs": -30.07,
+    "true_peak": -14.36,
+    "bytes": 98972,
+    "index": 0
+   }
+  ]
+ },
+ "mil.heli_loop": {
+  "event": "godzilla:mil.heli_loop",
+  "seconds": 2.0,
+  "ticks": 40.0,
+  "loop": true,
+  "stream": false,
+  "channels": 1,
+  "variants_count": 1,
+  "lufs": -23.09,
+  "true_peak": -9.13,
+  "atten": 170,
+  "note": "helicopter rotor chop with turbine whine; 2 s seamless",
+  "variants": [
+   {
+    "file": "mil/heli_loop",
+    "seconds": 2.0,
+    "ticks": 40.0,
+    "lufs": -23.09,
+    "true_peak": -9.13,
+    "bytes": 25523,
+    "index": 0
+   }
+  ]
+ },
+ "mil.jet_pass": {
+  "event": "godzilla:mil.jet_pass",
+  "seconds": 6.5,
+  "ticks": 130.0,
+  "loop": false,
+  "stream": false,
+  "channels": 1,
+  "variants_count": 2,
+  "lufs": -19.2,
+  "true_peak": -3.29,
+  "atten": 260,
+  "note": "a jet fighter screaming past low, 6.5 s, Doppler from approach to departure",
+  "variants": [
+   {
+    "file": "mil/jet_pass_1",
+    "seconds": 6.5,
+    "ticks": 130.0,
+    "lufs": -19.21,
+    "true_peak": -3.8,
+    "bytes": 75596,
+    "index": 0
+   },
+   {
+    "file": "mil/jet_pass_2",
+    "seconds": 6.5,
+    "ticks": 130.0,
+    "lufs": -19.2,
+    "true_peak": -3.29,
+    "bytes": 75469,
+    "index": 1
+   }
+  ]
+ },
+ "mil.maser_charge": {
+  "event": "godzilla:mil.maser_charge",
+  "seconds": 2.0,
+  "ticks": 40.0,
+  "loop": false,
+  "stream": false,
+  "channels": 1,
+  "variants_count": 2,
+  "lufs": -12.07,
+  "true_peak": -2.57,
+  "atten": 140,
+  "note": "a maser cannon spinning up: 2 s of climbing electric whine, arcs and a throbbing hum",
+  "variants": [
+   {
+    "file": "mil/maser_charge_1",
+    "seconds": 2.0,
+    "ticks": 40.0,
+    "lufs": -12.11,
+    "true_peak": -2.57,
+    "bytes": 27556,
+    "index": 0
+   },
+   {
+    "file": "mil/maser_charge_2",
+    "seconds": 2.0,
+    "ticks": 40.0,
+    "lufs": -12.04,
+    "true_peak": -2.65,
+    "bytes": 32044,
+    "index": 1
+   }
+  ]
+ },
+ "mil.maser_loop": {
+  "event": "godzilla:mil.maser_loop",
+  "seconds": 1.5,
+  "ticks": 30.0,
+  "loop": true,
+  "stream": false,
+  "channels": 1,
+  "variants_count": 1,
+  "lufs": -21.08,
+  "true_peak": -10.35,
+  "atten": 140,
+  "note": "the maser beam: a seamless 1.5 s buzzing electric column",
+  "variants": [
+   {
+    "file": "mil/maser_loop",
+    "seconds": 1.5,
+    "ticks": 30.0,
+    "lufs": -21.08,
+    "true_peak": -10.35,
+    "bytes": 20236,
+    "index": 0
+   }
+  ]
+ },
+ "mil.mg": {
+  "event": "godzilla:mil.mg",
+  "seconds": 2.2769,
+  "ticks": 45.54,
+  "loop": false,
+  "stream": false,
+  "channels": 1,
+  "variants_count": 4,
+  "lufs": -24.03,
+  "true_peak": -4.68,
+  "atten": 130,
+  "note": "a machine-gun burst: 8-14 rounds at about 13 per second with echoes",
+  "variants": [
+   {
+    "file": "mil/mg_1",
+    "seconds": 1.9692,
+    "ticks": 39.38,
+    "lufs": -24.85,
+    "true_peak": -5.03,
+    "bytes": 24172,
+    "index": 0
+   },
+   {
+    "file": "mil/mg_2",
+    "seconds": 2.2769,
+    "ticks": 45.54,
+    "lufs": -23.15,
+    "true_peak": -4.68,
+    "bytes": 28504,
+    "index": 1
+   },
+   {
+    "file": "mil/mg_3",
+    "seconds": 1.8154,
+    "ticks": 36.31,
+    "lufs": -24.54,
+    "true_peak": -4.86,
+    "bytes": 22375,
+    "index": 2
+   },
+   {
+    "file": "mil/mg_4",
+    "seconds": 2.1231,
+    "ticks": 42.46,
+    "lufs": -23.6,
+    "true_peak": -4.77,
+    "bytes": 25953,
+    "index": 3
+   }
+  ]
+ },
+ "mil.missile": {
+  "event": "godzilla:mil.missile",
+  "seconds": 3.5,
+  "ticks": 70.0,
+  "loop": false,
+  "stream": false,
+  "channels": 1,
+  "variants_count": 3,
+  "lufs": -20.09,
+  "true_peak": -3.37,
+  "atten": 150,
+  "note": "a missile launching and streaking away: ignition crack then a hissing rocket motor that recedes",
+  "variants": [
+   {
+    "file": "mil/missile_1",
+    "seconds": 3.5,
+    "ticks": 70.0,
+    "lufs": -20.15,
+    "true_peak": -3.54,
+    "bytes": 45531,
+    "index": 0
+   },
+   {
+    "file": "mil/missile_2",
+    "seconds": 3.5,
+    "ticks": 70.0,
+    "lufs": -20.59,
+    "true_peak": -4.08,
+    "bytes": 45270,
+    "index": 1
+   },
+   {
+    "file": "mil/missile_3",
+    "seconds": 3.5,
+    "ticks": 70.0,
+    "lufs": -19.52,
+    "true_peak": -3.37,
+    "bytes": 45239,
+    "index": 2
+   }
+  ]
+ },
+ "mil.shell_hit": {
+  "event": "godzilla:mil.shell_hit",
+  "seconds": 1.7,
+  "ticks": 34.0,
+  "loop": false,
+  "stream": false,
+  "channels": 1,
+  "variants_count": 4,
+  "lufs": -25.68,
+  "true_peak": -2.85,
+  "atten": 100,
+  "note": "a shell bursting or glancing off Godzilla's hide: dull thud, a spang and a ricochet whine",
+  "variants": [
+   {
+    "file": "mil/shell_hit_1",
+    "seconds": 1.7,
+    "ticks": 34.0,
+    "lufs": -26.53,
+    "true_peak": -3.06,
+    "bytes": 18111,
+    "index": 0
+   },
+   {
+    "file": "mil/shell_hit_2",
+    "seconds": 1.7,
+    "ticks": 34.0,
+    "lufs": -25.44,
+    "true_peak": -2.85,
+    "bytes": 17625,
+    "index": 1
+   },
+   {
+    "file": "mil/shell_hit_3",
+    "seconds": 1.7,
+    "ticks": 34.0,
+    "lufs": -25.41,
+    "true_peak": -2.94,
+    "bytes": 17779,
+    "index": 2
+   },
+   {
+    "file": "mil/shell_hit_4",
+    "seconds": 1.7,
+    "ticks": 34.0,
+    "lufs": -25.34,
+    "true_peak": -2.97,
+    "bytes": 17464,
+    "index": 3
+   }
+  ]
+ },
+ "mil.ship_cannon": {
+  "event": "godzilla:mil.ship_cannon",
+  "seconds": 6.0,
+  "ticks": 120.0,
+  "loop": false,
+  "stream": false,
+  "channels": 1,
+  "variants_count": 2,
+  "lufs": -20.62,
+  "true_peak": -1.36,
+  "atten": 300,
+  "note": "a battleship's main gun: a huge flat boom across the water, a shell going over, long echoes",
+  "variants": [
+   {
+    "file": "mil/ship_cannon_1",
+    "seconds": 6.0,
+    "ticks": 120.0,
+    "lufs": -21.88,
+    "true_peak": -1.36,
+    "bytes": 42113,
+    "index": 0
+   },
+   {
+    "file": "mil/ship_cannon_2",
+    "seconds": 6.0,
+    "ticks": 120.0,
+    "lufs": -19.37,
+    "true_peak": -1.36,
+    "bytes": 42466,
+    "index": 1
+   }
+  ]
+ },
+ "mil.tank_engine_loop": {
+  "event": "godzilla:mil.tank_engine_loop",
+  "seconds": 3.0,
+  "ticks": 60.0,
+  "loop": true,
+  "stream": false,
+  "channels": 1,
+  "variants_count": 1,
+  "lufs": -23.02,
+  "true_peak": -10.97,
+  "atten": 100,
+  "note": "a heavy diesel with track clatter; 3 s seamless",
+  "variants": [
+   {
+    "file": "mil/tank_engine_loop",
+    "seconds": 3.0,
+    "ticks": 60.0,
+    "lufs": -23.02,
+    "true_peak": -10.97,
+    "bytes": 37658,
+    "index": 0
+   }
+  ]
+ },
+ "mil.tank_fire": {
+  "event": "godzilla:mil.tank_fire",
+  "seconds": 3.0,
+  "ticks": 60.0,
+  "loop": false,
+  "stream": false,
+  "channels": 1,
+  "variants_count": 3,
+  "lufs": -19.24,
+  "true_peak": -1.22,
+  "atten": 180,
+  "note": "a tank gun: a flat hard crack, the boom, a shell whistling away, echoes off the buildings",
+  "variants": [
+   {
+    "file": "mil/tank_fire_1",
+    "seconds": 3.0,
+    "ticks": 60.0,
+    "lufs": -19.9,
+    "true_peak": -1.34,
+    "bytes": 32133,
+    "index": 0
+   },
+   {
+    "file": "mil/tank_fire_2",
+    "seconds": 3.0,
+    "ticks": 60.0,
+    "lufs": -18.47,
+    "true_peak": -1.22,
+    "bytes": 31077,
+    "index": 1
+   },
+   {
+    "file": "mil/tank_fire_3",
+    "seconds": 3.0,
+    "ticks": 60.0,
+    "lufs": -19.34,
+    "true_peak": -1.26,
+    "bytes": 32198,
+    "index": 2
+   }
+  ]
+ },
+ "mothra.cry": {
+  "event": "godzilla:mothra.cry",
+  "seconds": 5.1,
+  "ticks": 102.0,
+  "loop": false,
+  "stream": false,
+  "channels": 1,
+  "variants_count": 4,
+  "lufs": -15.55,
+  "true_peak": -1.91,
+  "atten": 300,
+  "note": "Mothra's call: a high, wavering, breathy chorus of detuned voices with a flutter and chimes",
+  "variants": [
+   {
+    "file": "mothra/cry_1",
+    "seconds": 4.7,
+    "ticks": 94.0,
+    "lufs": -16.18,
+    "true_peak": -1.91,
+    "bytes": 52385,
+    "index": 0
+   },
+   {
+    "file": "mothra/cry_2",
+    "seconds": 4.9,
+    "ticks": 98.0,
+    "lufs": -16.07,
+    "true_peak": -2.0,
+    "bytes": 54705,
+    "index": 1
+   },
+   {
+    "file": "mothra/cry_3",
+    "seconds": 5.1,
+    "ticks": 102.0,
+    "lufs": -13.85,
+    "true_peak": -1.99,
+    "bytes": 55494,
+    "index": 2
+   },
+   {
+    "file": "mothra/cry_4",
+    "seconds": 4.3,
+    "ticks": 86.0,
+    "lufs": -16.11,
+    "true_peak": -1.96,
+    "bytes": 48937,
+    "index": 3
+   }
+  ]
+ },
+ "mothra.death": {
+  "event": "godzilla:mothra.death",
+  "seconds": 7.5,
+  "ticks": 150.0,
+  "loop": false,
+  "stream": false,
+  "channels": 1,
+  "variants_count": 1,
+  "lufs": -13.82,
+  "true_peak": -1.4,
+  "atten": 320,
+  "note": "Mothra falls: a long falling cry that fails, fading chimes of scales, the body landing in the city",
+  "variants": [
+   {
+    "file": "mothra/death",
+    "seconds": 7.5,
+    "ticks": 150.0,
+    "lufs": -13.82,
+    "true_peak": -1.4,
+    "bytes": 94577,
+    "index": 0
+   }
+  ]
+ },
+ "mothra.dive": {
+  "event": "godzilla:mothra.dive",
+  "seconds": 3.0,
+  "ticks": 60.0,
+  "loop": false,
+  "stream": false,
+  "channels": 1,
+  "variants_count": 2,
+  "lufs": -16.78,
+  "true_peak": -2.3,
+  "atten": 280,
+  "note": "Mothra stooping on Godzilla: a falling wail, a rising wall of wind, a heavy whoomp at the bottom",
+  "variants": [
+   {
+    "file": "mothra/dive_1",
+    "seconds": 3.0,
+    "ticks": 60.0,
+    "lufs": -16.34,
+    "true_peak": -2.49,
+    "bytes": 37423,
+    "index": 0
+   },
+   {
+    "file": "mothra/dive_2",
+    "seconds": 3.0,
+    "ticks": 60.0,
+    "lufs": -17.22,
+    "true_peak": -2.3,
+    "bytes": 37380,
+    "index": 1
+   }
+  ]
+ },
+ "mothra.gust": {
+  "event": "godzilla:mothra.gust",
+  "seconds": 2.4,
+  "ticks": 48.0,
+  "loop": false,
+  "stream": false,
+  "channels": 1,
+  "variants_count": 3,
+  "lufs": -11.18,
+  "true_peak": -2.2,
+  "atten": 240,
+  "note": "a gale thrown off Mothra's wings: a heavy rushing blast with grit",
+  "variants": [
+   {
+    "file": "mothra/gust_1",
+    "seconds": 2.4,
+    "ticks": 48.0,
+    "lufs": -11.02,
+    "true_peak": -2.2,
+    "bytes": 33642,
+    "index": 0
+   },
+   {
+    "file": "mothra/gust_2",
+    "seconds": 2.4,
+    "ticks": 48.0,
+    "lufs": -11.25,
+    "true_peak": -2.36,
+    "bytes": 32614,
+    "index": 1
+   },
+   {
+    "file": "mothra/gust_3",
+    "seconds": 2.4,
+    "ticks": 48.0,
+    "lufs": -11.26,
+    "true_peak": -2.66,
+    "bytes": 34200,
+    "index": 2
+   }
+  ]
+ },
+ "mothra.hurt": {
+  "event": "godzilla:mothra.hurt",
+  "seconds": 2.7,
+  "ticks": 54.0,
+  "loop": false,
+  "stream": false,
+  "channels": 1,
+  "variants_count": 3,
+  "lufs": -17.0,
+  "true_peak": -2.44,
+  "atten": 260,
+  "note": "Mothra struck: a short, thin, dissonant cry",
+  "variants": [
+   {
+    "file": "mothra/hurt_1",
+    "seconds": 2.5,
+    "ticks": 50.0,
+    "lufs": -17.52,
+    "true_peak": -2.53,
+    "bytes": 28899,
+    "index": 0
+   },
+   {
+    "file": "mothra/hurt_2",
+    "seconds": 2.6,
+    "ticks": 52.0,
+    "lufs": -16.82,
+    "true_peak": -2.49,
+    "bytes": 30719,
+    "index": 1
+   },
+   {
+    "file": "mothra/hurt_3",
+    "seconds": 2.7,
+    "ticks": 54.0,
+    "lufs": -16.66,
+    "true_peak": -2.44,
+    "bytes": 30842,
+    "index": 2
+   }
+  ]
+ },
+ "mothra.scales": {
+  "event": "godzilla:mothra.scales",
+  "seconds": 3.8,
+  "ticks": 76.0,
+  "loop": false,
+  "stream": false,
+  "channels": 1,
+  "variants_count": 3,
+  "lufs": -20.1,
+  "true_peak": -7.2,
+  "atten": 200,
+  "note": "shimmering scale-dust: a glittering veil of tiny chimes over a breathy hiss",
+  "variants": [
+   {
+    "file": "mothra/scales_1",
+    "seconds": 3.8,
+    "ticks": 76.0,
+    "lufs": -20.05,
+    "true_peak": -7.89,
+    "bytes": 58375,
+    "index": 0
+   },
+   {
+    "file": "mothra/scales_2",
+    "seconds": 3.8,
+    "ticks": 76.0,
+    "lufs": -20.09,
+    "true_peak": -7.2,
+    "bytes": 60501,
+    "index": 1
+   },
+   {
+    "file": "mothra/scales_3",
+    "seconds": 3.8,
+    "ticks": 76.0,
+    "lufs": -20.16,
+    "true_peak": -7.41,
+    "bytes": 59927,
+    "index": 2
+   }
+  ]
+ },
+ "mothra.wing_loop": {
+  "event": "godzilla:mothra.wing_loop",
+  "seconds": 1.6,
+  "ticks": 32.0,
+  "loop": true,
+  "stream": false,
+  "channels": 1,
+  "variants_count": 1,
+  "lufs": -22.2,
+  "true_peak": -6.16,
+  "atten": 200,
+  "note": "vast wings beating about 2.5 times a second: air pushed down, a papery flutter; 1.6 s seamless",
+  "variants": [
+   {
+    "file": "mothra/wing_loop",
+    "seconds": 1.6,
+    "ticks": 32.0,
+    "lufs": -22.2,
+    "true_peak": -6.16,
+    "bytes": 20458,
+    "index": 0
+   }
+  ]
+ },
+ "music.defeat": {
+  "event": "godzilla:music.defeat",
+  "seconds": 15.0,
+  "ticks": 300.0,
+  "loop": false,
+  "stream": true,
+  "channels": 2,
+  "variants_count": 1,
+  "lufs": -20.09,
+  "true_peak": -7.47,
+  "atten": 0,
+  "note": "15 s, 60 bpm, E minor: a heavy blow, a falling low-brass line, a tolling bell and a dying cluster",
+  "bpm": 60,
+  "key": "E minor",
+  "bar_s": 4.0,
+  "variants": [
+   {
+    "file": "music/defeat",
+    "seconds": 15.0,
+    "ticks": 300.0,
+    "lufs": -20.09,
+    "true_peak": -7.47,
+    "bytes": 244910,
+    "index": 0
+   }
+  ]
+ },
+ "music.mothra_arrival": {
+  "event": "godzilla:music.mothra_arrival",
+  "seconds": 12.0,
+  "ticks": 240.0,
+  "loop": false,
+  "stream": true,
+  "channels": 2,
+  "variants_count": 1,
+  "lufs": -19.2,
+  "true_peak": -7.18,
+  "atten": 0,
+  "note": "12.0 s, 100 bpm (same tempo as rampage): the march cuts out, a shimmering choir and glass take over, a riser into the end; music.mothra_fight starts on its final beat",
+  "bpm": 100,
+  "key": "E major (pentatonic cloud)",
+  "bar_s": 2.4,
+  "handoff_s": 12.0,
+  "variants": [
+   {
+    "file": "music/mothra_arrival",
+    "seconds": 12.0,
+    "ticks": 240.0,
+    "lufs": -19.2,
+    "true_peak": -7.18,
+    "bytes": 237339,
+    "index": 0
+   }
+  ]
+ },
+ "music.mothra_fight": {
+  "event": "godzilla:music.mothra_fight",
+  "seconds": 76.8,
+  "ticks": 1536.0,
+  "loop": true,
+  "stream": true,
+  "channels": 2,
+  "variants_count": 1,
+  "lufs": -17.74,
+  "true_peak": -3.43,
+  "atten": 0,
+  "note": "the boss loop, 150 bpm E minor, 48 bars = 76.8 s; loops; arrival hands over on its downbeat",
+  "bpm": 150,
+  "beats_per_bar": 4,
+  "bars": 48,
+  "bar_s": 1.6,
+  "key": "E minor",
+  "loop_start_s": 0.0,
+  "loop_end_s": 76.8,
+  "section_s": [
+   0.0,
+   12.8,
+   25.6,
+   38.4,
+   51.2,
+   64.0
+  ],
+  "section_names": [
+   "A gallop",
+   "B choir",
+   "C fanfare",
+   "D breakdown",
+   "A2 return",
+   "E climax"
+  ],
+  "variants": [
+   {
+    "file": "music/mothra_fight",
+    "seconds": 76.8,
+    "ticks": 1536.0,
+    "lufs": -17.74,
+    "true_peak": -3.43,
+    "bytes": 1348717,
+    "index": 0
+   }
+  ]
+ },
+ "music.rampage": {
+  "event": "godzilla:music.rampage",
+  "seconds": 96.0,
+  "ticks": 1920.0,
+  "loop": true,
+  "stream": true,
+  "channels": 2,
+  "variants_count": 1,
+  "lufs": -18.25,
+  "true_peak": -2.93,
+  "atten": 0,
+  "note": "the monster march, 100 bpm E minor, 40 bars = 96.0 s; loops; same tempo/key/length as rampage_intense",
+  "bpm": 100,
+  "beats_per_bar": 4,
+  "bars": 40,
+  "bar_s": 2.4,
+  "key": "E minor",
+  "loop_start_s": 0.0,
+  "loop_end_s": 96.0,
+  "section_s": [
+   0.0,
+   19.2,
+   38.4,
+   57.6,
+   76.8
+  ],
+  "section_names": [
+   "A stomp",
+   "A2 theme",
+   "B chords",
+   "C breakdown",
+   "A3 return"
+  ],
+  "variants": [
+   {
+    "file": "music/rampage",
+    "seconds": 96.0,
+    "ticks": 1920.0,
+    "lufs": -18.25,
+    "true_peak": -2.93,
+    "bytes": 1672905,
+    "index": 0
+   }
+  ]
+ },
+ "music.rampage_intense": {
+  "event": "godzilla:music.rampage_intense",
+  "seconds": 96.0,
+  "ticks": 1920.0,
+  "loop": true,
+  "stream": true,
+  "channels": 2,
+  "variants_count": 1,
+  "lufs": -17.62,
+  "true_peak": -3.17,
+  "atten": 0,
+  "note": "rampage plus extra layers (ostinato, hats, choir, stabs, bells); same gain as rampage so shared layers match; crossfade-compatible",
+  "bpm": 100,
+  "beats_per_bar": 4,
+  "bars": 40,
+  "bar_s": 2.4,
+  "key": "E minor",
+  "loop_start_s": 0.0,
+  "loop_end_s": 96.0,
+  "section_s": [
+   0.0,
+   19.2,
+   38.4,
+   57.6,
+   76.8
+  ],
+  "section_names": [
+   "A stomp",
+   "A2 theme",
+   "B chords",
+   "C breakdown",
+   "A3 return"
+  ],
+  "variants": [
+   {
+    "file": "music/rampage_intense",
+    "seconds": 96.0,
+    "ticks": 1920.0,
+    "lufs": -17.62,
+    "true_peak": -3.17,
+    "bytes": 1660132,
+    "index": 0
+   }
+  ]
+ },
+ "music.results_loop": {
+  "event": "godzilla:music.results_loop",
+  "seconds": 30.0,
+  "ticks": 600.0,
+  "loop": true,
+  "stream": true,
+  "channels": 2,
+  "variants_count": 1,
+  "lufs": -22.06,
+  "true_peak": -7.98,
+  "atten": 0,
+  "note": "the score screen: a light arcade loop, 128 bpm, E major, 16 bars = 30.0 s",
+  "bpm": 128,
+  "key": "E major",
+  "bars": 16,
+  "bar_s": 1.875,
+  "loop_start_s": 0.0,
+  "loop_end_s": 30.0,
+  "variants": [
+   {
+    "file": "music/results_loop",
+    "seconds": 30.0,
+    "ticks": 600.0,
+    "lufs": -22.06,
+    "true_peak": -7.98,
+    "bytes": 582709,
+    "index": 0
+   }
+  ]
+ },
+ "music.rise": {
+  "event": "godzilla:music.rise",
+  "seconds": 20.0,
+  "ticks": 400.0,
+  "loop": false,
+  "stream": true,
+  "channels": 2,
+  "variants_count": 1,
+  "lufs": -17.74,
+  "true_peak": -1.31,
+  "atten": 0,
+  "note": "20 s: dark underwater drone, distant heartbeat drums and a rising swell, a held breath, then the HUGE hit at 12.0 s (head breaks the surface); a short ring-out; start music.rampage on the 19.2 s downbeat",
+  "bpm": 100,
+  "key": "E minor",
+  "bar_s": 2.4,
+  "hit_s": 12.0,
+  "handoff_s": 19.2,
+  "note2": "build 0-12 s; hit exactly at hit_s; start music.rampage at handoff_s (bar 9 of the 100 bpm grid)",
+  "variants": [
+   {
+    "file": "music/rise",
+    "seconds": 20.0,
+    "ticks": 400.0,
+    "lufs": -17.74,
+    "true_peak": -1.31,
+    "bytes": 331693,
+    "index": 0
+   }
+  ]
+ },
+ "music.victory": {
+  "event": "godzilla:music.victory",
+  "seconds": 20.0,
+  "ticks": 400.0,
+  "loop": false,
+  "stream": true,
+  "channels": 2,
+  "variants_count": 1,
+  "lufs": -17.24,
+  "true_peak": -2.12,
+  "atten": 0,
+  "note": "20 s, 120 bpm, E major: brass fanfare, a triumphant theme, a huge final chord with crash, bells and choir",
+  "bpm": 120,
+  "key": "E major",
+  "bar_s": 2.0,
+  "final_chord_s": 16.0,
+  "variants": [
+   {
+    "file": "music/victory",
+    "seconds": 20.0,
+    "ticks": 400.0,
+    "lufs": -17.24,
+    "true_peak": -2.12,
+    "bytes": 357543,
+    "index": 0
+   }
+  ]
+ },
+ "people.crowd_panic_loop": {
+  "event": "godzilla:people.crowd_panic_loop",
+  "seconds": 6.0,
+  "ticks": 120.0,
+  "loop": true,
+  "stream": false,
+  "channels": 1,
+  "variants_count": 1,
+  "lufs": -24.1,
+  "true_peak": -5.28,
+  "atten": 70,
+  "note": "a crowd running and screaming, 6 s seamless",
+  "variants": [
+   {
+    "file": "people/crowd_panic_loop",
+    "seconds": 6.0,
+    "ticks": 120.0,
+    "lufs": -24.1,
+    "true_peak": -5.28,
+    "bytes": 63582,
+    "index": 0
+   }
+  ]
+ },
+ "people.scream": {
+  "event": "godzilla:people.scream",
+  "seconds": 2.9,
+  "ticks": 58.0,
+  "loop": false,
+  "stream": false,
+  "channels": 1,
+  "variants_count": 10,
+  "lufs": -17.64,
+  "true_peak": -3.83,
+  "atten": 60,
+  "note": "cartoon screams: 0-2 women, 3-5 men, 6-7 squeaks, 8-9 groups",
+  "variants": [
+   {
+    "file": "people/scream_1",
+    "seconds": 1.9,
+    "ticks": 38.0,
+    "lufs": -17.55,
+    "true_peak": -4.15,
+    "bytes": 23302,
+    "index": 0
+   },
+   {
+    "file": "people/scream_2",
+    "seconds": 2.1,
+    "ticks": 42.0,
+    "lufs": -15.03,
+    "true_peak": -3.97,
+    "bytes": 24025,
+    "index": 1
+   },
+   {
+    "file": "people/scream_3",
+    "seconds": 2.3,
+    "ticks": 46.0,
+    "lufs": -15.97,
+    "true_peak": -3.9,
+    "bytes": 25944,
+    "index": 2
+   },
+   {
+    "file": "people/scream_4",
+    "seconds": 2.0,
+    "ticks": 40.0,
+    "lufs": -19.84,
+    "true_peak": -4.11,
+    "bytes": 22822,
+    "index": 3
+   },
+   {
+    "file": "people/scream_5",
+    "seconds": 2.2,
+    "ticks": 44.0,
+    "lufs": -17.27,
+    "true_peak": -4.15,
+    "bytes": 24464,
+    "index": 4
+   },
+   {
+    "file": "people/scream_6",
+    "seconds": 1.8,
+    "ticks": 36.0,
+    "lufs": -17.52,
+    "true_peak": -3.83,
+    "bytes": 20882,
+    "index": 5
+   },
+   {
+    "file": "people/scream_7",
+    "seconds": 1.0,
+    "ticks": 20.0,
+    "lufs": -17.26,
+    "true_peak": -3.89,
+    "bytes": 14625,
+    "index": 6
+   },
+   {
+    "file": "people/scream_8",
+    "seconds": 1.15,
+    "ticks": 23.0,
+    "lufs": -18.56,
+    "true_peak": -3.91,
+    "bytes": 14454,
+    "index": 7
+   },
+   {
+    "file": "people/scream_9",
+    "seconds": 2.9,
+    "ticks": 58.0,
+    "lufs": -19.44,
+    "true_peak": -4.21,
+    "bytes": 28940,
+    "index": 8
+   },
+   {
+    "file": "people/scream_10",
+    "seconds": 2.9,
+    "ticks": 58.0,
+    "lufs": -17.96,
+    "true_peak": -3.9,
+    "bytes": 31552,
+    "index": 9
+   }
+  ]
+ },
+ "people.squish": {
+  "event": "godzilla:people.squish",
+  "seconds": 0.55,
+  "ticks": 11.0,
+  "loop": false,
+  "stream": false,
+  "channels": 1,
+  "variants_count": 4,
+  "lufs": -25.76,
+  "true_peak": -4.77,
+  "atten": 50,
+  "note": "cartoon squish: a wet splat with a bubbly pop",
+  "variants": [
+   {
+    "file": "people/squish_1",
+    "seconds": 0.55,
+    "ticks": 11.0,
+    "lufs": -23.07,
+    "true_peak": -5.04,
+    "bytes": 8720,
+    "index": 0
+   },
+   {
+    "file": "people/squish_2",
+    "seconds": 0.55,
+    "ticks": 11.0,
+    "lufs": -25.32,
+    "true_peak": -4.77,
+    "bytes": 8688,
+    "index": 1
+   },
+   {
+    "file": "people/squish_3",
+    "seconds": 0.55,
+    "ticks": 11.0,
+    "lufs": -26.49,
+    "true_peak": -4.94,
+    "bytes": 8544,
+    "index": 2
+   },
+   {
+    "file": "people/squish_4",
+    "seconds": 0.55,
+    "ticks": 11.0,
+    "lufs": -28.15,
+    "true_peak": -5.26,
+    "bytes": 8443,
+    "index": 3
+   }
+  ]
+ },
+ "rubble.hit": {
+  "event": "godzilla:rubble.hit",
+  "seconds": 0.8,
+  "ticks": 16.0,
+  "loop": false,
+  "stream": false,
+  "channels": 1,
+  "variants_count": 5,
+  "lufs": -24.88,
+  "true_peak": -3.93,
+  "atten": 60,
+  "note": "a chunk of masonry landing: a thud, a skitter",
+  "variants": [
+   {
+    "file": "rubble/hit_1",
+    "seconds": 0.8,
+    "ticks": 16.0,
+    "lufs": -26.5,
+    "true_peak": -3.99,
+    "bytes": 11539,
+    "index": 0
+   },
+   {
+    "file": "rubble/hit_2",
+    "seconds": 0.8,
+    "ticks": 16.0,
+    "lufs": -23.81,
+    "true_peak": -3.93,
+    "bytes": 11211,
+    "index": 1
+   },
+   {
+    "file": "rubble/hit_3",
+    "seconds": 0.8,
+    "ticks": 16.0,
+    "lufs": -25.13,
+    "true_peak": -3.98,
+    "bytes": 11804,
+    "index": 2
+   },
+   {
+    "file": "rubble/hit_4",
+    "seconds": 0.8,
+    "ticks": 16.0,
+    "lufs": -24.67,
+    "true_peak": -4.02,
+    "bytes": 11526,
+    "index": 3
+   },
+   {
+    "file": "rubble/hit_5",
+    "seconds": 0.8,
+    "ticks": 16.0,
+    "lufs": -24.28,
+    "true_peak": -3.96,
+    "bytes": 9674,
+    "index": 4
+   }
+  ]
+ },
+ "siren.city_loop": {
+  "event": "godzilla:siren.city_loop",
+  "seconds": 10.0,
+  "ticks": 200.0,
+  "loop": true,
+  "stream": false,
+  "channels": 1,
+  "variants_count": 1,
+  "lufs": -19.97,
+  "true_peak": -6.96,
+  "atten": 220,
+  "note": "air-raid siren, 10 s cycle: slow wail rising to a plateau and winding down, with city echoes",
+  "variants": [
+   {
+    "file": "siren/city_loop",
+    "seconds": 10.0,
+    "ticks": 200.0,
+    "lufs": -19.97,
+    "true_peak": -6.96,
+    "bytes": 44109,
+    "index": 0
+   }
+  ]
+ },
+ "siren.police": {
+  "event": "godzilla:siren.police",
+  "seconds": 3.2,
+  "ticks": 64.0,
+  "loop": false,
+  "stream": false,
+  "channels": 1,
+  "variants_count": 2,
+  "lufs": -14.65,
+  "true_peak": -5.94,
+  "atten": 140,
+  "note": "police siren: 0 = two-tone 'pii-poo', 1 = rising yelp; 3.2 s, seamless if replayed",
+  "variants": [
+   {
+    "file": "siren/police_1",
+    "seconds": 3.2,
+    "ticks": 64.0,
+    "lufs": -14.43,
+    "true_peak": -5.97,
+    "bytes": 20180,
+    "index": 0
+   },
+   {
+    "file": "siren/police_2",
+    "seconds": 3.2,
+    "ticks": 64.0,
+    "lufs": -14.87,
+    "true_peak": -5.94,
+    "bytes": 25846,
+    "index": 1
+   }
+  ]
+ },
+ "smash.glass": {
+  "event": "godzilla:smash.glass",
+  "seconds": 1.8,
+  "ticks": 36.0,
+  "loop": false,
+  "stream": false,
+  "channels": 1,
+  "variants_count": 4,
+  "lufs": -19.7,
+  "true_peak": -2.61,
+  "atten": 70,
+  "note": "glass breaking: a curtain wall or a shop front",
+  "variants": [
+   {
+    "file": "smash/glass_1",
+    "seconds": 1.8,
+    "ticks": 36.0,
+    "lufs": -21.91,
+    "true_peak": -3.49,
+    "bytes": 26500,
+    "index": 0
+   },
+   {
+    "file": "smash/glass_2",
+    "seconds": 1.8,
+    "ticks": 36.0,
+    "lufs": -20.53,
+    "true_peak": -3.24,
+    "bytes": 28769,
+    "index": 1
+   },
+   {
+    "file": "smash/glass_3",
+    "seconds": 1.8,
+    "ticks": 36.0,
+    "lufs": -17.24,
+    "true_peak": -2.61,
+    "bytes": 28444,
+    "index": 2
+   },
+   {
+    "file": "smash/glass_4",
+    "seconds": 1.8,
+    "ticks": 36.0,
+    "lufs": -19.11,
+    "true_peak": -2.75,
+    "bytes": 28849,
+    "index": 3
+   }
+  ]
+ },
+ "smash.large": {
+  "event": "godzilla:smash.large",
+  "seconds": 3.8,
+  "ticks": 76.0,
+  "loop": false,
+  "stream": false,
+  "channels": 1,
+  "variants_count": 3,
+  "lufs": -16.0,
+  "true_peak": -1.26,
+  "atten": 130,
+  "note": "breaking a tower or a bridge: slabs, steel groans, glass, a long tumble",
+  "variants": [
+   {
+    "file": "smash/large_1",
+    "seconds": 3.2,
+    "ticks": 64.0,
+    "lufs": -15.53,
+    "true_peak": -1.49,
+    "bytes": 49558,
+    "index": 0
+   },
+   {
+    "file": "smash/large_2",
+    "seconds": 3.5,
+    "ticks": 70.0,
+    "lufs": -15.64,
+    "true_peak": -1.26,
+    "bytes": 54228,
+    "index": 1
+   },
+   {
+    "file": "smash/large_3",
+    "seconds": 3.8,
+    "ticks": 76.0,
+    "lufs": -16.82,
+    "true_peak": -1.74,
+    "bytes": 58672,
+    "index": 2
+   }
+  ]
+ },
+ "smash.medium": {
+  "event": "godzilla:smash.medium",
+  "seconds": 2.1,
+  "ticks": 42.0,
+  "loop": false,
+  "stream": false,
+  "channels": 1,
+  "variants_count": 4,
+  "lufs": -18.03,
+  "true_peak": -1.09,
+  "atten": 90,
+  "note": "through a floor of a building: masonry, glass and a bit of steel",
+  "variants": [
+   {
+    "file": "smash/medium_1",
+    "seconds": 1.8,
+    "ticks": 36.0,
+    "lufs": -18.11,
+    "true_peak": -1.09,
+    "bytes": 29186,
+    "index": 0
+   },
+   {
+    "file": "smash/medium_2",
+    "seconds": 1.9,
+    "ticks": 38.0,
+    "lufs": -17.41,
+    "true_peak": -2.23,
+    "bytes": 28561,
+    "index": 1
+   },
+   {
+    "file": "smash/medium_3",
+    "seconds": 2.0,
+    "ticks": 40.0,
+    "lufs": -17.82,
+    "true_peak": -1.32,
+    "bytes": 31163,
+    "index": 2
+   },
+   {
+    "file": "smash/medium_4",
+    "seconds": 2.1,
+    "ticks": 42.0,
+    "lufs": -18.77,
+    "true_peak": -1.27,
+    "bytes": 33137,
+    "index": 3
+   }
+  ]
+ },
+ "smash.small": {
+  "event": "godzilla:smash.small",
+  "seconds": 1.15,
+  "ticks": 23.0,
+  "loop": false,
+  "stream": false,
+  "channels": 1,
+  "variants_count": 4,
+  "lufs": -19.47,
+  "true_peak": -2.24,
+  "atten": 70,
+  "note": "a hand or foot through a wall, a fence or a window: crack, brick scatter",
+  "variants": [
+   {
+    "file": "smash/small_1",
+    "seconds": 1.0,
+    "ticks": 20.0,
+    "lufs": -19.1,
+    "true_peak": -2.81,
+    "bytes": 18395,
+    "index": 0
+   },
+   {
+    "file": "smash/small_2",
+    "seconds": 1.05,
+    "ticks": 21.0,
+    "lufs": -18.63,
+    "true_peak": -2.24,
+    "bytes": 19266,
+    "index": 1
+   },
+   {
+    "file": "smash/small_3",
+    "seconds": 1.1,
+    "ticks": 22.0,
+    "lufs": -20.31,
+    "true_peak": -2.47,
+    "bytes": 19066,
+    "index": 2
+   },
+   {
+    "file": "smash/small_4",
+    "seconds": 1.15,
+    "ticks": 23.0,
+    "lufs": -19.83,
+    "true_peak": -2.78,
+    "bytes": 19687,
+    "index": 3
+   }
+  ]
+ },
+ "train.pass": {
+  "event": "godzilla:train.pass",
+  "seconds": 9.0,
+  "ticks": 180.0,
+  "loop": false,
+  "stream": false,
+  "channels": 1,
+  "variants_count": 2,
+  "lufs": -20.11,
+  "true_peak": -1.41,
+  "atten": 160,
+  "note": "an electric commuter train passing, 9 s: motor whine and rail clatter with Doppler, a short horn",
+  "variants": [
+   {
+    "file": "train/pass_1",
+    "seconds": 9.0,
+    "ticks": 180.0,
+    "lufs": -20.11,
+    "true_peak": -1.41,
+    "bytes": 101928,
+    "index": 0
+   },
+   {
+    "file": "train/pass_2",
+    "seconds": 9.0,
+    "ticks": 180.0,
+    "lufs": -20.11,
+    "true_peak": -1.49,
+    "bytes": 102280,
+    "index": 1
+   }
+  ]
+ },
+ "ui.big_bonus": {
+  "event": "godzilla:ui.big_bonus",
+  "seconds": 3.2,
+  "ticks": 64.0,
+  "loop": false,
+  "stream": false,
+  "channels": 2,
+  "variants_count": 1,
+  "lufs": -15.36,
+  "true_peak": -1.76,
+  "atten": 0,
+  "note": "a big bonus: a brass hit, a cascade of coin-like chimes and a bell",
+  "variants": [
+   {
+    "file": "ui/big_bonus",
+    "seconds": 3.2,
+    "ticks": 64.0,
+    "lufs": -15.36,
+    "true_peak": -1.76,
+    "bytes": 85674,
+    "index": 0
+   }
+  ]
+ },
+ "ui.combo_break": {
+  "event": "godzilla:ui.combo_break",
+  "seconds": 1.5,
+  "ticks": 30.0,
+  "loop": false,
+  "stream": false,
+  "channels": 2,
+  "variants_count": 2,
+  "lufs": -17.34,
+  "true_peak": -3.85,
+  "atten": 0,
+  "note": "the combo is lost: two falling, deflating notes",
+  "variants": [
+   {
+    "file": "ui/combo_break_1",
+    "seconds": 1.5,
+    "ticks": 30.0,
+    "lufs": -16.99,
+    "true_peak": -3.9,
+    "bytes": 22626,
+    "index": 0
+   },
+   {
+    "file": "ui/combo_break_2",
+    "seconds": 1.5,
+    "ticks": 30.0,
+    "lufs": -17.69,
+    "true_peak": -3.85,
+    "bytes": 22093,
+    "index": 1
+   }
+  ]
+ },
+ "ui.combo_up": {
+  "event": "godzilla:ui.combo_up",
+  "seconds": 1.2,
+  "ticks": 24.0,
+  "loop": false,
+  "stream": false,
+  "channels": 2,
+  "variants_count": 4,
+  "lufs": -15.61,
+  "true_peak": -3.84,
+  "atten": 0,
+  "note": "rising arpeggio; variation k is a step higher than k-1, so the game may pick by combo level",
+  "variants": [
+   {
+    "file": "ui/combo_up_1",
+    "seconds": 1.2,
+    "ticks": 24.0,
+    "lufs": -15.95,
+    "true_peak": -3.86,
+    "bytes": 32753,
+    "index": 0
+   },
+   {
+    "file": "ui/combo_up_2",
+    "seconds": 1.2,
+    "ticks": 24.0,
+    "lufs": -15.26,
+    "true_peak": -3.84,
+    "bytes": 32578,
+    "index": 1
+   },
+   {
+    "file": "ui/combo_up_3",
+    "seconds": 1.2,
+    "ticks": 24.0,
+    "lufs": -16.34,
+    "true_peak": -4.12,
+    "bytes": 33558,
+    "index": 2
+   },
+   {
+    "file": "ui/combo_up_4",
+    "seconds": 1.2,
+    "ticks": 24.0,
+    "lufs": -14.91,
+    "true_peak": -3.98,
+    "bytes": 33225,
+    "index": 3
+   }
+  ]
+ },
+ "ui.game_over": {
+  "event": "godzilla:ui.game_over",
+  "seconds": 5.5,
+  "ticks": 110.0,
+  "loop": false,
+  "stream": false,
+  "channels": 2,
+  "variants_count": 1,
+  "lufs": -17.63,
+  "true_peak": -1.91,
+  "atten": 0,
+  "note": "the end card on a loss: a falling minor brass line, a low drum and a tolling bell",
+  "variants": [
+   {
+    "file": "ui/game_over",
+    "seconds": 5.5,
+    "ticks": 110.0,
+    "lufs": -17.63,
+    "true_peak": -1.91,
+    "bytes": 107781,
+    "index": 0
+   }
+  ]
+ },
+ "ui.score_tick": {
+  "event": "godzilla:ui.score_tick",
+  "seconds": 0.16,
+  "ticks": 3.2,
+  "loop": false,
+  "stream": false,
+  "channels": 2,
+  "variants_count": 4,
+  "lufs": -20.99,
+  "true_peak": -6.89,
+  "atten": 0,
+  "note": "a tiny bright blip for each score increment",
+  "variants": [
+   {
+    "file": "ui/score_tick_1",
+    "seconds": 0.16,
+    "ticks": 3.2,
+    "lufs": -21.35,
+    "true_peak": -8.12,
+    "bytes": 6130,
+    "index": 0
+   },
+   {
+    "file": "ui/score_tick_2",
+    "seconds": 0.16,
+    "ticks": 3.2,
+    "lufs": -20.77,
+    "true_peak": -6.89,
+    "bytes": 5937,
+    "index": 1
+   },
+   {
+    "file": "ui/score_tick_3",
+    "seconds": 0.16,
+    "ticks": 3.2,
+    "lufs": -21.14,
+    "true_peak": -8.0,
+    "bytes": 5889,
+    "index": 2
+   },
+   {
+    "file": "ui/score_tick_4",
+    "seconds": 0.16,
+    "ticks": 3.2,
+    "lufs": -20.7,
+    "true_peak": -7.0,
+    "bytes": 6018,
+    "index": 3
+   }
+  ]
+ },
+ "ui.title_hit": {
+  "event": "godzilla:ui.title_hit",
+  "seconds": 6.0,
+  "ticks": 120.0,
+  "loop": false,
+  "stream": false,
+  "channels": 2,
+  "variants_count": 1,
+  "lufs": -19.75,
+  "true_peak": -1.57,
+  "atten": 0,
+  "note": "the title card: a gigantic hit; drums, brass chord, crash and a sub drop",
+  "variants": [
+   {
+    "file": "ui/title_hit",
+    "seconds": 6.0,
+    "ticks": 120.0,
+    "lufs": -19.75,
+    "true_peak": -1.57,
+    "bytes": 142699,
+    "index": 0
+   }
+  ]
+ },
+ "ui.victory_sting": {
+  "event": "godzilla:ui.victory_sting",
+  "seconds": 4.6,
+  "ticks": 92.0,
+  "loop": false,
+  "stream": false,
+  "channels": 2,
+  "variants_count": 1,
+  "lufs": -16.89,
+  "true_peak": -2.69,
+  "atten": 0,
+  "note": "a short triumphant fanfare in E major with crash and chimes",
+  "variants": [
+   {
+    "file": "ui/victory_sting",
+    "seconds": 4.6,
+    "ticks": 92.0,
+    "lufs": -16.89,
+    "true_peak": -2.69,
+    "bytes": 112766,
+    "index": 0
+   }
+  ]
+ }
+}

@@ -1,0 +1,3 @@
+# regenerable: previews and bytecode (audio/out is the build product the mod copies)
+preview/
+__pycache__/
