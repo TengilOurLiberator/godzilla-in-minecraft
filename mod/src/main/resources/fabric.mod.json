@@ -7,6 +7,10 @@
 	"authors": ["Godzilla VR"],
 	"license": "CC0-1.0",
 	"environment": "*",
+	"mixins": [
+		"godzilla.player.mixins.json",
+		{"config": "godzilla.player.client.mixins.json", "environment": "client"}
+	],
 	"entrypoints": {
 		"main": ["dev.godzilla.core.GodzillaMod"],
 		"client": ["dev.godzilla.client.GodzillaClient"]

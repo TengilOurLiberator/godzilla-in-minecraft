@@ -1,0 +1,8 @@
+{
+	"required": true,
+	"minVersion": "0.8",
+	"package": "dev.godzilla.player.mixin",
+	"compatibilityLevel": "JAVA_21",
+	"mixins": ["CollisionContextMixin", "PlayerMixin", "EntityMixin", "LivingEntityMixin"],
+	"injectors": {"defaultRequire": 1}
+}
