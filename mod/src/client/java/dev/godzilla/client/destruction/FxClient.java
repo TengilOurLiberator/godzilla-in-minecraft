@@ -16,7 +16,7 @@ import java.util.List;
 
 /** Dust clouds, fireballs, smoke columns and lasting fires, all from {@link GzPuff} billows and a few vanilla flames. */
 final class FxClient {
-	static SpriteSet sprites;
+	static SpriteSet sprites, smokeSprites, blastSprites;
 	static int puffsThisTick;
 	static final int PUFF_CAP = 260;
 	static long clientTick;
@@ -51,12 +51,20 @@ final class FxClient {
 	}
 
 	static GzPuff make(ClientLevel level, double x, double y, double z, double vx, double vy, double vz, float size, int life) {
-		if (sprites == null || puffsThisTick >= PUFF_CAP) {
+		return make(level, sprites, x, y, z, vx, vy, vz, size, life);
+	}
+
+	static GzPuff make(ClientLevel level, SpriteSet set, double x, double y, double z, double vx, double vy, double vz, float size, int life) {
+		if (set == null || puffsThisTick >= PUFF_CAP) {
 			return null;
 		}
 		puffsThisTick++;
 		statPuffs++;
-		GzPuff p = new GzPuff(level, x, y, z, vx, vy, vz, sprites.get(RND), life, size);
+		GzPuff p = new GzPuff(level, x, y, z, vx, vy, vz, set.get(RND), life, size);
+		if (set == blastSprites) {
+			p.anim = set;
+			p.fadeStart = 0.82f;
+		}
 		Minecraft.getInstance().particleEngine.add(p);
 		return p;
 	}
@@ -125,9 +133,9 @@ final class FxClient {
 	static void explosion(ClientLevel level, float x, float y, float z, float r, boolean fuel) {
 		float scale = fuel ? 1.5f : 1f;
 		// flash
-		GzPuff f = make(level, x, y, z, 0, 0, 0, r * 2.4f * scale, 7);
+		GzPuff f = make(level, blastSprites, x, y, z, 0, 0, 0, r * 2.2f * scale, 10);
 		if (f != null) {
-			f.setCol(1f, 0.95f, 0.75f, 1f, 0.7f, 0.3f);
+			f.setCol(1f, 1f, 1f, 1f, 1f, 1f);
 			f.a0 = 1f;
 			f.glow = 1f;
 			f.grow = 0.4f;
@@ -136,12 +144,12 @@ final class FxClient {
 		for (int i = 0; i < fire; i++) {
 			Vec3 d = randomDir();
 			float sp = r * (0.03f + RND.nextFloat() * 0.06f) * scale;
-			GzPuff p = make(level, x + d.x * r * 0.3, y + d.y * r * 0.3, z + d.z * r * 0.3, d.x * sp, d.y * sp * 0.8 + sp * 0.4, d.z * sp,
+			GzPuff p = make(level, blastSprites, x + d.x * r * 0.3, y + d.y * r * 0.3, z + d.z * r * 0.3, d.x * sp, d.y * sp * 0.8 + sp * 0.4, d.z * sp,
 					r * (0.5f + RND.nextFloat() * 0.6f) * scale, 20 + RND.nextInt(22));
 			if (p != null) {
-				p.setCol(1f, 0.82f, 0.4f, 0.28f, 0.12f, 0.06f);
-				p.a0 = 0.95f;
-				p.glow = 1f;
+				p.setCol(1f, 1f, 1f, 1f, 1f, 1f);
+				p.a0 = 1f;
+				p.glow = 0.7f;
 				p.drag = 0.86f;
 				p.buoyancy = 0.012f;
 				p.grow = 0.9f;
@@ -151,12 +159,12 @@ final class FxClient {
 		for (int i = 0; i < smoke; i++) {
 			Vec3 d = randomDir();
 			float sp = r * (0.012f + RND.nextFloat() * 0.03f) * scale;
-			GzPuff p = make(level, x + d.x * r * 0.5, y + d.y * r * 0.4, z + d.z * r * 0.5, d.x * sp, Math.abs(d.y) * sp + 0.05 + r * 0.01, d.z * sp,
-					r * (0.7f + RND.nextFloat() * 0.8f) * scale, 70 + RND.nextInt(80));
+			GzPuff p = make(level, smokeSprites, x + d.x * r * 0.5, y + d.y * r * 0.4, z + d.z * r * 0.5, d.x * sp, Math.abs(d.y) * sp + 0.05 + r * 0.01, d.z * sp,
+					r * (0.4f + RND.nextFloat() * 0.5f) * scale, 70 + RND.nextInt(80));
 			if (p != null) {
-				float c = 0.12f + RND.nextFloat() * 0.1f;
-				p.setCol(c * 1.6f, c * 1.2f, c, c, c, c);
-				p.a0 = 0.8f;
+				float c = 0.3f + RND.nextFloat() * 0.12f;
+				p.setCol(c * 1.5f, c * 1.15f, c, c, c, c);
+				p.a0 = 0.62f;
 				p.drag = 0.95f;
 				p.buoyancy = 0.003f;
 				p.grow = 1.6f;
@@ -168,7 +176,7 @@ final class FxClient {
 			level.addParticle(ParticleTypes.LAVA, x, y, z, d.x * sp, Math.abs(d.y) * sp + 0.2, d.z * sp);
 		}
 		if (r >= 4) {
-			smokeColumn(x, y, z, r * 5 * scale, r * 0.8f);
+			smokeColumn(x, y, z, r * 5 * scale, r * 0.5f);
 		}
 	}
 
@@ -231,12 +239,12 @@ final class FxClient {
 			}
 			for (int k = 0; k < 3; k++) {
 				float rise = c.height / 75f;
-				GzPuff p = make(level, c.x + (RND.nextFloat() - 0.5f) * c.width * 0.5f, c.y + 1, c.z + (RND.nextFloat() - 0.5f) * c.width * 0.5f,
+				GzPuff p = make(level, smokeSprites, c.x + (RND.nextFloat() - 0.5f) * c.width * 0.5f, c.y + 1, c.z + (RND.nextFloat() - 0.5f) * c.width * 0.5f,
 						(RND.nextFloat() - 0.5f) * 0.03, rise * (0.7f + RND.nextFloat() * 0.5f), (RND.nextFloat() - 0.5f) * 0.03, c.width * (0.6f + RND.nextFloat() * 0.5f), 90 + RND.nextInt(60));
 				if (p != null) {
-					float g = 0.1f + RND.nextFloat() * 0.08f;
-					p.setCol(g * 1.4f, g * 1.1f, g, g * 1.2f, g * 1.2f, g * 1.2f);
-					p.a0 = 0.85f;
+					float g = 0.3f + RND.nextFloat() * 0.1f;
+					p.setCol(g * 1.3f, g * 1.1f, g, g * 1.1f, g * 1.1f, g * 1.1f);
+					p.a0 = 0.6f;
 					p.drag = 0.985f;
 					p.grow = 1.8f;
 				}
@@ -279,7 +287,7 @@ final class FxClient {
 						fl.scale(1.6f + RND.nextFloat() * 1.6f);
 					}
 					if (RND.nextInt(2) == 0) {
-						GzPuff p = make(level, fx, fy + 0.5, fz, (RND.nextFloat() - 0.5f) * 0.02, 0.06 + RND.nextFloat() * 0.04, (RND.nextFloat() - 0.5f) * 0.02,
+						GzPuff p = make(level, smokeSprites, fx, fy + 0.5, fz, (RND.nextFloat() - 0.5f) * 0.02, 0.06 + RND.nextFloat() * 0.04, (RND.nextFloat() - 0.5f) * 0.02,
 								1.4f + RND.nextFloat() * 1.2f, 50 + RND.nextInt(50));
 						if (p != null) {
 							float g = 0.15f + RND.nextFloat() * 0.1f;

@@ -440,6 +440,9 @@ final class Collapses {
 		for (float th = 0.03f; th < 1.52f; th += 0.02f) {
 			float cs = (float) Math.cos(th), sn = (float) Math.sin(th);
 			for (int i = 0; i < samples; i++) {
+				if (sy[i] - py < 4.5f) {
+					continue; // the foot of the mass just sinks into the ground at the hinge
+				}
 				rotate(sx[i], sy[i], sz[i], px, py, pz, ax, az, cs, sn, o);
 				int ix = (int) Math.floor(o[0]), iz = (int) Math.floor(o[2]);
 				int h = level.getHeight(Heightmap.Types.MOTION_BLOCKING, ix, iz);
@@ -451,8 +454,8 @@ final class Collapses {
 		}
 		end = Math.max(0.12f, end);
 		// inverted pendulum: slow to start, then it goes
-		float k = 0.07f / Math.max(8f, height);
-		float th = 0.035f, w = 0.01f;
+		float k = 0.045f / Math.max(8f, height);
+		float th = 0.03f, w = 0.006f;
 		IntArrayList ticks = new IntArrayList();
 		java.util.ArrayList<Float> list = new java.util.ArrayList<>();
 		list.add(0f);

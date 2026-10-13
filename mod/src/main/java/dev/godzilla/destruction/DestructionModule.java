@@ -15,11 +15,16 @@ import net.minecraft.server.level.ServerPlayer;
 public final class DestructionModule {
 	public static final net.minecraft.core.particles.SimpleParticleType PUFF = net.fabricmc.fabric.api.particle.v1.FabricParticleTypes.simple(true);
 
+	public static final net.minecraft.core.particles.SimpleParticleType SMOKE = net.fabricmc.fabric.api.particle.v1.FabricParticleTypes.simple(true);
+	public static final net.minecraft.core.particles.SimpleParticleType BLAST = net.fabricmc.fabric.api.particle.v1.FabricParticleTypes.simple(true);
+
 	private DestructionModule() {
 	}
 
 	public static void init() {
 		net.minecraft.core.Registry.register(net.minecraft.core.registries.BuiltInRegistries.PARTICLE_TYPE, GodzillaMod.id("puff"), PUFF);
+		net.minecraft.core.Registry.register(net.minecraft.core.registries.BuiltInRegistries.PARTICLE_TYPE, GodzillaMod.id("smoke"), SMOKE);
+		net.minecraft.core.Registry.register(net.minecraft.core.registries.BuiltInRegistries.PARTICLE_TYPE, GodzillaMod.id("blast"), BLAST);
 		Packets.register();
 		Gz.setDestruction(new DestructionService());
 		ServerTickEvents.START_SERVER_TICK.register(server -> DestructionService.startTick());

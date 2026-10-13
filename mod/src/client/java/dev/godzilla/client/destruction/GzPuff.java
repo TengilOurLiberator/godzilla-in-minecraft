@@ -13,6 +13,8 @@ final class GzPuff extends SingleQuadParticle {
 	float baseSize, grow, buoyancy, drag;
 	float r0, g0, b0, r1, g1, b1, a0;
 	float glow;
+	net.minecraft.client.particle.SpriteSet anim;
+	float fadeStart = 0.45f;
 
 	GzPuff(ClientLevel level, double x, double y, double z, double vx, double vy, double vz, TextureAtlasSprite sprite, int life, float size) {
 		super(level, x, y, z, sprite);
@@ -58,13 +60,16 @@ final class GzPuff extends SingleQuadParticle {
 		this.zd *= drag;
 		this.move(this.xd, this.yd, this.zd);
 		this.roll += (this.xd + this.zd) * 0.2f;
+		if (anim != null) {
+			setSpriteFromAge(anim);
+		}
 		float f = (float) age / lifetime;
 		this.rCol = r0 + (r1 - r0) * Math.min(1f, f * 1.6f);
 		this.gCol = g0 + (g1 - g0) * Math.min(1f, f * 1.6f);
 		this.bCol = b0 + (b1 - b0) * Math.min(1f, f * 1.6f);
 		// quick fade-in, long fade-out
 		float in = Math.min(1f, age / 3f);
-		float out = f < 0.45f ? 1f : 1f - (f - 0.45f) / 0.55f;
+		float out = f < fadeStart ? 1f : 1f - (f - fadeStart) / (1f - fadeStart);
 		this.alpha = a0 * in * Math.max(0f, out);
 	}
 

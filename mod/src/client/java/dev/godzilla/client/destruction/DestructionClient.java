@@ -32,6 +32,14 @@ public final class DestructionClient {
 			FxClient.sprites = sprites;
 			return (options, level, x, y, z, xa, ya, za, random) -> null;
 		});
+		ParticleProviderRegistry.getInstance().register(DestructionModule.SMOKE, sprites -> {
+			FxClient.smokeSprites = sprites;
+			return (options, level, x, y, z, xa, ya, za, random) -> null;
+		});
+		ParticleProviderRegistry.getInstance().register(DestructionModule.BLAST, sprites -> {
+			FxClient.blastSprites = sprites;
+			return (options, level, x, y, z, xa, ya, za, random) -> null;
+		});
 
 		ClientPlayNetworking.registerGlobalReceiver(Packets.DebrisBurst.TYPE, (pk, ctx) -> {
 			ClientLevel level = ctx.client().level;
@@ -80,6 +88,7 @@ public final class DestructionClient {
 			}
 			long t0 = System.nanoTime();
 			FxClient.tick(level);
+			EntityBench.tick();
 			Debris.tick(level);
 			Vec3 cam = mc.gameRenderer.mainCamera().position();
 			Masses.tick(level, 0);
@@ -148,9 +157,12 @@ public final class DestructionClient {
 			GodzillaMod.LOGGER.info("GZ-DEBRIS {}", statsLine());
 		}
 		if (Debris.adaptive) {
-			if (ms > 13.5) {
+			// headroom against the frame budget: 90 fps in VR (two eye passes), 75 fps on the desktop
+			double budget = dev.godzilla.client.vr.ClientVr.isVrActive() ? 10.5 : 13.0;
+			if (ms > budget) {
 				Debris.maxLive = Math.max(3000, (int) (Debris.maxLive * 0.88));
-			} else if (ms < 8.0 && Debris.n > Debris.maxLive * 0.85) {
+				Debris.trim(Debris.n - Debris.maxLive);
+			} else if (ms < budget * 0.62 && Debris.n > Debris.maxLive * 0.85) {
 				Debris.maxLive = Math.min(Debris.HARD_MAX, (int) (Debris.maxLive * 1.12) + 200);
 			}
 		}
@@ -194,7 +206,17 @@ public final class DestructionClient {
 					log = t[1].equals("on");
 					msg = "log " + log;
 				}
+				case "maxfps" -> {
+					mc.options.framerateLimit().set(Integer.parseInt(t[1]));
+					mc.options.enableVsync().set(false);
+					msg = "max fps " + t[1];
+				}
+				case "benchent" -> {
+					EntityBench.start(mc, Integer.parseInt(t[1]));
+					msg = "benchent " + EntityBench.count();
+				}
 				case "clear" -> {
+					EntityBench.clear(mc.level);
 					resetAll();
 					msg = "cleared";
 				}

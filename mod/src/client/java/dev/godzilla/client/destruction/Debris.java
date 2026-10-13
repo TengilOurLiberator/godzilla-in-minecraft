@@ -49,6 +49,14 @@ final class Debris {
 	private Debris() {
 	}
 
+	static void trim(int excess) {
+		for (int i = n - 1; i >= 0 && excess > 0; i--, excess--) {
+			if (ttl[i] - age[i] > 12) {
+				ttl[i] = (short) (age[i] + 12);
+			}
+		}
+	}
+
 	static void clear() {
 		n = 0;
 	}
