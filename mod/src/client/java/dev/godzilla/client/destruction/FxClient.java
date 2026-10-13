@@ -66,11 +66,11 @@ final class FxClient {
 		for (int i = 0; i < count; i++) {
 			float a = RND.nextFloat() * 6.2831855f;
 			float s = spread * (0.3f + RND.nextFloat() * 0.9f);
-			float c = 0.58f + RND.nextFloat() * 0.18f;
+			float c = 0.86f + RND.nextFloat() * 0.14f;
 			GzPuff p = make(level, x + (RND.nextFloat() - 0.5f) * size * 0.3f, y + RND.nextFloat() * size * 0.15f, z + (RND.nextFloat() - 0.5f) * size * 0.3f,
 					Math.cos(a) * s, rise * (0.4f + RND.nextFloat()), Math.sin(a) * s, size * (0.7f + RND.nextFloat() * 0.6f), 55 + RND.nextInt(55));
 			if (p != null) {
-				p.setCol(c, c * 0.95f, c * 0.86f, c * 0.8f, c * 0.77f, c * 0.7f);
+				p.setCol(c, c * 0.95f, c * 0.84f, c * 0.8f, c * 0.77f, c * 0.7f);
 				p.a0 = 0.55f * opacity;
 				p.drag = 0.93f;
 				p.buoyancy = 0.0012f;
@@ -103,8 +103,8 @@ final class FxClient {
 			float s = 0.16f + RND.nextFloat() * 0.1f;
 			GzPuff p = make(level, x + Math.cos(a) * r, y + 0.5, z + Math.sin(a) * r, Math.cos(a) * s, 0.01, Math.sin(a) * s, 3.5f + dust * 0.45f, 80 + RND.nextInt(60));
 			if (p != null) {
-				float c = 0.6f + RND.nextFloat() * 0.15f;
-				p.setCol(c, c * 0.95f, c * 0.85f, c * 0.78f, c * 0.76f, c * 0.68f);
+				float c = 0.86f + RND.nextFloat() * 0.14f;
+				p.setCol(c, c * 0.95f, c * 0.84f, c * 0.78f, c * 0.76f, c * 0.68f);
 				p.a0 = 0.6f;
 				p.drag = 0.94f;
 				p.buoyancy = 0.001f;
@@ -114,7 +114,7 @@ final class FxClient {
 			GzPuff p = make(level, x + (RND.nextFloat() - 0.5f) * dust, y + 1, z + (RND.nextFloat() - 0.5f) * dust, 0, 0.12 + RND.nextFloat() * 0.1, 0,
 					4.5f + dust * 0.6f, 100 + RND.nextInt(60));
 			if (p != null) {
-				p.setCol(0.68f, 0.64f, 0.58f, 0.5f, 0.48f, 0.45f);
+				p.setCol(0.9f, 0.85f, 0.76f, 0.62f, 0.6f, 0.56f);
 				p.a0 = 0.5f;
 				p.drag = 0.95f;
 			}

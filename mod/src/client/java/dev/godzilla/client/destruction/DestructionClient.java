@@ -75,7 +75,7 @@ public final class DestructionClient {
 
 		ClientTickEvents.END_CLIENT_TICK.register(mc -> {
 			ClientLevel level = mc.level;
-			if (level == null || mc.isPaused()) {
+			if (level == null || mc.isPaused() || !level.tickRateManager().runsNormally()) {
 				return;
 			}
 			long t0 = System.nanoTime();

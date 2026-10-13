@@ -35,7 +35,7 @@ import java.util.concurrent.Executors;
  * a rubble mound of real blocks.
  */
 final class Collapses {
-	static final float RUBBLE_FRACTION = 0.30f;
+	static final float RUBBLE_FRACTION = 0.40f;
 	static final int SLICE_CELLS = 3500;
 	static final long TICK_BUDGET_NANOS = 6_000_000L;
 
@@ -620,11 +620,11 @@ final class Collapses {
 		RandomSource rnd = RandomSource.createThreadLocalInstance(count * 7919L + minX * 31L + minZ);
 		for (int i = 0; i < prof.length; i++) {
 			float sd = fp[i] ? in[i] : -out[i];
-			float t = (sd + m) / (emax + m);
+			float t = (sd + 0.55f * m) / (emax + 0.55f * m);
 			if (t <= 0) {
 				continue;
 			}
-			prof[i] = (float) Math.pow(Math.min(1f, t), 1.15) * (0.7f + 0.6f * rnd.nextFloat());
+			prof[i] = (float) Math.pow(Math.min(1f, t), 1.5) * (0.7f + 0.6f * rnd.nextFloat());
 		}
 		// scale the height so that the columns add up to the count
 		float lo = 0.1f, hi = 80f;
