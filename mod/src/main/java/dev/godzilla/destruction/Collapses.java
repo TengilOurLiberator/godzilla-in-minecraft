@@ -309,7 +309,7 @@ final class Collapses {
 			statMassBlocks += n;
 			statMaxMass = Math.max(statMaxMass, n);
 			GzEvents.COLLAPSE.fire(new GzEvents.Collapse(center, n, s.asBuilding()));
-			DestructionService.sound(level, center, GodzillaSounds.COLLAPSE_RUMBLE, 10f, 0.95f + level.random.nextFloat() * 0.1f, 40, true);
+			DestructionService.sound(level, center, GodzillaSounds.COLLAPSE_RUMBLE, 10f, 0.95f + level.getRandom().nextFloat() * 0.1f, 40, true);
 			shake(level, center, 0.25f + Math.min(0.5f, n / 4000f), 40 + Math.min(80, n / 100));
 
 			// the landing and, for a pancake, the storeys giving way on the way down
@@ -364,7 +364,7 @@ final class Collapses {
 		crushedIds.addAll(ids);
 		Vec3 c = centroid(cells);
 		DestructionService.burst(level, cells, ids, c, Vec3.ZERO, 2, 1.3f, 4);
-		DestructionService.sound(level, c, GodzillaSounds.SMASH_MEDIUM, 6f, 0.8f + level.random.nextFloat() * 0.2f, 41, false);
+		DestructionService.sound(level, c, GodzillaSounds.SMASH_MEDIUM, 6f, 0.8f + level.getRandom().nextFloat() * 0.2f, 41, false);
 	}
 
 	// ------------------------------------------------------------------------------------------------------------------
@@ -583,7 +583,7 @@ final class Collapses {
 		}
 		statRubble += rubble;
 
-		DestructionService.sound(level, land, GodzillaSounds.COLLAPSE_SETTLE, 7f, 0.95f + level.random.nextFloat() * 0.1f, 42, true);
+		DestructionService.sound(level, land, GodzillaSounds.COLLAPSE_SETTLE, 7f, 0.95f + level.getRandom().nextFloat() * 0.1f, 42, true);
 		if (n > 60) {
 			shake(level, land, 0.2f + Math.min(0.6f, n / 3500f), 30 + Math.min(60, n / 80));
 		}

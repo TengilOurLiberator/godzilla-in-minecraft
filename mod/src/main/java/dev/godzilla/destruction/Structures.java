@@ -16,7 +16,6 @@ import it.unimi.dsi.fastutil.longs.LongArrayList;
 import it.unimi.dsi.fastutil.longs.LongOpenHashSet;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.chunk.LevelChunk;
 import net.minecraft.world.level.chunk.LevelChunkSection;
@@ -45,6 +44,10 @@ final class Structures {
 	private static int nextAdhoc = ADHOC_ID0;
 	private static Map<Integer, String> labels = new HashMap<>();
 	static int adhocCount;
+
+	static long ckey(int cx, int cz) {
+		return ((long) cx & 0xffffffffL) | ((long) cz << 32);
+	}
 
 	private Structures() {
 	}
@@ -88,6 +91,9 @@ final class Structures {
 			s.current = b.blocks();
 			s.label = labels.getOrDefault(b.id(), b.name() == null ? "" : b.name());
 			String l = s.label.toLowerCase(java.util.Locale.ROOT);
+			if (l.isEmpty() && b.name() != null) {
+				l = b.name().toLowerCase(java.util.Locale.ROOT);
+			}
 			s.fuel = b.kind().equals("industrial") && (l.contains("fuel tank") || l.contains("gas sphere") || l.contains("oil tank"));
 			s.bridge = b.kind().equals("bridge");
 			add(s);
@@ -124,7 +130,7 @@ final class Structures {
 	private static void index(Long2ObjectOpenHashMap<List<Struct>> map, Struct s) {
 		for (int cx = s.x0 >> 4; cx <= s.x1 >> 4; cx++) {
 			for (int cz = s.z0 >> 4; cz <= s.z1 >> 4; cz++) {
-				map.computeIfAbsent(ChunkPos.asLong(cx, cz), k -> new ArrayList<>(2)).add(s);
+				map.computeIfAbsent(ckey(cx, cz), k -> new ArrayList<>(2)).add(s);
 			}
 		}
 	}
@@ -132,7 +138,7 @@ final class Structures {
 	private static void unindex(Struct s) {
 		for (int cx = s.x0 >> 4; cx <= s.x1 >> 4; cx++) {
 			for (int cz = s.z0 >> 4; cz <= s.z1 >> 4; cz++) {
-				List<Struct> l = BY_CHUNK.get(ChunkPos.asLong(cx, cz));
+				List<Struct> l = BY_CHUNK.get(ckey(cx, cz));
 				if (l != null) {
 					l.remove(s);
 				}
@@ -149,7 +155,7 @@ final class Structures {
 	}
 
 	static Struct find(int x, int y, int z) {
-		List<Struct> l = BY_CHUNK.get(ChunkPos.asLong(x >> 4, z >> 4));
+		List<Struct> l = BY_CHUNK.get(ckey(x >> 4, z >> 4));
 		if (l != null) {
 			for (int i = 0; i < l.size(); i++) {
 				Struct s = l.get(i);
@@ -162,7 +168,7 @@ final class Structures {
 	}
 
 	static Struct findBuilding(int x, int y, int z) {
-		List<Struct> l = BUILDINGS_BY_CHUNK.get(ChunkPos.asLong(x >> 4, z >> 4));
+		List<Struct> l = BUILDINGS_BY_CHUNK.get(ckey(x >> 4, z >> 4));
 		if (l != null) {
 			for (int i = 0; i < l.size(); i++) {
 				Struct s = l.get(i);
@@ -295,7 +301,7 @@ final class Structures {
 		Struct join = null;
 		for (int cx = minX >> 4; cx <= maxX >> 4 && join == null; cx++) {
 			for (int cz = minZ >> 4; cz <= maxZ >> 4 && join == null; cz++) {
-				List<Struct> l = BY_CHUNK.get(ChunkPos.asLong(cx, cz));
+				List<Struct> l = BY_CHUNK.get(ckey(cx, cz));
 				if (l != null) {
 					for (Struct o : l) {
 						if (o.building == null && o.x0 <= maxX && o.x1 >= minX && o.y0 <= maxY && o.y1 >= minY && o.z0 <= maxZ && o.z1 >= minZ) {
@@ -506,3 +512,4 @@ final class Structures {
 		return l;
 	}
 }
+

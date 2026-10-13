@@ -41,7 +41,7 @@ final class FuelTanks {
 		for (int i = 0; i < 3; i++) {
 			final int k = i;
 			Collapses.schedule(tick + 12 + i * 5, () -> {
-				double a = k * 2.1 + level.random.nextDouble();
+				double a = k * 2.1 + level.getRandom().nextDouble();
 				Vec3 at = new Vec3(c.x + Math.cos(a) * r * 0.8, c.y + k * 2, c.z + Math.sin(a) * r * 0.8);
 				svc.explode(level, at, r * 0.5, Cause.EXPLOSION);
 			});
