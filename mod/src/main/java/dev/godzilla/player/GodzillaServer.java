@@ -100,6 +100,7 @@ public final class GodzillaServer {
 		boolean riseSent;
 		boolean surfaced;
 		int idle;
+		float plough;
 		Pose pose;
 
 		Runtime(UUID uuid) {
@@ -279,7 +280,7 @@ public final class GodzillaServer {
 		p.refreshDimensions();
 		if (notify) {
 			ServerPlayNetworking.send(p, new PlayerNet.RiseS2C(false, Vec3.ZERO, 0, 0));
-			broadcast(p, new PlayerNet.StateS2C(p.getId(), PlayerNet.StateS2C.ENDED, 0, 0, 0, 0, -1, -1, 0, Vec3.ZERO, Vec3.ZERO, Vec3.ZERO, Vec3.ZERO, Vec3.ZERO, Vec3.ZERO));
+			broadcast(p, new PlayerNet.StateS2C(p.getId(), PlayerNet.StateS2C.ENDED, 0, 0, 0, 0, -1, -1, 0.0F, Vec3.ZERO, Vec3.ZERO, Vec3.ZERO, Vec3.ZERO, Vec3.ZERO, Vec3.ZERO));
 		}
 		GodzillaMod.LOGGER.info("godzilla: {} is no longer Godzilla", p.getGameProfile().name());
 	}
@@ -449,8 +450,11 @@ public final class GodzillaServer {
 			AABB legs = new AABB(feet.x - half, feet.y + 0.05, feet.z - half, feet.x + half, feet.y + 12.5 * s, feet.z + half).move(ahead);
 			AABB torso = new AABB(feet.x - half - 0.8 * s, feet.y + 12.5 * s, feet.z - half - 0.8 * s,
 					feet.x + half + 0.8 * s, feet.y + 24.5 * s, feet.z + half + 0.8 * s).move(ahead);
-			Gz.destruction().smashBox(level, legs, impulse, Cause.BODY);
-			Gz.destruction().smashBox(level, torso, impulse, Cause.BODY);
+			int removed = Gz.destruction().smashBox(level, legs, impulse, Cause.BODY) + Gz.destruction().smashBox(level, torso, impulse, Cause.BODY);
+			// how much mass he is ploughing through right now (0..1); the client turns it into a little drag
+			rt.plough += (Math.min(1.0F, removed / 300.0F) - rt.plough) * 0.5F;
+		} else {
+			rt.plough *= 0.5F;
 		}
 	}
 
@@ -628,14 +632,13 @@ public final class GodzillaServer {
 
 	private static void riseTick(ServerPlayer p, Runtime rt, ServerLevel level, Game game, Vec3 feet, double s) {
 		int t = game.phaseTicks();
-		if (!rt.riseSent) {
-			rt.riseSent = true;
-			rt.surfaced = false;
+		if (!rt.riseSent || t % 20 == 0) {
 			dev.godzilla.api.CityData.Start start = Gz.city().data().playerStart();
 			Vec3 pos = start.pos();
-			if (t < 5) {
+			if (!rt.riseSent && t < 5) {
 				p.teleportTo(level, pos.x, pos.y, pos.z, Set.of(), start.yaw(), 8.0F, true);
 			}
+			rt.riseSent = true;
 			ServerPlayNetworking.send(p, new PlayerNet.RiseS2C(true, pos, start.yaw(), t));
 		}
 		double eyeY = feet.y + p.getEyeHeight();
@@ -703,7 +706,7 @@ public final class GodzillaServer {
 		float charge = rt.breath == Breath.CHARGING ? rt.chargeTicks / (float) PlayerConfig.BREATH_CHARGE_TICKS
 				: rt.breath == Breath.FIRING ? 1.0F : 0.0F;
 		broadcast(p, new PlayerNet.StateS2C(p.getId(), flags, rt.gauge, charge, rt.beamLen, rt.roarTicks, rt.swipeLeft, rt.swipeRight,
-				BodyMotion.stepIndex(rt.motion.phase), pose.head(), pose.headDir(), pose.right(), pose.rightDir(), pose.left(), pose.leftDir()));
+				rt.plough, pose.head(), pose.headDir(), pose.right(), pose.rightDir(), pose.left(), pose.leftDir()));
 	}
 
 	private static void broadcast(ServerPlayer source, PlayerNet.StateS2C payload) {

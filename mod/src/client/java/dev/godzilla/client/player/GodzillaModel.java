@@ -32,6 +32,8 @@ final class GodzillaModel {
 		float age;
 	}
 
+	/** The head is drawn this much larger than its box coordinates (GodzillaGeometry.MOUTH_* include it). */
+	static final float HEAD_SCALE = 1.25F;
 	private static final int WHITE = 0xFFFFFFFF;
 	private static final double[] UP = {0, 1, 0};
 
@@ -103,7 +105,9 @@ final class GodzillaModel {
 		m.rotX(0.12 + 0.05 * p.amp);
 		m.box(Mesh.SKIN, tint(225), 0, 4.9, 0.8, 9.4, 9.6, 7.0);
 		m.box(Mesh.BELLY, tint(235), 0, 4.2, 4.35, 6.4, 7.4, 1.0);
-		m.box(Mesh.SKIN, tint(235), 0, 8.6, 0.6, 12.4, 3.4, 5.6);
+		if (!p.firstPerson) {
+			m.box(Mesh.SKIN, tint(235), 0, 8.6, 0.6, 12.4, 3.4, 5.6);
+		}
 		m.pop();
 	}
 
@@ -118,6 +122,7 @@ final class GodzillaModel {
 		m.translate(h.x, h.y, h.z);
 		m.rotY(-p.headYawRel);
 		m.rotX(p.headPitch);
+		m.scale(HEAD_SCALE);
 		if (!p.firstPerson) {
 			// skull, brow, snout
 			m.box(Mesh.SKIN, tint(230), 0, -0.5, -1.5, 5.4, 4.2, 5.0);
@@ -138,7 +143,7 @@ final class GodzillaModel {
 		}
 		// lower jaw (the part you may see when looking down)
 		m.push();
-		m.translate(0, -2.2, 0.3);
+		m.translate(0, -2.2 - (p.firstPerson ? 4.3 : 0), p.firstPerson ? -0.8 : 0.3);
 		m.rotX(p.mouth * 0.65);
 		m.box(Mesh.SKIN, tint(205), 0, -0.45, 2.5, 3.2, 0.9, 4.8);
 		m.box(Mesh.MOUTH, WHITE, 0, 0.05, 2.5, 2.6, 0.2, 4.2);

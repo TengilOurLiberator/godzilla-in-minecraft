@@ -57,11 +57,11 @@ final class RisePath {
 		double ySurface = SURFACE_EYE_Y - eye;
 		double y = lift(start.y, ySurface, t);
 		// terrain below the path may push him higher after the surface beat, never before (the beat must stay on the music)
-		double g = groundHeight((ClientLevel) p.level(), x, z, PlayerConfig.GROUND_Y + 1);
 		if (t > Game.RISE_SURFACE_TICK) {
-			y = Math.max(y, g);
-		} else {
-			y = Math.max(y, Math.min(g, lift(start.y, ySurface, Game.RISE_SURFACE_TICK) - 0.5));
+			double g = groundHeight((ClientLevel) p.level(), x, z, PlayerConfig.GROUND_Y + 1);
+			double k = Math.min(1.0, (t - Game.RISE_SURFACE_TICK) / 50.0);
+			k = k * k * (3 - 2 * k);
+			y += Math.max(0, g - y) * k;
 		}
 		p.setPos(x, y, z);
 		p.setDeltaMovement(Vec3.ZERO);

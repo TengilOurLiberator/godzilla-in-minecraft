@@ -15,7 +15,7 @@ public final class PlayerConfig {
 	public static final double VANILLA_BASE_SPEED = 0.1;
 	public static final double STEP_HEIGHT = 3.0;
 	/** Third person camera: vanilla distance 4 x scale; Godzilla uses less so the whole body fits. */
-	public static final double CAMERA_DISTANCE = 2.2;
+	public static final double CAMERA_DISTANCE = 3.4;
 
 	// ---- stride and feet
 	public static final double STEP_LENGTH = 9.6;
@@ -45,6 +45,6 @@ public final class PlayerConfig {
 	public static final int SWIPE_TICKS = 16;
 
 	// ---- rise
-	public static final double RISE_FORWARD_SPEED = 0.2;
+	public static final double RISE_FORWARD_SPEED = 0.17;
 	public static final double SEA_LEVEL = 62.0;
 }

@@ -137,6 +137,10 @@ public final class PlayerClient {
 			}
 		});
 		ClientPlayNetworking.registerGlobalReceiver(PlayerNet.RiseS2C.TYPE, (payload, ctx) -> {
+			// the server repeats this every second while rising; only a start or a real drift changes the clock
+			if (payload.active() && riseActive && Math.abs(riseTick - payload.tick0()) <= 4) {
+				return;
+			}
 			riseActive = payload.active();
 			riseStart = payload.start();
 			riseYaw = payload.yaw();
@@ -235,9 +239,6 @@ public final class PlayerClient {
 			localTick(mc, me, mine);
 		} else {
 			stopUnderwater();
-			if (riseActive) {
-				riseActive = false;
-			}
 		}
 		for (Visual v : VISUALS.values()) {
 			sounds(mc, v);

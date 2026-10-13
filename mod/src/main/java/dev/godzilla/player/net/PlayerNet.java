@@ -44,7 +44,7 @@ public final class PlayerNet {
 
 	/** Server to every client, every tick for each Godzilla: what the body is doing. */
 	public record StateS2C(int entityId, int flags, float gauge, float charge, float beamLength, int roarTicks,
-						   int swipeLeft, int swipeRight, int step, Vec3 headPos, Vec3 headDir,
+						   int swipeLeft, int swipeRight, float plough, Vec3 headPos, Vec3 headDir,
 						   Vec3 rightHand, Vec3 rightDir, Vec3 leftHand, Vec3 leftDir) implements CustomPacketPayload {
 		public static final int ACTIVE = 1;
 		public static final int CHARGING = 2;
@@ -66,7 +66,7 @@ public final class PlayerNet {
 					b.writeVarInt(v.roarTicks);
 					b.writeVarInt(v.swipeLeft + 1);
 					b.writeVarInt(v.swipeRight + 1);
-					b.writeVarInt(v.step);
+					b.writeFloat(v.plough);
 					writeVec(b, v.headPos);
 					writeVec(b, v.headDir);
 					writeVec(b, v.rightHand);
@@ -75,7 +75,7 @@ public final class PlayerNet {
 					writeVec(b, v.leftDir);
 				},
 				b -> new StateS2C(b.readVarInt(), b.readUnsignedByte(), b.readFloat(), b.readFloat(), b.readFloat(), b.readVarInt(),
-						b.readVarInt() - 1, b.readVarInt() - 1, b.readVarInt(), readVec(b), readVec(b), readVec(b), readVec(b), readVec(b), readVec(b)));
+						b.readVarInt() - 1, b.readVarInt() - 1, b.readFloat(), readVec(b), readVec(b), readVec(b), readVec(b), readVec(b), readVec(b)));
 
 		public boolean has(int flag) {
 			return (flags & flag) != 0;

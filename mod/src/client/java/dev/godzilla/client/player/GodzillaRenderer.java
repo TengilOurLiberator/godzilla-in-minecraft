@@ -274,7 +274,7 @@ public final class GodzillaRenderer {
 		Vec3 mouthW = GodzillaGeometry.mouth(head, dir, s);
 		Vec3 mouth = mouthW.subtract(feet);
 		float age = v.age + Minecraft.getInstance().getDeltaTracker().getGameTimeDeltaPartialTick(false);
-		double R = 1.5 * Math.max(0.35, s);
+		double R = 1.9 * Math.max(0.35, s);
 		if (charging && !firing) {
 			float ch = st.charge();
 			double r = R * (0.5 + 2.2 * ch);

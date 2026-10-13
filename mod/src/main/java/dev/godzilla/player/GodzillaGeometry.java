@@ -27,8 +27,8 @@ public final class GodzillaGeometry {
 	public static final float[] TAIL_THICK = {4.8F, 4.3F, 3.8F, 3.3F, 2.7F, 2.1F, 1.5F, 1.0F};
 
 	/** Head-local mouth (snout tip, between the jaws): x right..., z forward, y up, relative to the eye. */
-	public static final double MOUTH_FORWARD = 5.0;
-	public static final double MOUTH_DOWN = 1.9;
+	public static final double MOUTH_FORWARD = 6.4;
+	public static final double MOUTH_DOWN = 2.5;
 
 	public static double scaleOf(double entityScale) {
 		return entityScale / PlayerConfig.SCALE;
