@@ -123,11 +123,17 @@ final class DestructionCommands {
 				.formatted(Structures.liveCount(), Structures.adhocCount, Collapses.statAnalyses, Collapses.statSnapshotNanos / 1e6,
 						Collapses.statWorkerNanos / 1e6, Collapses.workerNanosLast / 1e6, Collapses.statMasses, Collapses.statMassBlocks,
 						Collapses.statMaxMass, Collapses.statRubble);
-		String u = "queues: jobs %d events %d; fires %d; tick time in destruction: avg %.3f ms, max %.3f ms over %d ticks; piece budget %d/tick"
+		String u2 = " worst single steps: mass removal slice %.1f ms, launch %.1f ms, landing %.1f ms; ".formatted(Collapses.maxStepNs / 1e6, Collapses.maxLaunchNs / 1e6, Collapses.maxLandNs / 1e6);
+		u2 += "slice cells %d: beforeRemoval %.2f us/block, setBlock %.2f us/block; ".formatted(Collapses.sliceCells, Collapses.beforeNs / 1e3 / Math.max(1, Collapses.sliceCells), Collapses.removeNs / 1e3 / Math.max(1, Collapses.sliceCells));
+		String u = u2 + "queues: jobs %d events %d; fires %d; tick time in destruction: avg %.3f ms, max %.3f ms over %d ticks; piece budget %d/tick"
 				.formatted(Collapses.jobs(), Collapses.events(), Fires.count(),
 						DestructionService.sumTickNanos / 1e6 / Math.max(1, DestructionService.tickCount), DestructionService.maxTickNanos / 1e6,
 						DestructionService.tickCount, DestructionService.pieceBudgetPerTick);
-		src.sendSuccess(() -> Component.literal(s + t + u), false);
+		u += "; WHOLE server tick (all work): avg %.2f ms, max %.1f ms over %d ticks, histogram <5/<10/<20/<35/<50/>=50 ms: %d/%d/%d/%d/%d/%d".formatted(
+				DestructionService.wholeTickSum / 1e6 / Math.max(1, DestructionService.wholeTickCount), DestructionService.wholeTickMax / 1e6, DestructionService.wholeTickCount,
+				DestructionService.wholeHist[0], DestructionService.wholeHist[1], DestructionService.wholeHist[2], DestructionService.wholeHist[3], DestructionService.wholeHist[4], DestructionService.wholeHist[5]);
+		String uu = u;
+		src.sendSuccess(() -> Component.literal(s + t + uu), false);
 		dev.godzilla.core.GodzillaMod.LOGGER.info("DESTRUCTION-STATS {}{}{}", s, t, u);
 		return 1;
 	}

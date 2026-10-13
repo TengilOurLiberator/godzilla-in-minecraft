@@ -36,7 +36,8 @@ import java.util.concurrent.Executors;
  */
 final class Collapses {
 	static final float RUBBLE_FRACTION = 0.40f;
-	static final int SLICE_CELLS = 3500;
+	static final long SLICE_NANOS = 3_000_000L;
+	static final int SLICE_CELLS = 2200;
 	static final long TICK_BUDGET_NANOS = 6_000_000L;
 
 	private static final ExecutorService POOL = Executors.newSingleThreadExecutor(r -> {
@@ -71,8 +72,14 @@ final class Collapses {
 	// statistics
 	static long statMasses, statMassBlocks, statAnalyses, statWorkerNanos, statSnapshotNanos, statRubble, statMaxMass;
 	static volatile long workerNanosLast;
+	static long maxStepNs, maxLaunchNs, maxLandNs, maxApplyNs, readNs, beforeNs, removeNs, sliceCells;
 
 	private Collapses() {
+	}
+
+	static void resetStats() {
+		statMasses = statMassBlocks = statAnalyses = statWorkerNanos = statSnapshotNanos = statRubble = statMaxMass = 0;
+		maxStepNs = maxLaunchNs = maxLandNs = maxApplyNs = readNs = beforeNs = removeNs = sliceCells = 0;
 	}
 
 	static void reset() {
@@ -120,7 +127,10 @@ final class Collapses {
 		int n = JOBS.size();
 		for (int i = 0; i < n; i++) {
 			MassJob j = JOBS.poll();
-			if (!j.step(level, tick)) {
+			long s0 = System.nanoTime();
+			boolean done = j.step(level, tick);
+			maxStepNs = Math.max(maxStepNs, System.nanoTime() - s0);
+			if (!done) {
 				JOBS.add(j);
 			}
 			if (System.nanoTime() - t0 > TICK_BUDGET_NANOS) {
@@ -207,8 +217,12 @@ final class Collapses {
 			LongArrayList slice = new LongArrayList();
 			IntArrayList sliceIds = new IntArrayList();
 			BlockPos.MutableBlockPos p = new BlockPos.MutableBlockPos();
-			int end = Math.min(src.length, pos + SLICE_CELLS);
-			for (; pos < end; pos++) {
+			long deadline = System.nanoTime() + SLICE_NANOS;
+			int end = pos;
+			for (; pos < src.length; pos++) {
+				if (pos - end >= SLICE_CELLS || ((pos & 127) == 0 && pos > end && System.nanoTime() > deadline)) {
+					break;
+				}
 				long c = src[pos];
 				p.set(c);
 				LevelChunk ch = level.getChunkSource().getChunkNow(p.getX() >> 4, p.getZ() >> 4);
@@ -222,9 +236,15 @@ final class Collapses {
 				slice.add(c);
 				sliceIds.add(Block.BLOCK_STATE_REGISTRY.getId(st));
 			}
+			long q0 = System.nanoTime();
 			if (!slice.isEmpty()) {
 				Structures.beforeRemoval(level, slice, Cause.COLLAPSE, tick, Vec3.ZERO);
+				long q1 = System.nanoTime();
 				DestructionService.removeCells(level, slice);
+				long q2 = System.nanoTime();
+				beforeNs += q1 - q0;
+				removeNs += q2 - q1;
+				sliceCells += slice.size();
 				DestructionService.statBlocks += slice.size();
 				if (m == null) {
 					Vec3 c = centroid(slice);
@@ -241,7 +261,9 @@ final class Collapses {
 				s.outstanding--;
 				return true;
 			}
+			long l0 = System.nanoTime();
 			launch(level, tick);
+			maxLaunchNs = Math.max(maxLaunchNs, System.nanoTime() - l0);
 			return true;
 		}
 
@@ -332,7 +354,9 @@ final class Collapses {
 				}
 			}
 			schedule(tick + duration, () -> {
+				long l0 = System.nanoTime();
 				land(level, s, fMode, landCells, landIds, crushedIds, fAmount, fpx, fpy, fpz, fax, faz, center);
+				maxLandNs = Math.max(maxLandNs, System.nanoTime() - l0);
 				s.outstanding--;
 			});
 		}

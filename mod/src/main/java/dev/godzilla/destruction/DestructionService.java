@@ -51,12 +51,15 @@ public final class DestructionService implements Destruction {
 	static long statBlocks, statNanos, statCalls, statPieces, statBursts, statDroppedPieces, statPacketBytes;
 	static long tickNanos, maxTickNanos, sumTickNanos, tickCount;
 	static long blocksThisTick;
+	static long tickStartNs, wholeTickMax, wholeTickSum, wholeTickCount, slowTicks;
+	static long[] wholeHist = new long[8];
 
 	interface Shape {
 		boolean test(int x, int y, int z);
 	}
 
 	static void startTick() {
+		tickStartNs = System.nanoTime();
 		piecesLeft = pieceBudgetPerTick;
 		soundsLeft = soundBudgetPerTick;
 		tickNanos = 0;
@@ -64,6 +67,12 @@ public final class DestructionService implements Destruction {
 	}
 
 	static void endTick(long tick) {
+		long whole = System.nanoTime() - tickStartNs;
+		wholeTickMax = Math.max(wholeTickMax, whole);
+		wholeTickSum += whole;
+		wholeTickCount++;
+		if (whole > 50_000_000L) slowTicks++;
+		wholeHist[whole < 5_000_000L ? 0 : whole < 10_000_000L ? 1 : whole < 20_000_000L ? 2 : whole < 35_000_000L ? 3 : whole < 50_000_000L ? 4 : 5]++;
 		maxTickNanos = Math.max(maxTickNanos, tickNanos);
 		sumTickNanos += tickNanos;
 		tickCount++;
@@ -75,6 +84,9 @@ public final class DestructionService implements Destruction {
 	static void resetStats() {
 		statBlocks = statNanos = statCalls = statPieces = statBursts = statDroppedPieces = statPacketBytes = 0;
 		tickNanos = maxTickNanos = sumTickNanos = tickCount = 0;
+		wholeTickMax = wholeTickSum = wholeTickCount = slowTicks = 0;
+		java.util.Arrays.fill(wholeHist, 0);
+		Collapses.resetStats();
 	}
 
 	// ------------------------------------------------------------------------------------------------------------------

@@ -158,7 +158,7 @@ final class Analysis {
 					int i = row + x;
 					if (!grounded[i]) continue;
 					int c = cls[i];
-					if ((c & T_MASK) == BlockInfo.NONE) continue;
+					if ((c & T_MASK) == BlockInfo.NONE || (c & RUBBLE) != 0) continue; // rubble is neither load nor load-bearing
 					total[y]++;
 					if ((c & T_MASK) == BlockInfo.STRONG && (c & RUBBLE) == 0) {
 						strong[y]++;
@@ -194,7 +194,7 @@ final class Analysis {
 				int row = y * stepY + z * sx;
 				for (int x = 0; x < sx; x++) {
 					int i = row + x;
-					if (grounded[i] && (cls[i] & T_MASK) != BlockInfo.NONE) {
+					if (grounded[i] && (cls[i] & T_MASK) != BlockInfo.NONE && (cls[i] & RUBBLE) == 0) {
 						cells.add(BlockPos.asLong(sn.x0 + x, sn.y0 + y, sn.z0 + z));
 						minX = Math.min(minX, sn.x0 + x);
 						maxX = Math.max(maxX, sn.x0 + x);
@@ -290,7 +290,7 @@ final class Analysis {
 					int row = k * stepY + z * sx;
 					for (int x = 0; x < sx; x++) {
 						int i = row + x;
-						if (grounded[i] && (cls[i] & T_MASK) != BlockInfo.NONE) {
+						if (grounded[i] && (cls[i] & T_MASK) != BlockInfo.NONE && (cls[i] & RUBBLE) == 0) {
 							l.add(BlockPos.asLong(sn.x0 + x, sn.y0 + k, sn.z0 + z));
 						}
 					}
