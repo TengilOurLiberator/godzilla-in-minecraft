@@ -158,19 +158,14 @@ def build_zone(world, T, block, rng, stats):
 def industrial_block(world, T, rect, rng):
     x0, z0, x1, z1 = rect
     paint(world, rect, B.C['gray'] if False else plan.YARD)
-    mid = (z0 + z1) // 2
-    # tank farm in the south half, warehouses in the north half
-    farm = (x0, mid + 2, x1, z1)
+    mid = z0 + 14
+    # warehouses in the north strip, a tank farm (two rows of three fuel tanks) in the south
+    farm = (x0, mid + 1, x1, z1)
     paint(world, farm, B.GRAVEL)
-    tanks = [(x0 + 8, mid + 11, 6, 9), (x0 + 24, mid + 11, 6, 10), (x0 + 8, mid + 29, 6, 8), (x0 + 24, mid + 29, 6, 9),
-             (x0 + 17, mid + 20, 4, 6)]
-    for (cx, cz, r, h) in tanks:
-        if cz + r + 2 <= z1:
-            D.fuel_tank(world, cx, cz, r, h, rng)
-    # gas sphere
-    if mid + 50 <= z1 + 40:
-        pass
-    wh = (x0, z0, x1, mid)
+    for row, cz in enumerate((z0 + 18, z0 + 26)):
+        for k, cx in enumerate((x0 + 5, x0 + 15, x0 + 25)):
+            D.fuel_tank(world, cx, cz, 3, int(rng.integers(6, 10)), rng)
+    wh = (x0, z0, x1, mid - 1)
     for lot in plan.split_rect(wh, 16, 30, 14, 24, rng):
         D.warehouse(world, lot, 's', rng)
 
@@ -211,6 +206,10 @@ def street_trees_and_lamps(world, T, kind, rng):
                         continue
                     # skip intersections, bridges and anything non-sidewalk
                     if kind[z, x] != 1 or T.river[z, x]:
+                        continue
+                    along = t
+                    if any(o.axis != r.axis and abs(along - o.c) <= o.hw + 4 and
+                           any(oa <= r.c <= ob for oa, ob in o.spans) for o in plan.ROADS):
                         continue
                     if rng.random() < 0.15:
                         continue

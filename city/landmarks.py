@@ -120,7 +120,7 @@ def ferris_wheel(world, T, rect, rng):
         a = k * np.pi / 8
         tx, ty = cx + (R - 0.5) * np.cos(a), hub_y + (R - 0.5) * np.sin(a)
         for zr in (cz, cz + 4):
-            S.line((cx, hub_y, zr), (int(round(tx)), int(round(ty)), zr), B.IRON_BARS if k % 2 else B.C['light_gray'])
+            S.line((cx, hub_y, zr), (int(round(tx)), int(round(ty)), zr), B.IRON_BLOCK if k % 2 else B.C['light_gray'])
     # hub axle
     S.fill(cx - 1, hub_y - 1, cz, cx + 1, hub_y + 1, cz + 4, B.C['red'])
     # cabins
@@ -222,12 +222,12 @@ def tokyo_station(world, T, rect, rng):
         pcx, pcz = (a + b) // 2, (bz0 + bz1) // 2
         # octagonal drum
         S.cyl(pcx, pcz, 6.5, proof + 1, proof + 3, B.BRICKS, hollow=True)
-        S.disk(pcx, pcz, 6.5, proof + 4, B.DEEPSLATE_TILES)
+        S.disk(pcx, pcz, 6.5, proof + 4, B.WEATH_CUT_COPPER)
         for dy in range(0, 6):
             r = np.sqrt(max(0.0, 6.5 ** 2 - (dy * 1.15) ** 2))
             if r < 1:
                 break
-            S.disk(pcx, pcz, r, proof + 5 + dy, B.DEEPSLATE_TILES, hollow=(r > 1.5))
+            S.disk(pcx, pcz, r, proof + 5 + dy, B.WEATH_CUT_COPPER, hollow=(r > 1.5))
         S.fill(pcx, proof + 11, pcz, pcx, proof + 12, pcz, B.CHAIN_Y)
         S.set(pcx, proof + 13, pcz, B.LIGHTNING_ROD)
     # central pavilion with gable

@@ -264,7 +264,7 @@ def warehouse(world, rect, front, rng):
     return S
 
 
-def fuel_tank(world, cx, cz, r, h, rng, name='Fuel tank'):
+def fuel_tank(world, cx, cz, r, h, rng, name='Fuel Tank'):
     """A recognisable cylindrical storage tank: white shell, red band, floating-roof rim, ladder, pipe."""
     S = world.new('industrial', name)
     y0 = GROUND
@@ -284,7 +284,7 @@ def fuel_tank(world, cx, cz, r, h, rng, name='Fuel tank'):
 
 
 def sphere_tank(world, cx, cz, r, rng):
-    S = world.new('industrial', 'Gas sphere')
+    S = world.new('industrial', 'Fuel Tank')
     y0 = GROUND
     cy = y0 + r + 3
     for lx, lz in ((-r // 2, -r // 2), (r // 2, -r // 2), (-r // 2, r // 2), (r // 2, r // 2)):

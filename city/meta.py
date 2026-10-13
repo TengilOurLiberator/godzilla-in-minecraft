@@ -43,7 +43,7 @@ def building_list(world):
         wmax = to_world(*bx['max'])
         value = s.value if s.value is not None else int(round(bx['blocks'] / 12.0 * KIND_VALUE.get(s.kind, 1.0)))
         d = dict(id=nid, kind=s.kind, min=list(wmin), max=list(wmax), blocks=bx['blocks'], value=int(value))
-        if s.kind == 'landmark':
+        if s.kind == 'landmark' or s.name == 'Fuel Tank':
             d['name'] = s.name
         elif s.name:
             d['label'] = s.name
