@@ -24,7 +24,6 @@ import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import dev.godzilla.api.Cause;
 import dev.godzilla.api.Game;
 import dev.godzilla.api.Gz;
-import dev.godzilla.core.dev.DevGame;
 import net.minecraft.commands.arguments.coordinates.Vec3Argument;
 import net.minecraft.world.phys.Vec3;
 
@@ -123,15 +122,7 @@ public final class GodzillaCommands {
 													DoubleArgumentType.getDouble(c, "radius"), Cause.EXPLOSION);
 											c.getSource().sendSuccess(() -> Component.literal("exploded " + n + " blocks"), false);
 											return n;
-										}))))
-				// only with the stand-in game (before dev.godzilla.game exists): /godzilla dev phase <PHASE> [player]
-				.then(Commands.literal("dev")
-						.then(Commands.literal("phase")
-								.then(Commands.argument("phase", StringArgumentType.word())
-										.executes(c -> devPhase(c.getSource(), StringArgumentType.getString(c, "phase"), null))
-										.then(Commands.argument("targets", EntityArgument.players())
-												.executes(c -> devPhase(c.getSource(), StringArgumentType.getString(c, "phase"),
-														EntityArgument.getPlayers(c, "targets").iterator().next()))))));
+										}))));
 		for (Sub sub : SUBS) {
 			sub.add(root, context);
 		}
@@ -142,23 +133,6 @@ public final class GodzillaCommands {
 		ServerPlayer p = targets.iterator().next();
 		Gz.game().start(p);
 		source.sendSuccess(() -> Component.literal("run started for " + p.getGameProfile().name()), false);
-		return 1;
-	}
-
-	private static int devPhase(CommandSourceStack source, String name, ServerPlayer player) {
-		if (!(Gz.game() instanceof DevGame dev)) {
-			source.sendFailure(Component.literal("the real game is installed; use /godzilla start and its own commands"));
-			return 0;
-		}
-		Game.Phase phase;
-		try {
-			phase = Game.Phase.valueOf(name.toUpperCase(java.util.Locale.ROOT));
-		} catch (IllegalArgumentException e) {
-			source.sendFailure(Component.literal("phase: IDLE | RISE | RAMPAGE | MOTHRA | VICTORY | DEFEAT"));
-			return 0;
-		}
-		dev.force(phase, player);
-		source.sendSuccess(() -> Component.literal("stand-in game: phase " + phase), false);
 		return 1;
 	}
 

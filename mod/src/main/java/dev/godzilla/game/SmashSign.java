@@ -92,14 +92,15 @@ public class SmashSign extends Entity implements Smashable {
 
 	@Override
 	public void onSmashed(Cause cause, Vec3 impulse, float power) {
-		if (cause != Cause.MOTHRA && level() instanceof ServerLevel) {
+		// only a hand counts (not the body walking into it, debris, explosions or Mothra), and not in the first moments
+		if (cause == Cause.HAND && age2 > 30 && level() instanceof ServerLevel) {
 			GameModule.game().requestStart(null);
 		}
 	}
 
 	@Override
 	public boolean hurtServer(ServerLevel level, DamageSource source, float damage) {
-		if (source.getEntity() instanceof ServerPlayer p) {
+		if (age2 > 20 && source.getEntity() instanceof ServerPlayer p) {
 			GameModule.game().requestStart(p);
 			return true;
 		}

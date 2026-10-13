@@ -21,13 +21,13 @@ public class GodzillaMod implements ModInitializer {
 
 	@Override
 	public void onInitialize() {
+		GodzillaConfig.load();
 		Vr.init();
 		GodzillaSounds.register();
 		GodzillaAttributes.register();
 		GodzillaEntities.register();
 		GodzillaNetworking.registerCommon();
 		CommandRegistrationCallback.EVENT.register(GodzillaCommands::register);
-		ServerLifecycleEvents.SERVER_STARTED.register(dev.godzilla.core.dev.DevGame::serverStarted);
 
 		// One module per package; each registers its own entities, payloads, subcommands and tick handlers, and installs its
 		// service in dev.godzilla.api.Gz. Order matters only in that city and destruction come first.
@@ -53,7 +53,8 @@ public class GodzillaMod implements ModInitializer {
 			// time is clock/time-marker based in 26.x; the vanilla command is the simplest verified way to move it
 			server.getCommands().performPrefixedCommand(server.createCommandSourceStack(), "time set noon");
 			server.getCommands().performPrefixedCommand(server.createCommandSourceStack(), "weather clear");
-			LOGGER.info("godzilla: gamerules set (no time, weather or natural spawning); vivecraft present = {}", Vr.available());
+			LOGGER.info("godzilla: services {}", dev.godzilla.api.Gz.describe());
+				LOGGER.info("godzilla: gamerules set (no time, weather or natural spawning); vivecraft present = {}", Vr.available());
 		});
 		LOGGER.info("godzilla: common init done");
 	}

@@ -38,7 +38,7 @@ public final class Popups {
 
 	private static final int COLLECT_TICKS = 9;
 	private static final int LIFE_TICKS = 46;
-	private static final int MAX_LIVE = 40;
+	private static final int MAX_LIVE = 18;
 	/** Master size factor of all popups (text display scale 1 is a quarter block per line). */
 	public static final float SIZE = 4.0f;
 
@@ -112,7 +112,7 @@ public final class Popups {
 					budget--;
 					if (p.points >= 10) {
 						Vec3 at = new Vec3(p.sx / p.points, p.sy / p.points + 2, p.sz / p.points);
-						float size = Mth.clamp(4.5f + 2.2f * (float) Math.log10(p.points + 1), 5f, 15f) * SIZE;
+						float size = Mth.clamp(3.5f + 1.6f * (float) Math.log10(p.points + 1), 4.5f, 10f) * SIZE;
 						spawn(level, at, Component.literal("+" + String.format("%,d", p.points)).withColor(GROUP_COLORS[e.getKey().group]), size, 16, tick);
 					}
 				}

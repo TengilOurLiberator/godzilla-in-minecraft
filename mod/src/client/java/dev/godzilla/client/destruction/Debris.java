@@ -21,9 +21,9 @@ final class Debris {
 
 	// state
 	static int n;
-	static int maxLive = 24000;
+	static int maxLive = dev.godzilla.core.GodzillaConfig.debrisMax;
 	static final int HARD_MAX = 120000;
-	static boolean adaptive = true;
+	static boolean adaptive = dev.godzilla.core.GodzillaConfig.debrisAdaptive;
 	static boolean floatMode = false;
 
 	static float[] x = new float[0], y, z, px, py, pz, vx, vy, vz;

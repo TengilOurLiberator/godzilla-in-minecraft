@@ -19,6 +19,7 @@ public final class PloughDrag {
 		if (!GodzillaState.isGodzilla(p)) {
 			return;
 		}
+		climb(p);
 		Visual v = PlayerClient.visual(p.getId());
 		PlayerNet.StateS2C st = v == null ? null : v.state;
 		if (st == null || st.plough() < 0.02F) {
@@ -27,5 +28,20 @@ public final class PloughDrag {
 		Vec3 m = p.getDeltaMovement();
 		double f = 1.0 - 0.45 * Math.pow(st.plough(), 0.7);
 		p.setDeltaMovement(m.x * f, m.y, m.z * f);
+	}
+
+	/**
+	 * The quays of the bay are vertical sea walls up to 10 blocks high, far more than his step height: heave himself up them. While
+	 * he pushes against a wall below the street level he rises at a steady speed (a fast lift, not a snap: no jump of the view).
+	 */
+	private static void climb(LocalPlayer p) {
+		if (PlayerClient.rising() || !p.horizontalCollision || !p.input.hasForwardImpulse()) {
+			return;
+		}
+		if (p.getY() > dev.godzilla.player.PlayerConfig.GROUND_Y + 0.4) {
+			return;
+		}
+		Vec3 m = p.getDeltaMovement();
+		p.setDeltaMovement(m.x, Math.max(m.y, 0.5), m.z);
 	}
 }

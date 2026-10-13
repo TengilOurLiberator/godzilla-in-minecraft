@@ -30,6 +30,10 @@ import java.util.UUID;
  */
 public final class GameImpl implements Game {
 	public static final float MAX_HEALTH = 100f;
+	/** Everything Mothra does to Godzilla is multiplied by this (tuned so a passive player falls after about two minutes). */
+	public static final float DAMAGE_SCALE = 1.4f;
+	/** The longer the fight lasts, the harder she hits (added to the scale per minute of the MOTHRA phase), so a passive player does fall. */
+	public static final float DAMAGE_RAMP_PER_MINUTE = 0.5f;
 	/** A combo breaks after this many ticks without destruction. */
 	public static final int COMBO_QUIET_TICKS = 50;
 	/** Chain value needed for multiplier 1, 2, 3 ... */
@@ -40,7 +44,7 @@ public final class GameImpl implements Game {
 	private static final int MOTHRA_ARRIVAL_MUSIC_TICKS = 240;
 
 	private static final String[] RANKS = {"Clumsy Lizard", "Neighbourhood Nuisance", "City Stomper", "Skyline Wrecker", "Scourge of Tokyo", "Monarch of Monsters"};
-	private static final long[] RANK_SCORES = {0, 10_000, 25_000, 50_000, 90_000, 150_000};
+	private static final long[] RANK_SCORES = {0, 40_000, 120_000, 260_000, 480_000, 780_000};
 
 	private @Nullable MinecraftServer server;
 	private Phase phase = Phase.IDLE;
@@ -74,6 +78,7 @@ public final class GameImpl implements Game {
 	private int lastLevelled = -10000;
 	private final Popups popups = new Popups();
 	private @Nullable SmashSign sign;
+	private boolean signRestart;
 
 	// ---------------------------------------------------------------- wiring
 
@@ -96,7 +101,7 @@ public final class GameImpl implements Game {
 	public void playerJoined(ServerPlayer p) {
 		if (phase == Phase.IDLE) {
 			godzilla = p.getUUID();
-			schedulePrompt = 30;
+			schedulePrompt = 10;
 		}
 	}
 
@@ -203,7 +208,7 @@ public final class GameImpl implements Game {
 			return;
 		}
 		ServerPlayer p = godzilla();
-		health = Math.max(0, health - amount);
+		health = Math.max(0, health - amount * (DAMAGE_SCALE + DAMAGE_RAMP_PER_MINUTE * phaseTicks / 1200f));
 		if (p != null) {
 			Gz.fx().hitFlash(p, from, Mth.clamp(amount / 18f, 0.2f, 1f));
 			sendAll(new GameNet.Cue(GameNet.Cue.FLASH, Mth.clamp(amount / 14f, 0.25f, 1f), "", 0));
@@ -412,7 +417,18 @@ public final class GameImpl implements Game {
 				godzilla = p.getUUID();
 			}
 			if (p != null) {
+				Lobby.enter(p);
 				spawnSign(p, false);
+			}
+		}
+		if (phase == Phase.IDLE && sign != null && !sign.isRemoved() && !signRestart) {
+			// walking up to the sign counts as smashing it
+			for (ServerPlayer q : server.getPlayerList().getPlayers()) {
+				double dx = q.getX() - sign.getX();
+				double dz = q.getZ() - sign.getZ();
+				if (dx * dx + dz * dz < 9.0 && Math.abs(q.getY() - sign.getBoundingBox().getCenter().y) < 6) {
+					requestStart(q);
+				}
 			}
 		}
 		if (phase != Phase.IDLE) {
@@ -674,12 +690,21 @@ public final class GameImpl implements Game {
 			return;
 		}
 		SmashSign s = new SmashSign(GameModule.SIGN, level);
+		signRestart = restart;
+		if (!restart) {
+			Vec3 c = Lobby.signCenter();
+			s.setPos(c.x, c.y - GameModule.SIGN_HEIGHT / 2.0, c.z);
+			s.setup(false, 2.6f);
+			level.addFreshEntity(s);
+			sign = s;
+			return;
+		}
 		float scale = (float) p.getScale();
 		Vec3 look = p.getLookAngle();
 		Vec3 flat = new Vec3(look.x, 0, look.z);
 		flat = flat.lengthSqr() < 1e-4 ? new Vec3(0, 0, 1) : flat.normalize();
-		double dist = Math.max(8, 0.95 * scale);
-		Vec3 at = p.getEyePosition().add(flat.scale(dist)).add(0, -0.1 * scale, 0);
+		double dist = Math.max(8, 0.8 * scale);
+		Vec3 at = p.getEyePosition().add(flat.scale(dist)).add(0, -0.5 * scale, 0);
 		s.setPos(at.x, at.y - GameModule.SIGN_HEIGHT / 2.0, at.z);
 		s.setup(restart, Math.max(2.5f, 0.55f * scale + 0.5f));
 		level.addFreshEntity(s);

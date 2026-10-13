@@ -38,7 +38,7 @@ import java.util.List;
  */
 public class Mothra extends Entity implements Smashable {
 	// ---- tuning --------------------------------------------------------------------------------------------------
-	public static final float MAX_HP = 900f;
+	public static final float MAX_HP = 700f;
 	static final double CIRCLE_RADIUS = 44;
 	static final double CIRCLE_SPEED = 0.95; // blocks per tick along the circle
 	static final float BEAM_DAMAGE_PER_POWER = 0.85f;
@@ -590,12 +590,19 @@ public class Mothra extends Entity implements Smashable {
 		if (modeTicks % 3 == 0) {
 			// people, cars and anything else loose are blown along the wind
 			AABB box = new AABB(center(), g.position()).inflate(60, 50, 60);
-			for (Entity e : sl.getEntities(this, box, x -> x instanceof Smashable && !(x instanceof Mothra) && !(x instanceof ScaleCloud))) {
+			var gameG = GameModule.game();
+				// only civilians are blown about (vehicles and units would explode in chains and be scored as Godzilla's kills)
+				gameG.suppressScore(true);
+				try {
+				for (Entity e : sl.getEntities(this, box, x -> x instanceof dev.godzilla.population.PersonEntity)) {
 				Vec3 rel = e.position().subtract(center());
 				if (rel.horizontalDistanceSqr() < 100 * 100 && !(e instanceof Player)) {
 					((Smashable) e).onSmashed(Cause.MOTHRA, wind.scale(0.9).add(0, 0.25, 0), 1f);
 				}
 			}
+				} finally {
+					gameG.suppressScore(false);
+				}
 		}
 		if (modeTicks % 5 == 0) {
 			// rooftops are stripped along the wind; this is Mothra's doing, so no points for it
@@ -714,6 +721,9 @@ public class Mothra extends Entity implements Smashable {
 			float f = BEAM_DAMAGE_PER_POWER * Math.min(3f, Math.max(1f, power)) * beamFactor(g);
 			damage(f, cause, false);
 			return;
+		}
+		if (cause == Cause.BODY || cause == Cause.FOOT) {
+			return; // standing in her way is not an attack: only hands, tail and the beam hurt her
 		}
 		if (cause.byGodzilla()) {
 			if (!debugNoRange && g != null && g.position().distanceTo(center()) > 70) {

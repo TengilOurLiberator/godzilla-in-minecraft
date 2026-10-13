@@ -56,6 +56,7 @@ public final class GodzillaServer {
 
 	private static final Map<UUID, Runtime> RUNTIMES = new HashMap<>();
 	private static final Set<UUID> FORCED = new HashSet<>();
+	private static MinecraftServer serverRef;
 
 	private GodzillaServer() {
 	}
@@ -132,6 +133,12 @@ public final class GodzillaServer {
 
 	public static void init() {
 		ServerTickEvents.END_SERVER_TICK.register(GodzillaServer::tick);
+		net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents.SERVER_STARTED.register(s -> serverRef = s);
+		net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents.SERVER_STOPPING.register(s -> {
+			serverRef = null;
+			RUNTIMES.clear();
+			FORCED.clear();
+		});
 		ServerPlayConnectionEvents.DISCONNECT.register((handler, server) -> {
 			ServerPlayer p = handler.getPlayer();
 			Runtime rt = RUNTIMES.get(p.getUUID());
@@ -142,7 +149,7 @@ public final class GodzillaServer {
 		});
 		GzEvents.RESET.register(g -> {
 			FORCED.clear();
-			MinecraftServer server = dev.godzilla.core.dev.DevGame.server();
+			MinecraftServer server = serverRef;
 			if (server != null) {
 				for (ServerPlayer p : server.getPlayerList().getPlayers()) {
 					Runtime rt = RUNTIMES.get(p.getUUID());
@@ -314,7 +321,8 @@ public final class GodzillaServer {
 		Game game = Gz.game();
 		Game.Phase phase = game.phase();
 		boolean forced = FORCED.contains(p.getUUID());
-		rt.attacks = forced || phase.playing();
+		boolean defeat = phase == Game.Phase.DEFEAT;
+		rt.attacks = forced || phase.playing() || phase == Game.Phase.VICTORY;
 		boolean rise = phase == Game.Phase.RISE && !forced;
 		double scale = p.getScale();
 		double s = GodzillaGeometry.scaleOf(scale);
@@ -387,6 +395,18 @@ public final class GodzillaServer {
 			hands(p, rt, level, pose, s);
 			breath(p, rt, level, pose, s);
 			if (rt.inUse && !rt.prevUse) {
+				roar(p, rt);
+			}
+			if (phase == Game.Phase.VICTORY && game.phaseTicks() == 40) {
+				roar(p, rt);
+			}
+		} else if (defeat) {
+			// fallen: only the hands (to smash the restart sign) and the roar still work
+			rt.breath = Breath.IDLE;
+			rt.chargeTicks = 0;
+			rt.beamLen = 0;
+			hands(p, rt, level, pose, s);
+			if (rt.inUse && !rt.prevUse && game.phaseTicks() > 60) {
 				roar(p, rt);
 			}
 		} else {
@@ -704,6 +724,9 @@ public final class GodzillaServer {
 		}
 		if (rt.attacks) {
 			flags |= PlayerNet.StateS2C.ATTACKS;
+		}
+		if (Gz.game().phase() == Game.Phase.DEFEAT) {
+			flags |= PlayerNet.StateS2C.FALLEN;
 		}
 		float charge = rt.breath == Breath.CHARGING ? rt.chargeTicks / (float) PlayerConfig.BREATH_CHARGE_TICKS
 				: rt.breath == Breath.FIRING ? 1.0F : 0.0F;

@@ -45,10 +45,10 @@ def options(width, height):
     o = {
         "version": "5023", "fov": "0.0", "fovEffectScale": "0.0", "screenEffectScale": "0.0", "darknessEffectScale": "0.0",
         "gamma": "0.5", "renderDistance": "16", "simulationDistance": "12", "entityDistanceScaling": "5.0",
-        "vignette": "false", "bobView": "false", "damageTiltStrength": "0.0", "enableVsync": "false", "maxFps": "60",
+        "vignette": "false", "bobView": "false", "damageTiltStrength": "0.0", "enableVsync": "false", "maxFps": os.environ.get("GZ_MAXFPS", "60"),
         "inactivityFpsLimit": '"minimized"', "pauseOnLostFocus": "false", "biomeBlendRadius": "3", "ao": "true",
         "mipmapLevels": "4", "entityShadows": "true", "particles": "0", "guiScale": "2", "showSubtitles": "false",
-        "narrator": "0", "chatVisibility": "0", "soundCategory_master": "0.0", "soundCategory_music": "0.0",
+        "narrator": "0", "chatVisibility": os.environ.get("GZ_CHATVIS", "0"), "soundCategory_master": "0.0", "soundCategory_music": "0.0",
         "soundCategory_record": "0.0", "soundCategory_weather": "0.0", "soundCategory_block": "0.0",
         "soundCategory_hostile": "0.0", "soundCategory_neutral": "0.0", "soundCategory_player": "0.0",
         "soundCategory_ambient": "0.0", "soundCategory_voice": "0.0", "onboardAccessibility": "false",

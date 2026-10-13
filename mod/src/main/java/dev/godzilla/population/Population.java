@@ -34,13 +34,13 @@ public final class Population {
 	public static final Population I = new Population();
 
 	// ---- tunables (see /godzilla pop budget)
-	public int targetPeople = 450;
-	public int maxPeople = 650;
-	public int targetCars = 70;
-	public int targetParked = 26;
-	public int targetBigVehicles = 10;
-	public int targetPolice = 6;
-	public int targetTrains = 2;
+	public int targetPeople = dev.godzilla.core.GodzillaConfig.peopleTarget;
+	public int maxPeople = dev.godzilla.core.GodzillaConfig.peopleMax;
+	public int targetCars = dev.godzilla.core.GodzillaConfig.carsTarget;
+	public int targetParked = dev.godzilla.core.GodzillaConfig.parkedTarget;
+	public int targetBigVehicles = dev.godzilla.core.GodzillaConfig.bigVehiclesTarget;
+	public int targetPolice = dev.godzilla.core.GodzillaConfig.policeTarget;
+	public int targetTrains = dev.godzilla.core.GodzillaConfig.trainsTarget;
 	/** Godzilla scares people within this many blocks (horizontal) of his feet. */
 	public double scareRadius = 55;
 
@@ -623,8 +623,8 @@ public final class Population {
 		ensureRoads();
 		refreshAnchor(server, lvl);
 		// token buckets
-		screamTok = Math.min(5, screamTok + 0.32);
-		squishTok = Math.min(8, squishTok + 0.5);
+		screamTok = Math.min(4, screamTok + 0.14);
+		squishTok = Math.min(6, squishTok + 0.25);
 		honkTok = Math.min(3, honkTok + 0.1);
 		particleTok = Math.min(80, particleTok + 40);
 		alarmTok = Math.min(4, alarmTok + 4.0 / 80);

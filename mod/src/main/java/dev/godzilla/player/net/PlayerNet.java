@@ -54,12 +54,14 @@ public final class PlayerNet {
 		public static final int RISE = 32;
 		public static final int ATTACKS = 64;
 		public static final int ENDED = 128;
+			/** Defeat: the body topples over. */
+			public static final int FALLEN = 256;
 
 		public static final Type<StateS2C> TYPE = mk("state");
 		public static final StreamCodec<RegistryFriendlyByteBuf, StateS2C> CODEC = StreamCodec.of(
 				(b, v) -> {
 					b.writeVarInt(v.entityId);
-					b.writeByte(v.flags);
+					b.writeVarInt(v.flags);
 					b.writeFloat(v.gauge);
 					b.writeFloat(v.charge);
 					b.writeFloat(v.beamLength);
@@ -74,7 +76,7 @@ public final class PlayerNet {
 					writeVec(b, v.leftHand);
 					writeVec(b, v.leftDir);
 				},
-				b -> new StateS2C(b.readVarInt(), b.readUnsignedByte(), b.readFloat(), b.readFloat(), b.readFloat(), b.readVarInt(),
+				b -> new StateS2C(b.readVarInt(), b.readVarInt(), b.readFloat(), b.readFloat(), b.readFloat(), b.readVarInt(),
 						b.readVarInt() - 1, b.readVarInt() - 1, b.readFloat(), readVec(b), readVec(b), readVec(b), readVec(b), readVec(b), readVec(b)));
 
 		public boolean has(int flag) {

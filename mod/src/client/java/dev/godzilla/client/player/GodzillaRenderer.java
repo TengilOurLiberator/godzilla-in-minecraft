@@ -164,6 +164,13 @@ public final class GodzillaRenderer {
 
 		Mesh mesh = new Mesh();
 		mesh.cur = new Matrix4f().rotateY((float) -yaw).scale((float) s);
+		if (v.fall > 0) {
+			// defeat: topples backwards about the feet, slowly at first, then with a thud
+			float k = Mth.clamp((v.fall + pt) / 40.0F, 0, 1);
+			double a = k * k * Math.toRadians(86);
+			Vec3 fwd = GodzillaGeometry.forward(yawDeg);
+			mesh.cur = new Matrix4f().rotate((float) a, (float) -fwd.z, 0.0F, (float) fwd.x).mul(mesh.cur);
+		}
 		GodzillaModel.build(mesh, p);
 
 		int light = LightCoordsUtil.max(state.lightCoords, LightCoordsUtil.pack(2, 11));

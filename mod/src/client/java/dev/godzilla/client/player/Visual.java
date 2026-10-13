@@ -25,6 +25,8 @@ final class Visual {
 	int beamTicks;
 	/** Beam length as seen last tick, smoothed. */
 	float beamLen;
+	/** Ticks since the body started to topple (defeat); 0 while standing. */
+	int fall;
 
 	Visual(int entityId, boolean local) {
 		this.entityId = entityId;
@@ -37,6 +39,7 @@ final class Visual {
 
 	void tick(AbstractClientPlayer p, float headYaw, boolean carried) {
 		age++;
+		fall = flag(PlayerNet.StateS2C.FALLEN) ? fall + 1 : 0;
 		ticksSinceState++;
 		double dx = p.getX() - p.xo;
 		double dz = p.getZ() - p.zo;

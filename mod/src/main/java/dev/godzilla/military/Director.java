@@ -167,23 +167,23 @@ public final class Director {
 				any = true;
 			}
 			if (!rise) {
-				int tanks = t < 20 ? 0 : (int) Math.min(20, 4 + (t - 20) / 5);
+				int tanks = t < 20 ? 0 : (int) Math.round(Math.min(20, 4 + (t - 20) / 5) * dev.godzilla.core.GodzillaConfig.militaryScale);
 				if (count(Tank.class) < tanks && (force || tick >= NEXT[TANK]) && spawnTank(level, g)) {
 					NEXT[TANK] = tick + 40;
 					any = true;
 				}
-				int helis = t < 20 ? 0 : (int) Math.min(8, 1 + (t - 20) / 15);
+				int helis = t < 20 ? 0 : (int) Math.round(Math.min(8, 1 + (t - 20) / 15) * dev.godzilla.core.GodzillaConfig.militaryScale);
 				if (count(Helicopter.class) < helis && (force || tick >= NEXT[HELI]) && spawnHeli(level, g)) {
 					NEXT[HELI] = tick + 80;
 					any = true;
 				}
-				int jets = t < 75 ? 0 : (int) Math.min(6, 2 + 2 * ((t - 75) / 50));
+				int jets = t < 75 ? 0 : (int) Math.round(Math.min(6, 2 + 2 * ((t - 75) / 50)) * dev.godzilla.core.GodzillaConfig.militaryScale);
 				if (count(Jet.class) + PENDING.size() <= jets - 2 && (force || tick >= NEXT[JET])) {
 					spawnJetPair(level, g);
 					NEXT[JET] = tick + (long) Math.max(160, 440 - (t - 75) * 3);
 					any = true;
 				}
-				int masers = t < 120 ? 0 : (int) Math.min(4, 1 + (t - 120) / 30);
+				int masers = t < 120 ? 0 : (int) Math.round(Math.min(4, 1 + (t - 120) / 30) * dev.godzilla.core.GodzillaConfig.militaryScale);
 				if (count(MaserCannon.class) < masers && (force || tick >= NEXT[MASER]) && spawnMaser(level, g)) {
 					NEXT[MASER] = tick + 200;
 					any = true;

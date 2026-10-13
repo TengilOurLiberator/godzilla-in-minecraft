@@ -82,12 +82,18 @@ public final class PlayerClient {
 		return mc.player != null && GodzillaState.isGodzilla(mc.player);
 	}
 
+	/** True during the scripted rise out of the sea. */
+	public static boolean rising() {
+		return riseActive;
+	}
+
 	public static boolean isGodzillaId(int entityId) {
 		return VISUALS.containsKey(entityId);
 	}
 
 	public static void init() {
 		PlayerVr.init();
+		dev.godzilla.client.game.BreathGauge.setSource(BreathGauge::value);
 		KeyMapping.Category cat = KeyMapping.Category.register(GodzillaMod.id("player"));
 		swipeLeftKey = KeyMappingHelper.registerKeyMapping(new KeyMapping("key.godzilla.swipe_left", InputConstants.KEY_Z, cat));
 		swipeRightKey = KeyMappingHelper.registerKeyMapping(new KeyMapping("key.godzilla.swipe_right", InputConstants.KEY_X, cat));
@@ -132,8 +138,8 @@ public final class PlayerClient {
 					walkDir = -1;
 				}
 				case 3 -> turnTicks = payload.value();
-				case 4 -> GodzillaMod.LOGGER.info("GODZILLA-PLAYER fps={} visuals={} breath={} rendererCpuMs={}", mc.getFps(), VISUALS.size(),
-						BreathGauge.state(), "%.3f".formatted(GodzillaRenderer.avgMs));
+				case 4 -> GodzillaMod.LOGGER.info("GODZILLA-PLAYER fps={} visuals={} breath={} rendererCpuMs={} frame=[{}]", mc.getFps(), VISUALS.size(),
+						BreathGauge.state(), "%.3f".formatted(GodzillaRenderer.avgMs), frameProbe());
 				default -> {
 				}
 			}
@@ -418,7 +424,28 @@ public final class PlayerClient {
 				(float) Math.cos(t * 4.7) * k * 1.3F, (float) Math.sin(t * 6.3) * k * 0.9F};
 	}
 
+	/** Frames drawn so far (counted by the HUD pass, once per frame) and the render thread's CPU time, for the fps probe. */
+	private static long frames;
+	private static long probeFrames;
+	private static long probeCpuNs;
+	private static long probeWallNs;
+
+	private static String frameProbe() {
+		long cpu = java.lang.management.ManagementFactory.getThreadMXBean().getCurrentThreadCpuTime();
+		long wall = System.nanoTime();
+		String s = "n/a";
+		if (probeFrames > 0 && frames > probeFrames) {
+			double df = frames - probeFrames;
+			s = "%.2f ms cpu and %.2f ms wall per frame".formatted((cpu - probeCpuNs) / 1e6 / df, (wall - probeWallNs) / 1e6 / df);
+		}
+		probeFrames = frames;
+		probeCpuNs = cpu;
+		probeWallNs = wall;
+		return s;
+	}
+
 	private static void drawFlash(net.minecraft.client.gui.GuiGraphicsExtractor g, net.minecraft.client.DeltaTracker dt) {
+		frames++;
 		if (flashTicks <= 0 || !BreathGauge.active) {
 			return;
 		}

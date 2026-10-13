@@ -37,7 +37,7 @@ public final class DestructionService implements Destruction {
 	static final double SEND_RANGE = 520;
 
 	// tuning, changed with /godzilla destruction set
-	static int pieceBudgetPerTick = 5000;
+	static int pieceBudgetPerTick = dev.godzilla.core.GodzillaConfig.debrisPiecesPerTick;
 	static int maxPiecesPerBurst = 12000;
 	static int soundBudgetPerTick = 5;
 
