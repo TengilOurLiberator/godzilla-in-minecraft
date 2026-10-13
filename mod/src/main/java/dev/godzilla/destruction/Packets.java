@@ -117,10 +117,10 @@ public final class Packets {
 	 * A mass of blocks that has just come loose and moves as one rigid cluster. Blocks are at origin + rel (their original
 	 * world positions, already removed from the world on the server). mode 0: falls straight down (path = drop in 1/32 block
 	 * per tick); 1: pancake, same as 0 but crushes what is below; 2: topples about the pivot (path = angle in 1/1000 rad per
-	 * tick) toward the horizontal unit direction (ax, az).
+	 * tick) toward the horizontal unit direction (ax, az); when it meets the ground first (angle c1 > 0) it carries on turning about the contact point (tx,ty,tz).
 	 */
 	public record Mass(int id, BlockPos origin, int mode, short[] path, float px, float py, float pz, float ax, float az,
-					   float dust, int[] rel, int[] ids) implements CustomPacketPayload {
+					   float c1, float tx, float ty, float tz, float dust, int[] rel, int[] ids) implements CustomPacketPayload {
 		public static final Type<Mass> TYPE = new Type<>(GodzillaMod.id("mass"));
 		public static final StreamCodec<RegistryFriendlyByteBuf, Mass> CODEC = StreamCodec.of(
 				(buf, v) -> {
@@ -136,6 +136,10 @@ public final class Packets {
 					buf.writeFloat(v.pz);
 					buf.writeFloat(v.ax);
 					buf.writeFloat(v.az);
+					buf.writeFloat(v.c1);
+					buf.writeFloat(v.tx);
+					buf.writeFloat(v.ty);
+					buf.writeFloat(v.tz);
 					buf.writeFloat(v.dust);
 					writeBlocks(buf, v.ids.length, v.rel, v.ids);
 				},
@@ -148,9 +152,10 @@ public final class Packets {
 						path[i] = buf.readShort();
 					}
 					float px = buf.readFloat(), py = buf.readFloat(), pz = buf.readFloat(), ax = buf.readFloat(), az = buf.readFloat();
+					float c1 = buf.readFloat(), tx = buf.readFloat(), ty = buf.readFloat(), tz = buf.readFloat();
 					float dust = buf.readFloat();
 					int[][] b = readBlocks(buf);
-					return new Mass(id, o, mode, path, px, py, pz, ax, az, dust, b[0], b[1]);
+					return new Mass(id, o, mode, path, px, py, pz, ax, az, c1, tx, ty, tz, dust, b[0], b[1]);
 				});
 
 		@Override

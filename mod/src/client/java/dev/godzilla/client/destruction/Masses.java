@@ -22,7 +22,7 @@ final class Masses {
 		int[] meshId;
 		byte[] mask;
 		short[] path;
-		float px, py, pz, ax, az, dust;
+		float px, py, pz, ax, az, dust, c1, tx, ty, tz;
 		float cx, cy, cz;       // centroid
 		int age;
 		float wobble, phase;
@@ -60,6 +60,10 @@ final class Masses {
 		m.pz = pk.pz();
 		m.ax = pk.ax();
 		m.az = pk.az();
+		m.c1 = pk.c1();
+		m.tx = pk.tx();
+		m.ty = pk.ty();
+		m.tz = pk.tz();
 		m.dust = pk.dust();
 		int n = pk.ids().length;
 		m.n = n;
@@ -137,33 +141,43 @@ final class Masses {
 		return (p[i] + (p[i + 1] - p[i]) * f) / scale;
 	}
 
+	/** Row-major rotation by th about the horizontal axis perpendicular to (ax, az): the top turns toward (ax, az). */
+	private static void tipMatrix(float ax, float az, float th, float[] R) {
+		float cs = (float) Math.cos(th), sn = (float) Math.sin(th);
+		float uxx = ax * ax, uxz = ax * az, uzz = az * az;
+		R[0] = 1 - uxx + uxx * cs;
+		R[1] = ax * sn;
+		R[2] = -uxz + uxz * cs;
+		R[3] = -ax * sn;
+		R[4] = cs;
+		R[5] = -az * sn;
+		R[6] = -uxz + uxz * cs;
+		R[7] = az * sn;
+		R[8] = 1 - uzz + uzz * cs;
+	}
 	/** Rotation matrix, pivot and offset of the cluster at time t (ticks since it started). */
 	private static void pose(Mass m, float t, float[] R, float[] pivot, float[] off) {
 		Debris.quatToMatrix(0, 0, 0, 1, R);
 		if (m.mode == 2) {
 			float th = sample(m.path, t, 1000f);
-			float cs = (float) Math.cos(th), sn = (float) Math.sin(th);
-			// rotate about the horizontal axis perpendicular to (ax, az) through the hinge: top moves toward (ax, az)
-			float ax = m.ax, az = m.az;
-			// local basis: u = lean direction (ax,0,az), up = (0,1,0), lateral = (-az,0,ax) stays
-			// world = P + u*(r*cs + h*sn) + up*(-r*sn + h*cs) + lat*l, with r = rel.u, h = rel.y, l = rel.lat
-			// as a matrix on rel = (rx, ry, rz):
-			float uxx = ax * ax, uxz = ax * az, uzz = az * az;
-			// r*u contribution: rotation of the u component
-			R[0] = 1 - uxx + uxx * cs;
-			R[1] = ax * sn;
-			R[2] = -uxz + uxz * cs;
-			R[3] = -ax * sn;
-			R[4] = cs;
-			R[5] = -az * sn;
-			R[6] = -uxz + uxz * cs;
-			R[7] = az * sn;
-			R[8] = 1 - uzz + uzz * cs;
+			tipMatrix(m.ax, m.az, th, R);
 			pivot[0] = m.px;
 			pivot[1] = m.py;
 			pivot[2] = m.pz;
 			off[0] = off[1] = off[2] = 0;
-		} else {
+			if (m.c1 > 0 && th > m.c1) {
+				// it met the ground: from there it turns about the toe. p' = toe + R2 (P - toe) + R (p - P) with R2 = rotation by (th - c1)
+				float[] r2 = new float[9];
+				tipMatrix(m.ax, m.az, th - m.c1, r2);
+				float dx = m.px - m.tx, dy = m.py - m.ty, dz = m.pz - m.tz;
+				// the first stage rotation R1 about P, the second R2 about the toe: net rotation is R(th); offset as below
+				float[] r1 = new float[9];
+				tipMatrix(m.ax, m.az, m.c1, r1);
+				// stage 1 maps P to P; stage 2 maps P to toe + R2 (P - toe)
+				off[0] = m.tx + r2[0] * dx + r2[1] * dy + r2[2] * dz - m.px;
+				off[1] = m.ty + r2[3] * dx + r2[4] * dy + r2[5] * dz - m.py;
+				off[2] = m.tz + r2[6] * dx + r2[7] * dy + r2[8] * dz - m.pz;
+			}		} else {
 			float drop = sample(m.path, t, 32f);
 			float amp = m.wobble * Math.min(1f, t / 12f) * (m.mode == 1 ? 1.0f : 1.6f);
 			float a = amp * (float) Math.sin(t * 0.21f + m.phase);

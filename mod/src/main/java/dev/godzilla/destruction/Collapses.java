@@ -289,10 +289,16 @@ final class Collapses {
 			int mode = m.mode;
 			float px = m.px, py = m.py, pz = m.pz, ax = m.ax, az = m.az;
 			float dropOrAngle;
+			float c1 = 0, tx = 0, ty = 0, tz = 0;
 			if (mode == 2) {
-				float[] theta = topple(level, cells, px, py, pz, ax, az, maxY - (int) py + 1);
+				Topple tp = topple(level, s, cells, px, py, pz, ax, az, maxY - (int) py + 1);
+				float[] theta = tp.theta;
 				path = toShorts(theta, 1000f);
 				dropOrAngle = theta.length == 0 ? 0 : theta[theta.length - 1];
+				c1 = tp.c1;
+				tx = tp.tx;
+				ty = tp.ty;
+				tz = tp.tz;
 			} else if (mode == 1) {
 				path = ensureLength(m.path, 16);
 				dropOrAngle = path[path.length - 1] / 32f;
@@ -325,7 +331,7 @@ final class Collapses {
 			}
 			int massId = nextMassId++;
 			float dust = (float) Math.sqrt(n) / 5f + 2f;
-			Packets.Mass pk = new Packets.Mass(massId, origin, mode, path, px, py, pz, ax, az, dust, rel, idArr);
+			Packets.Mass pk = new Packets.Mass(massId, origin, mode, path, px, py, pz, ax, az, c1, tx, ty, tz, dust, rel, idArr);
 			DestructionService.broadcast(level, center, pk, 700);
 			statMasses++;
 			statMassBlocks += n;
@@ -339,7 +345,7 @@ final class Collapses {
 			final IntArrayList landIds = new IntArrayList(ids);
 			final int fMode = mode;
 			final float fAmount = dropOrAngle;
-			final float fpx = px, fpy = py, fpz = pz, fax = ax, faz = az;
+			final float fpx = px, fpy = py, fpz = pz, fax = ax, faz = az, fc1 = c1, ftx = tx, fty = ty, ftz = tz;
 			final int extraCrushed[] = {0};
 			final IntArrayList crushedIds = new IntArrayList();
 			if (mode == 1) {
@@ -355,7 +361,7 @@ final class Collapses {
 			}
 			schedule(tick + duration, () -> {
 				long l0 = System.nanoTime();
-				land(level, s, fMode, landCells, landIds, crushedIds, fAmount, fpx, fpy, fpz, fax, faz, center);
+				land(level, s, fMode, landCells, landIds, crushedIds, fAmount, fpx, fpy, fpz, fax, faz, fc1, ftx, fty, ftz, center);
 				maxLandNs = Math.max(maxLandNs, System.nanoTime() - l0);
 				s.outstanding--;
 			});
@@ -446,10 +452,17 @@ final class Collapses {
 		return best;
 	}
 
-	/** Angle (radians) per tick for a lump tipping over about its hinge until it meets the ground or something standing. */
-	static float[] topple(ServerLevel level, LongArrayList cells, float px, float py, float pz, float ax, float az, float height) {
+	/** The tipping of a lump: angle per tick, and where it meets the ground first, from where it goes on turning about that toe. */
+	static final class Topple {
+		float[] theta;
+		float c1;           // angle at the first contact, 0 if there was none
+		float tx, ty, tz;   // the contact point (toe)
+	}
+
+	/** Tips the lump about its hinge until its lean side meets the ground (then about that toe) or something standing. */
+	static Topple topple(ServerLevel level, Struct s, LongArrayList cells, float px, float py, float pz, float ax, float az, float height) {
 		int n = cells.size();
-		int samples = Math.min(n, 700);
+		int samples = Math.min(n, 900);
 		float[] sx = new float[samples], sy = new float[samples], sz = new float[samples];
 		RandomSource rnd = RandomSource.createThreadLocalInstance(n);
 		for (int i = 0; i < samples; i++) {
@@ -458,29 +471,67 @@ final class Collapses {
 			sy[i] = BlockPos.getY(c) + 0.5f;
 			sz[i] = BlockPos.getZ(c) + 0.5f;
 		}
-		float end = 1.52f;
+		int ground = Structures.groundY() + 1;
+		Topple out = new Topple();
+		float end = 1.5f;
 		float[] o = new float[3];
-		outer:
-		for (float th = 0.03f; th < 1.52f; th += 0.02f) {
+		float[] q = new float[3];
+		boolean stage2 = false;
+		for (float th = 0.03f; th < 1.5f; th += 0.02f) {
 			float cs = (float) Math.cos(th), sn = (float) Math.sin(th);
+			float cs2 = 1, sn2 = 0;
+			if (stage2) {
+				cs2 = (float) Math.cos(th - out.c1);
+				sn2 = (float) Math.sin(th - out.c1);
+			}
+			float cs1 = stage2 ? (float) Math.cos(out.c1) : cs, sn1 = stage2 ? (float) Math.sin(out.c1) : sn;
 			for (int i = 0; i < samples; i++) {
-				if (sy[i] - py < 4.5f) {
-					continue; // the foot of the mass just sinks into the ground at the hinge
+				rotate(sx[i], sy[i], sz[i], px, py, pz, ax, az, cs1, sn1, o);
+				if (stage2) {
+					rotate(o[0], o[1], o[2], out.tx, out.ty, out.tz, ax, az, cs2, sn2, q);
+					o[0] = q[0];
+					o[1] = q[1];
+					o[2] = q[2];
 				}
-				rotate(sx[i], sy[i], sz[i], px, py, pz, ax, az, cs, sn, o);
 				int ix = (int) Math.floor(o[0]), iz = (int) Math.floor(o[2]);
-				int h = level.getHeight(Heightmap.Types.MOTION_BLOCKING, ix, iz);
-				if (o[1] < h) {
+				float tol = stage2 ? 1.2f : 0f;
+				if (stage2) {
+					float dx = o[0] - out.tx, dz = o[2] - out.tz;
+					if (dx * dx + dz * dz < 9f) {
+						continue; // the toe itself digs in
+					}
+				}
+				boolean hit = o[1] < ground - tol;
+				int h = ground;
+				if (!hit) {
+					h = level.getHeight(Heightmap.Types.MOTION_BLOCKING, ix, iz);
+					if (o[1] < h - tol) {
+						Struct top = Structures.find(ix, h - 1, iz);
+						hit = top != s; // its own standing remains do not stop it: they are crushed when it lands
+					}
+				}
+				if (hit) {
+					if (!stage2) {
+						out.c1 = th;
+						out.tx = o[0];
+						out.ty = Math.max(h, ground);
+						out.tz = o[2];
+						stage2 = true;
+						break; // carry on at the next angle, now about the toe
+					}
 					end = th - 0.02f;
-					break outer;
+					th = 99;
+					break;
 				}
 			}
 		}
-		end = Math.max(0.12f, end);
+		end = Math.max(0.12f, Math.min(end, 1.5f));
+		if (stage2 && out.c1 > end) {
+			out.c1 = end;
+		}
 		// inverted pendulum: slow to start, then it goes
 		float k = 0.045f / Math.max(8f, height);
 		float th = 0.03f, w = 0.006f;
-		IntArrayList ticks = new IntArrayList();
 		java.util.ArrayList<Float> list = new java.util.ArrayList<>();
 		list.add(0f);
 		for (int t = 0; t < 400 && th < end; t++) {
@@ -488,10 +539,14 @@ final class Collapses {
 			th += w;
 			list.add(Math.min(th, end));
 		}
-		float[] out = new float[list.size()];
-		for (int i = 0; i < out.length; i++) {
-			out[i] = list.get(i);
+		out.theta = new float[list.size()];
+		for (int i = 0; i < out.theta.length; i++) {
+			out.theta[i] = list.get(i);
 		}
+		if (out.c1 >= end - 0.001f) {
+			out.c1 = 0;
+		}
+		GodzillaMod.LOGGER.info("topple: end {} first contact {} at ({},{},{}) over {} ticks", end, out.c1, out.tx, out.ty, out.tz, out.theta.length);
 		return out;
 	}
 
@@ -507,11 +562,20 @@ final class Collapses {
 		out[2] = pz + az * r2 + lz;
 	}
 
+	/** Where a point ends up after tipping by theta (first about the hinge up to c1, then about the toe). */
+	static void tip(float x, float y, float z, float px, float py, float pz, float ax, float az, float theta, float c1, float tx, float ty, float tz, float[] out) {
+		if (c1 > 0 && theta > c1) {
+			rotate(x, y, z, px, py, pz, ax, az, (float) Math.cos(c1), (float) Math.sin(c1), out);
+			rotate(out[0], out[1], out[2], tx, ty, tz, ax, az, (float) Math.cos(theta - c1), (float) Math.sin(theta - c1), out);
+		} else {
+			rotate(x, y, z, px, py, pz, ax, az, (float) Math.cos(theta), (float) Math.sin(theta), out);
+		}
+	}
 	// ------------------------------------------------------------------------------------------------------------------
 	// landing
 
 	private static void land(ServerLevel level, Struct s, int mode, LongArrayList cells, IntArrayList ids, IntArrayList crushedIds,
-							 float amount, float px, float py, float pz, float ax, float az, Vec3 center) {
+							 float amount, float px, float py, float pz, float ax, float az, float c1, float tx, float ty, float tz, Vec3 center) {
 		int n = cells.size();
 		LongOpenHashSet footprint = new LongOpenHashSet();
 		LongArrayList finals = new LongArrayList(n);
@@ -523,7 +587,7 @@ final class Collapses {
 			long c = cells.getLong(i);
 			int x = BlockPos.getX(c), y = BlockPos.getY(c), z = BlockPos.getZ(c);
 			if (mode == 2) {
-				rotate(x + 0.5f, y + 0.5f, z + 0.5f, px, py, pz, ax, az, cs, sn, o);
+				tip(x + 0.5f, y + 0.5f, z + 0.5f, px, py, pz, ax, az, amount, c1, tx, ty, tz, o);
 				x = (int) Math.floor(o[0]);
 				y = (int) Math.floor(o[1]);
 				z = (int) Math.floor(o[2]);

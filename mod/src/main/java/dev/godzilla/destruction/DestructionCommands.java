@@ -43,6 +43,10 @@ final class DestructionCommands {
 					DestructionService.resetStats();
 					return 1;
 				}))
+				.then(Commands.literal("bench")
+						.then(Commands.argument("calls", IntegerArgumentType.integer(1, 5000))
+								.then(Commands.argument("radius", DoubleArgumentType.doubleArg(0.5, 20)).executes(c -> bench(c.getSource(),
+										IntegerArgumentType.getInteger(c, "calls"), DoubleArgumentType.getDouble(c, "radius"))))))
 				.then(Commands.literal("set")
 						.then(Commands.argument("key", StringArgumentType.word())
 								.then(Commands.argument("value", IntegerArgumentType.integer(0, 1_000_000))
@@ -97,6 +101,28 @@ final class DestructionCommands {
 										.then(Commands.argument("h", IntegerArgumentType.integer(6, 150)).executes(c -> lattice(c.getSource(),
 												BlockPosArgument.getLoadedBlockPos(c, "pos"), IntegerArgumentType.getInteger(c, "w"),
 												IntegerArgumentType.getInteger(c, "h"))))))));
+	}
+
+	/** Throughput test: many smashes at random places in the city, timed on the server thread (restore with /godzilla stamp). */
+	private static int bench(CommandSourceStack src, int calls, double radius) {
+		ServerLevel level = src.getLevel();
+		RandomSource rnd = RandomSource.createThreadLocalInstance(99);
+		DestructionService svc = (DestructionService) Gz.destruction();
+		long blocks = 0;
+		long t0 = System.nanoTime();
+		long maxCall = 0;
+		for (int i = 0; i < calls; i++) {
+			Vec3 at = new Vec3(-120 + rnd.nextInt(240), 65 + rnd.nextInt(22), -100 + rnd.nextInt(200));
+			long c0 = System.nanoTime();
+			blocks += svc.smashSphere(level, at, radius, new Vec3(0.3, 0.2, 0), Cause.HAND);
+			maxCall = Math.max(maxCall, System.nanoTime() - c0);
+		}
+		double ms = (System.nanoTime() - t0) / 1e6;
+		String msg = "%d smashes (radius %.1f): %d blocks in %.1f ms = %.0f blocks/ms, %.3f ms per call (worst call %.2f ms)".formatted(calls, radius, blocks, ms,
+				blocks / Math.max(ms, 0.001), ms / calls, maxCall / 1e6);
+		src.sendSuccess(() -> Component.literal(msg), false);
+		dev.godzilla.core.GodzillaMod.LOGGER.info("DESTRUCTION-BENCH {}", msg);
+		return (int) Math.min(blocks, Integer.MAX_VALUE);
 	}
 
 	private static int set(CommandSourceStack src, String key, int v) {
