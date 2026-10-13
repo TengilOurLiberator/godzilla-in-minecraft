@@ -33,7 +33,7 @@ final class GodzillaModel {
 	}
 
 	/** The head is drawn this much larger than its box coordinates (GodzillaGeometry.MOUTH_* include it). */
-	static final float HEAD_SCALE = 1.25F;
+	static final float HEAD_SCALE = 1.45F;
 	private static final int WHITE = 0xFFFFFFFF;
 	private static final double[] UP = {0, 1, 0};
 
@@ -154,7 +154,7 @@ final class GodzillaModel {
 			m.limb(Mesh.BONE, WHITE, d(-x, 0.0, z), d(-x, 0.8, z), 0.5, 0.45, 0.1, 0.1, UP);
 		}
 		m.pop();
-		if (p.glow > 0.05F) {
+		if (p.glow > 0.05F && !p.firstPerson) {
 			int a = (int) (Mth.clamp(p.glow * p.flicker, 0, 1) * 255);
 			m.box(Mesh.GLOW, (a << 24) | 0x00B8DCFF, 0, -1.65, 3.0, 2.2, 0.3, 3.4);
 		}

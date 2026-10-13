@@ -132,6 +132,8 @@ public final class PlayerClient {
 					walkDir = -1;
 				}
 				case 3 -> turnTicks = payload.value();
+				case 4 -> GodzillaMod.LOGGER.info("GODZILLA-PLAYER fps={} visuals={} breath={} rendererCpuMs={}", mc.getFps(), VISUALS.size(),
+						BreathGauge.state(), "%.3f".formatted(GodzillaRenderer.avgMs));
 				default -> {
 				}
 			}
@@ -230,7 +232,7 @@ public final class PlayerClient {
 			} else {
 				headYaw = p.getYHeadRot();
 			}
-			v.tick(p, headYaw);
+			v.tick(p, headYaw, riseActive && v.local);
 		}
 		Visual mine = VISUALS.get(me.getId());
 		boolean godzilla = mine != null && GodzillaState.isGodzilla(me);

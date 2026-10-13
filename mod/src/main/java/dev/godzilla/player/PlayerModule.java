@@ -130,6 +130,23 @@ public final class PlayerModule {
 					ServerPlayNetworking.send(p, new PlayerNet.DebugS2C(3, IntegerArgumentType.getInteger(c, "ticks")));
 					return 1;
 				})));
+		root.then(Commands.literal("shake")
+				.then(Commands.argument("strength", com.mojang.brigadier.arguments.FloatArgumentType.floatArg(0, 1))
+						.then(Commands.argument("ticks", IntegerArgumentType.integer(1, 200)).executes(c -> {
+							Gz.fx().shake(target(c, false), com.mojang.brigadier.arguments.FloatArgumentType.getFloat(c, "strength"),
+									IntegerArgumentType.getInteger(c, "ticks"));
+							return 1;
+						}))));
+		root.then(Commands.literal("flash").executes(c -> {
+			ServerPlayer p = target(c, false);
+			Gz.fx().hitFlash(p, p.position().add(GodzillaGeometry.left(p.getYRot()).scale(60)), 0.9F);
+			return 1;
+		}));
+		root.then(Commands.literal("fps").executes(c -> {
+			ServerPlayNetworking.send(target(c, false), new PlayerNet.DebugS2C(4, 0));
+			c.getSource().sendSuccess(() -> Component.literal("client fps is in the client log (GODZILLA-PLAYER fps=...)"), false);
+			return 1;
+		}));
 		root.then(Commands.literal("gauge").executes(c -> {
 			ServerPlayer p = target(c, false);
 			GodzillaServer.Runtime rt = GodzillaServer.runtime(p);

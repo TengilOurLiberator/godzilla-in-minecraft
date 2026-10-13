@@ -51,8 +51,17 @@ public final class GodzillaRenderer {
 		};
 	}
 
-	/** x, y, z: where the entity origin (the feet) is relative to the camera. */
+	/** Moving average of the CPU time spent in {@link #submit} per frame, in milliseconds (logged by /godzilla fps). */
+	public static volatile double avgMs;
+
 	public static void submit(AvatarRenderState state, double x, double y, double z, PoseStack poseStack, SubmitNodeCollector collector) {
+		long t0 = System.nanoTime();
+		submit0(state, x, y, z, poseStack, collector);
+		avgMs += ((System.nanoTime() - t0) / 1e6 - avgMs) * 0.05;
+	}
+
+	/** x, y, z: where the entity origin (the feet) is relative to the camera. */
+	private static void submit0(AvatarRenderState state, double x, double y, double z, PoseStack poseStack, SubmitNodeCollector collector) {
 		Minecraft mc = Minecraft.getInstance();
 		ClientLevel level = mc.level;
 		Entity entity = level == null ? null : level.getEntity(state.id);
@@ -276,6 +285,9 @@ public final class GodzillaRenderer {
 		float age = v.age + Minecraft.getInstance().getDeltaTracker().getGameTimeDeltaPartialTick(false);
 		double R = 1.9 * Math.max(0.35, s);
 		if (charging && !firing) {
+			if (firstPerson) {
+				return;
+			}
 			float ch = st.charge();
 			double r = R * (0.5 + 2.2 * ch);
 			disc(collector, poseStack, mouth, cam, r, 0.9F * ch, 0.55F, 0.8F, 1.0F);
@@ -306,8 +318,10 @@ public final class GodzillaRenderer {
 		layer(collector, poseStack, mouthF, dir, cam, ds, Rr * 1.0, 0.0, 0.45F * fl, 0.45F, 0.7F, 1.0F, firstPerson, age);
 		layer(collector, poseStack, mouthF, dir, cam, ds, Rr * 0.62, 0.0, 0.75F, 0.65F, 0.88F, 1.0F, firstPerson, age);
 		layer(collector, poseStack, mouthF, dir, cam, ds, Rr * 0.3, 0.0, 1.0F, 1.0F, 1.0F, 1.0F, firstPerson, age);
-		disc(collector, poseStack, mouthF, cam, Rr * 1.9, 0.8F, 0.6F, 0.85F, 1.0F);
-		disc(collector, poseStack, mouthF, cam, Rr * 0.9, 1.0F, 1.0F, 1.0F, 1.0F);
+		if (!firstPerson) {
+			disc(collector, poseStack, mouthF, cam, Rr * 1.9, 0.8F, 0.6F, 0.85F, 1.0F);
+			disc(collector, poseStack, mouthF, cam, Rr * 0.9, 1.0F, 1.0F, 1.0F, 1.0F);
+		}
 		if (lenF < range - 1) {
 			// impact flash and sparks
 			double fr = Rr * (3.0 + 0.8 * Math.sin(age * 1.9));

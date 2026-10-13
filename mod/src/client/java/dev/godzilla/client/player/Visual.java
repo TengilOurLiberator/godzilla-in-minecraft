@@ -35,12 +35,12 @@ final class Visual {
 		return state != null && state.has(f);
 	}
 
-	void tick(AbstractClientPlayer p, float headYaw) {
+	void tick(AbstractClientPlayer p, float headYaw, boolean carried) {
 		age++;
 		ticksSinceState++;
 		double dx = p.getX() - p.xo;
 		double dz = p.getZ() - p.zo;
-		boolean ground = p.onGround() || Math.abs(p.getY() - p.yo) < 0.3;
+		boolean ground = !carried && (p.onGround() || Math.abs(p.getY() - p.yo) < 0.3);
 		motion.tick(headYaw, dx, dz, ground, p.getScale());
 		mouthPrev = mouth;
 		glowPrev = glow;

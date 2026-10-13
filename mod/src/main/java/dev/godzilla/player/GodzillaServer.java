@@ -272,6 +272,8 @@ public final class GodzillaServer {
 		removeMod(p, Attributes.SAFE_FALL_DISTANCE, GodzillaState.FALL_ID);
 		removeMod(p, Attributes.CAMERA_DISTANCE, GodzillaState.CAMERA_ID);
 		p.setGameMode(rt.prevGameType);
+		// setGameMode does nothing when the mode is unchanged (adventure to adventure): reset the abilities we changed ourselves
+		rt.prevGameType.updatePlayerAbilities(p.getAbilities());
 		p.onUpdateAbilities();
 		p.getInventory().clearContent();
 		for (int i = 0; i < rt.savedItems.size() && i < p.getInventory().getContainerSize(); i++) {
@@ -370,7 +372,7 @@ public final class GodzillaServer {
 			rt.motion.reset(headYaw);
 			rt.lastStep = BodyMotion.stepIndex(rt.motion.phase);
 		}
-		rt.motion.tick(headYaw, move.x, move.z, p.onGround() || p.isInWater() || level.getBlockState(p.blockPosition().below()).isSolid(), scale);
+		rt.motion.tick(headYaw, move.x, move.z, !rise && (p.onGround() || p.isInWater() || level.getBlockState(p.blockPosition().below()).isSolid()), scale);
 		if (rise) {
 			riseTick(p, rt, level, game, feet, s);
 		} else if (rt.riseSent) {
