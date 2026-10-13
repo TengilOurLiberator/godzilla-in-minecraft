@@ -262,7 +262,7 @@ final class FxClient {
 				continue;
 			}
 			// flames and smoke on the surfaces of what is still standing
-			int tries = dist > 200 ? 1 : (int) Math.min(5, 2 + s.radius * 0.4);
+			int tries = dist > 220 ? 2 : (int) Math.min(8, 3 + s.radius * 0.6);
 			for (int k = 0; k < tries; k++) {
 				float a = RND.nextFloat() * 6.2831855f, rr = (float) Math.sqrt(RND.nextFloat()) * s.radius;
 				int bx = (int) Math.floor(s.x + Math.cos(a) * rr), bz = (int) Math.floor(s.z + Math.sin(a) * rr);
@@ -284,13 +284,13 @@ final class FxClient {
 				if (level.getBlockState(mp.set(bx, by + 1, bz)).isAir()) {
 					var fl = mc.particleEngine.createParticle(ParticleTypes.FLAME, fx, fy, fz, 0, 0.02, 0);
 					if (fl != null) {
-						fl.scale(1.6f + RND.nextFloat() * 1.6f);
+						fl.scale(3.2f + RND.nextFloat() * 3.2f);
 					}
-					if (RND.nextInt(2) == 0) {
-						GzPuff p = make(level, smokeSprites, fx, fy + 0.5, fz, (RND.nextFloat() - 0.5f) * 0.02, 0.06 + RND.nextFloat() * 0.04, (RND.nextFloat() - 0.5f) * 0.02,
-								1.4f + RND.nextFloat() * 1.2f, 50 + RND.nextInt(50));
+					if (RND.nextInt(3) != 0) {
+						GzPuff p = make(level, smokeSprites, fx, fy + 0.5, fz, (RND.nextFloat() - 0.5f) * 0.02, 0.08 + RND.nextFloat() * 0.05, (RND.nextFloat() - 0.5f) * 0.02,
+								2.8f + RND.nextFloat() * 2.2f, 70 + RND.nextInt(60));
 						if (p != null) {
-							float g = 0.15f + RND.nextFloat() * 0.1f;
+							float g = 0.28f + RND.nextFloat() * 0.1f;
 							p.setCol(g, g, g, g * 1.3f, g * 1.3f, g * 1.3f);
 							p.a0 = 0.7f;
 							p.drag = 0.97f;
