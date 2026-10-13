@@ -13,10 +13,13 @@ import net.minecraft.server.level.ServerPlayer;
 
 /** Common (server and client) initialisation of this module: smashing, debris, collapse, fire. */
 public final class DestructionModule {
+	public static final net.minecraft.core.particles.SimpleParticleType PUFF = net.fabricmc.fabric.api.particle.v1.FabricParticleTypes.simple(true);
+
 	private DestructionModule() {
 	}
 
 	public static void init() {
+		net.minecraft.core.Registry.register(net.minecraft.core.registries.BuiltInRegistries.PARTICLE_TYPE, GodzillaMod.id("puff"), PUFF);
 		Packets.register();
 		Gz.setDestruction(new DestructionService());
 		ServerTickEvents.START_SERVER_TICK.register(server -> DestructionService.startTick());
