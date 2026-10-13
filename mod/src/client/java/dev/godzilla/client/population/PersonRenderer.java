@@ -24,6 +24,8 @@ public class PersonRenderer extends EntityRenderer<PersonEntity, PersonModel.Sta
 		}
 	}
 
+	/** People are drawn bigger than life so that they read from Godzilla's eyes, 26 blocks up. */
+	public static final float SCALE = 1.45F;
 	private final PersonModel model;
 
 	public PersonRenderer(EntityRendererProvider.Context context) {
@@ -52,6 +54,7 @@ public class PersonRenderer extends EntityRenderer<PersonEntity, PersonModel.Sta
 	public void submit(PersonModel.State s, PoseStack poseStack, SubmitNodeCollector collector, CameraRenderState camera) {
 		poseStack.pushPose();
 		poseStack.rotateDegrees(Axis.YP, 180.0F - s.yRot);
+		poseStack.scale(SCALE, SCALE, SCALE);
 		if (s.flung) {
 			poseStack.translate(0.0F, 0.3F, 0.0F);
 			poseStack.rotateDegrees(Axis.XP, s.ageInTicks * 37.0F);

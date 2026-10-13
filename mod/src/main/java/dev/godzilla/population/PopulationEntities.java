@@ -16,13 +16,13 @@ import net.minecraft.world.entity.MobCategory;
  */
 public final class PopulationEntities {
 	/** A civilian, 0.64 blocks tall. */
-	public static final EntityType<PersonEntity> PERSON = register("person", PersonEntity::new, 0.5F, 0.75F, 10, 3);
+	public static final EntityType<PersonEntity> PERSON = register("person", PersonEntity::new, 0.6F, 0.95F, 10, 3);
 	/** Cars, taxis, police cars (about 1.5 blocks long). */
-	public static final EntityType<VehicleEntity> CAR = register("car", VehicleEntity::new, 1.35F, 1.0F, 12, 2);
+	public static final EntityType<VehicleEntity> CAR = register("car", VehicleEntity::new, 1.7F, 1.25F, 12, 2);
 	/** Buses and trucks (2 to 2.5 blocks long). */
-	public static final EntityType<VehicleEntity> BUS = register("bus", VehicleEntity::new, 2.3F, 1.3F, 12, 2);
+	public static final EntityType<VehicleEntity> BUS = register("bus", VehicleEntity::new, 2.6F, 1.6F, 12, 2);
 	/** One carriage of a train (3.5 blocks long). */
-	public static final EntityType<VehicleEntity> TRAIN_CAR = register("train_car", VehicleEntity::new, 3.4F, 1.5F, 24, 1);
+	public static final EntityType<VehicleEntity> TRAIN_CAR = register("train_car", VehicleEntity::new, 3.6F, 1.6F, 24, 1);
 
 	private PopulationEntities() {
 	}

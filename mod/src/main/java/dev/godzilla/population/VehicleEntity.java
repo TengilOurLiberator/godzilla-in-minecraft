@@ -142,10 +142,10 @@ public class VehicleEntity extends Entity implements Smashable {
 
 	double bodyLength() {
 		return switch (style()) {
-			case STYLE_BUS -> 2.5;
-			case STYLE_TRUCK -> 2.25;
+			case STYLE_BUS -> 2.8;
+			case STYLE_TRUCK -> 2.5;
 			case STYLE_TRAIN -> 3.5;
-			default -> 1.5;
+			default -> 1.9;
 		};
 	}
 

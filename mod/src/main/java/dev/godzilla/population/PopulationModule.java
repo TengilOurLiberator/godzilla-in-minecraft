@@ -66,6 +66,12 @@ public final class PopulationModule {
 						.executes(c -> panic(c.getSource(), 200))
 						.then(Commands.argument("radius", DoubleArgumentType.doubleArg(5, 600))
 								.executes(c -> panic(c.getSource(), DoubleArgumentType.getDouble(c, "radius")))))
+				.then(Commands.literal("lineup").executes(c -> lineup(c.getSource())))
+				.then(Commands.literal("freeze").executes(c -> {
+					Population.I.frozen = !Population.I.frozen;
+					c.getSource().sendSuccess(() -> Component.literal("population frozen: " + Population.I.frozen), false);
+					return 1;
+				}))
 				.then(Commands.literal("calm").executes(c -> {
 					Population.I.calm();
 					c.getSource().sendSuccess(() -> Component.literal("threats cleared"), false);
@@ -184,6 +190,56 @@ public final class PopulationModule {
 		}
 		t.line = line;
 		source.sendSuccess(() -> Component.literal("train spawned on line " + line), false);
+		return 1;
+	}
+
+	/** Test helper: a still row of every look, 8 blocks south of the player: people, cars, buses and trucks, train carriages. */
+	private static int lineup(CommandSourceStack source) {
+		ServerPlayer p = player(source);
+		if (p == null) {
+			return 0;
+		}
+		Population pop = Population.I;
+		ServerLevel level = p.level();
+		prepare(pop, level, p);
+		pop.frozen = true;
+		double x0 = Math.floor(p.getX()) + 0.5, y = Math.floor(p.getY()), z = Math.floor(p.getZ()) + 6.5;
+		for (int i = 0; i < PersonEntity.OUTFITS; i++) {
+			PersonEntity e = pop.spawnPerson(level, x0 - 12 + i * 1.5, y, z - 3);
+			if (e != null) {
+				e.setOutfit(i);
+				e.setYRot(180);
+				if (i % 4 == 1) {
+					e.panicFrom(pop, x0, z - 20, 100000);
+				}
+			}
+		}
+		String[] kinds = {"car", "car", "car", "car", "car", "car", "car", "car", "car", "taxi", "police"};
+		for (int i = 0; i < kinds.length; i++) {
+			VehicleEntity v = pop.spawnVehicle(level, kinds[i], 0, 1, 10, true);
+			if (v != null) {
+				v.setPos(x0 - 12 + i * 2.4, y, z);
+				v.setYRot(180);
+				if (kinds[i].equals("car")) {
+					v.setLook(VehicleEntity.STYLE_CAR, i % VehicleEntity.CAR_COLORS.length);
+				}
+			}
+		}
+		for (int i = 0; i < 4; i++) {
+			VehicleEntity v = pop.spawnVehicle(level, "bus", 0, 1, 10, true);
+			if (v != null) {
+				v.setPos(x0 - 12 + i * 3.4, y, z + 3.5);
+				v.setYRot(180);
+				v.setLook(VehicleEntity.STYLE_BUS, i);
+			}
+			VehicleEntity t = pop.spawnVehicle(level, "truck", 0, 1, 10, true);
+			if (t != null) {
+				t.setPos(x0 - 12 + i * 3.4, y, z + 7);
+				t.setYRot(180);
+				t.setLook(VehicleEntity.STYLE_TRUCK, i);
+			}
+		}
+		source.sendSuccess(() -> Component.literal("lineup placed south of the player (population frozen)"), false);
 		return 1;
 	}
 

@@ -72,7 +72,7 @@ final class RoadNet {
 	}
 
 	static double laneOffset(int width) {
-		return Math.min(1.15, width / 4.3);
+		return width <= 5 ? 1.15 : Math.min(2.4, 1.15 + (width - 5) * 0.27);
 	}
 
 	/**

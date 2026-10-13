@@ -89,6 +89,8 @@ public class VehicleRenderer extends EntityRenderer<VehicleEntity, VehicleModels
 		};
 		poseStack.pushPose();
 		poseStack.rotateDegrees(Axis.YP, 180.0F - s.yRot);
+		float sc = s.style == VehicleEntity.STYLE_TRAIN ? 1.0F : s.style == VehicleEntity.STYLE_BUS || s.style == VehicleEntity.STYLE_TRUCK ? 1.1F : 1.25F;
+		poseStack.scale(sc, sc, sc);
 		if ((s.flags & VehicleEntity.FLAG_TUMBLE) != 0) {
 			poseStack.translate(0.0F, 0.5F, 0.0F);
 			poseStack.rotateDegrees(Axis.ZP, s.ageInTicks * 31.0F);

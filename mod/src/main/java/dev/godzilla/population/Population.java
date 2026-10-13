@@ -52,6 +52,8 @@ public final class Population {
 	@Nullable AABB gzBox;
 	@Nullable Vec3 gzPos;
 	boolean alert;
+	/** Debug: when set nobody moves (for screenshots). */
+	public boolean frozen;
 	final double[] tmp = new double[2];
 
 	final List<PersonEntity> people = new ArrayList<>();
@@ -505,7 +507,7 @@ public final class Population {
 			double dx = (r.x[b] - r.x[a]) / len, dz = (r.z[b] - r.z[a]) / len;
 			double w = r.width(a, b);
 			double side = rnd.nextBoolean() ? 1 : -1;
-			double off = w / 2.0 - (big ? 1.25 : 0.65);
+			double off = w / 2.0 - (big ? 1.3 : 0.55);
 			v.setPos(r.x[a] + dx * d + dz * off * side, r.y[a], r.z[a] + dz * d - dx * off * side);
 			v.setYRot((float) (Mth.atan2(-dx, dz) * Mth.RAD_TO_DEG) + (rnd.nextBoolean() ? 0 : 180));
 			v.mode = VehicleEntity.Mode.PARKED;
@@ -631,15 +633,17 @@ public final class Population {
 			maintain(lvl);
 		}
 		buildGrid();
-		stepPeople(lvl);
-		for (int i = 0; i < vehicles.size(); i++) {
-			VehicleEntity v = vehicles.get(i);
-			if (!v.isRemoved()) {
-				v.simulate(this, lvl);
+		if (!frozen) {
+			stepPeople(lvl);
+			for (int i = 0; i < vehicles.size(); i++) {
+				VehicleEntity v = vehicles.get(i);
+				if (!v.isRemoved()) {
+					v.simulate(this, lvl);
+				}
 			}
-		}
-		for (int i = 0; i < trains.size(); i++) {
-			trains.get(i).tick(this, lvl);
+			for (int i = 0; i < trains.size(); i++) {
+				trains.get(i).tick(this, lvl);
+			}
 		}
 		ambience(lvl);
 
@@ -684,7 +688,7 @@ public final class Population {
 			if (a != null) {
 				double dx = p.getX() - a.x, dz = p.getZ() - a.z;
 				double d2 = dx * dx + dz * dz;
-				if (d2 < 220 * 220) {
+				if (d2 < 160 * 160) {
 					near++;
 				}
 				if (d2 > 330 * 330 && people.size() > targetPeople * 0.85 && now % 4 == 0) {
@@ -720,7 +724,7 @@ public final class Population {
 				BlockPos sp = spawns.get(rnd.nextInt(spawns.size()));
 				double dx = sp.getX() + 0.5 - a.x, dz = sp.getZ() + 0.5 - a.z;
 				double d2 = dx * dx + dz * dz;
-				if (d2 < 32 * 32 || d2 > 220 * 220) {
+				if (d2 < 32 * 32 || d2 > 160 * 160) {
 					continue; // never right at Godzilla's feet, and not beyond the action
 				}
 				double x = sp.getX() + 0.5 + (rnd.nextDouble() - 0.5) * 0.8, z = sp.getZ() + 0.5 + (rnd.nextDouble() - 0.5) * 0.8;
