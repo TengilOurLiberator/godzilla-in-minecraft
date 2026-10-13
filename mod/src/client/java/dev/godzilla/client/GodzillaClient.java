@@ -42,6 +42,14 @@ public class GodzillaClient implements ClientModInitializer {
 			GodzillaMod.LOGGER.info("GODZILLA-NET client got ping id={} vr={} worldScale={}", payload.id(), ClientVr.isVrActive(), ClientVr.worldScale());
 			ClientPlayNetworking.send(new PongC2S(payload.id(), payload.serverNanos(), ClientVr.isVrActive()));
 		});
+
+		// One client module per package, mirroring GodzillaMod.
+		dev.godzilla.client.destruction.DestructionClient.init();
+		dev.godzilla.client.game.GameClient.init();
+		dev.godzilla.client.player.PlayerClient.init();
+		dev.godzilla.client.population.PopulationClient.init();
+		dev.godzilla.client.military.MilitaryClient.init();
+		dev.godzilla.client.mothra.MothraClient.init();
 		GodzillaMod.LOGGER.info("godzilla: client init done");
 	}
 }

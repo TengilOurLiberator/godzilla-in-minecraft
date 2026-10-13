@@ -27,6 +27,17 @@ public class GodzillaMod implements ModInitializer {
 		GodzillaEntities.register();
 		GodzillaNetworking.registerCommon();
 		CommandRegistrationCallback.EVENT.register(GodzillaCommands::register);
+		ServerLifecycleEvents.SERVER_STARTED.register(dev.godzilla.core.dev.DevGame::serverStarted);
+
+		// One module per package; each registers its own entities, payloads, subcommands and tick handlers, and installs its
+		// service in dev.godzilla.api.Gz. Order matters only in that city and destruction come first.
+		dev.godzilla.city.CityModule.init();
+		dev.godzilla.destruction.DestructionModule.init();
+		dev.godzilla.game.GameModule.init();
+		dev.godzilla.player.PlayerModule.init();
+		dev.godzilla.population.PopulationModule.init();
+		dev.godzilla.military.MilitaryModule.init();
+		dev.godzilla.mothra.MothraModule.init();
 
 		// Daylight forever, no weather, no mob spawning: the world is a stage.
 		ServerLifecycleEvents.SERVER_STARTED.register(server -> {

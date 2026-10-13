@@ -20,6 +20,15 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 
+import com.mojang.brigadier.builder.LiteralArgumentBuilder;
+import dev.godzilla.api.Cause;
+import dev.godzilla.api.Game;
+import dev.godzilla.api.Gz;
+import dev.godzilla.core.dev.DevGame;
+import net.minecraft.commands.arguments.coordinates.Vec3Argument;
+import net.minecraft.world.phys.Vec3;
+
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
@@ -33,11 +42,22 @@ public final class GodzillaCommands {
 	public static final double SCALE_MIN = 0.0625;
 	public static final double SCALE_MAX = 16.0;
 
+	/** A module's own subcommands of /godzilla. Call {@link #addSubcommands} from the module's init(). */
+	public interface Sub {
+		void add(LiteralArgumentBuilder<CommandSourceStack> root, CommandBuildContext context);
+	}
+
+	private static final List<Sub> SUBS = new ArrayList<>();
+
+	public static void addSubcommands(Sub sub) {
+		SUBS.add(sub);
+	}
+
 	private GodzillaCommands() {
 	}
 
 	public static void register(CommandDispatcher<CommandSourceStack> dispatcher, CommandBuildContext context, Commands.CommandSelection selection) {
-		dispatcher.register(Commands.literal("godzilla")
+		LiteralArgumentBuilder<CommandSourceStack> root = Commands.literal("godzilla")
 				.requires(Commands.hasPermission(Commands.LEVEL_GAMEMASTERS))
 				.then(Commands.literal("scale")
 						.then(Commands.argument("value", DoubleArgumentType.doubleArg())
@@ -61,7 +81,85 @@ public final class GodzillaCommands {
 				.then(Commands.literal("ping")
 						.executes(c -> ping(c.getSource(), self(c.getSource())))
 						.then(Commands.argument("targets", EntityArgument.players())
-								.executes(c -> ping(c.getSource(), EntityArgument.getPlayers(c, "targets"))))));
+								.executes(c -> ping(c.getSource(), EntityArgument.getPlayers(c, "targets")))))
+				// the run: /godzilla start [player], /godzilla stop, /godzilla stamp (place or repair the city)
+				.then(Commands.literal("start")
+						.executes(c -> start(c.getSource(), self(c.getSource())))
+						.then(Commands.argument("targets", EntityArgument.players())
+								.executes(c -> start(c.getSource(), EntityArgument.getPlayers(c, "targets")))))
+				.then(Commands.literal("stop").executes(c -> {
+					Gz.game().stop();
+					return 1;
+				}))
+				.then(Commands.literal("stamp").executes(c -> {
+					long t0 = System.nanoTime();
+					Gz.city().stamp(c.getSource().getLevel());
+					c.getSource().sendSuccess(() -> Component.literal("city stamped in %.0f ms".formatted((System.nanoTime() - t0) / 1e6)), false);
+					return 1;
+				}))
+				.then(Commands.literal("status").executes(c -> {
+					Game g = Gz.game();
+					ServerPlayer p = g.godzilla();
+					c.getSource().sendSuccess(() -> Component.literal("phase %s (%d ticks), run %d ticks, godzilla %s, score %d, health %.0f/%.0f, city %s (%d buildings)".formatted(
+							g.phase(), g.phaseTicks(), g.runTicks(), p == null ? "nobody" : p.getGameProfile().name(), g.score(),
+							g.godzillaHealth(), g.godzillaMaxHealth(), Gz.city().stamped() ? "stamped" : "not stamped", Gz.city().data().buildings().size())), false);
+					return 1;
+				}))
+				// dev tools: /godzilla smash <pos> <radius>, /godzilla explode <pos> <radius>
+				.then(Commands.literal("smash")
+						.then(Commands.argument("pos", Vec3Argument.vec3())
+								.then(Commands.argument("radius", DoubleArgumentType.doubleArg(0.5, 64))
+										.executes(c -> {
+											int n = Gz.destruction().smashSphere(c.getSource().getLevel(), Vec3Argument.getVec3(c, "pos"),
+													DoubleArgumentType.getDouble(c, "radius"), new Vec3(0.6, 0.4, 0), Cause.HAND);
+											c.getSource().sendSuccess(() -> Component.literal("smashed " + n + " blocks"), false);
+											return n;
+										}))))
+				.then(Commands.literal("explode")
+						.then(Commands.argument("pos", Vec3Argument.vec3())
+								.then(Commands.argument("radius", DoubleArgumentType.doubleArg(0.5, 64))
+										.executes(c -> {
+											int n = Gz.destruction().explode(c.getSource().getLevel(), Vec3Argument.getVec3(c, "pos"),
+													DoubleArgumentType.getDouble(c, "radius"), Cause.EXPLOSION);
+											c.getSource().sendSuccess(() -> Component.literal("exploded " + n + " blocks"), false);
+											return n;
+										}))))
+				// only with the stand-in game (before dev.godzilla.game exists): /godzilla dev phase <PHASE> [player]
+				.then(Commands.literal("dev")
+						.then(Commands.literal("phase")
+								.then(Commands.argument("phase", StringArgumentType.word())
+										.executes(c -> devPhase(c.getSource(), StringArgumentType.getString(c, "phase"), null))
+										.then(Commands.argument("targets", EntityArgument.players())
+												.executes(c -> devPhase(c.getSource(), StringArgumentType.getString(c, "phase"),
+														EntityArgument.getPlayers(c, "targets").iterator().next()))))));
+		for (Sub sub : SUBS) {
+			sub.add(root, context);
+		}
+		dispatcher.register(root);
+	}
+
+	private static int start(CommandSourceStack source, Collection<ServerPlayer> targets) {
+		ServerPlayer p = targets.iterator().next();
+		Gz.game().start(p);
+		source.sendSuccess(() -> Component.literal("run started for " + p.getGameProfile().name()), false);
+		return 1;
+	}
+
+	private static int devPhase(CommandSourceStack source, String name, ServerPlayer player) {
+		if (!(Gz.game() instanceof DevGame dev)) {
+			source.sendFailure(Component.literal("the real game is installed; use /godzilla start and its own commands"));
+			return 0;
+		}
+		Game.Phase phase;
+		try {
+			phase = Game.Phase.valueOf(name.toUpperCase(java.util.Locale.ROOT));
+		} catch (IllegalArgumentException e) {
+			source.sendFailure(Component.literal("phase: IDLE | RISE | RAMPAGE | MOTHRA | VICTORY | DEFEAT"));
+			return 0;
+		}
+		dev.force(phase, player);
+		source.sendSuccess(() -> Component.literal("stand-in game: phase " + phase), false);
+		return 1;
 	}
 
 	private static Collection<ServerPlayer> self(CommandSourceStack source) throws com.mojang.brigadier.exceptions.CommandSyntaxException {
