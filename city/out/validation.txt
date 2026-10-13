@@ -1,0 +1,15 @@
+ok    gzc round-trips: size (512, 128, 640) origin (-256, 28, -320) palette 147 entries, 41943040 cells
+ok    249 building boxes, none overlap
+      unowned above-ground blocks (scenery: trees, street lamps): 54334; others: none
+ok    buildings by kind (count, blocks min/median/max): apartment 21 (1690/2508/4355); bridge 11 (62/62/10823); house 65 (213/490/919); industrial 36 (68/890/1547); landmark 10 (1368/4905/13732); office 36 (1206/2284/5253); shop 59 (70/918/1990); station 1 (3669/3669/3669); tower 10 (2498/6886/9900)
+ok    total owned blocks 404290
+      floating (not connected to the ground) blocks: 181 in 49 fragments; largest: [(12, 'industrial', 'Port crane', (196, 73, 453)), (12, 'industrial', 'Port crane', (170, 73, 453)), (12, 'industrial', 'Port crane', (126, 73, 442)), (12, 'industrial', 'Port crane', (90, 73, 442)), (11, 'landmark', 'Metropolitan Government Twin Towers', (269, 111, 184)), (8, 'bridge', 'Elevated rail West', (184, 76, 212)), (8, 'bridge', 'Elevated rail West', (173, 76, 212)), (8, 'bridge', 'Elevated rail West', (162, 76, 212))]
+ok    700 sidewalk spawns all on free paving
+ok    tankSpawns: 13, all on clear carriageway
+ok    maserSpawns: 6, all on clear carriageway
+ok    5 ship spawns on open deep water
+ok    road graph connected: 69 nodes, 119 edges
+ok    every road edge runs over clear asphalt (3 blocks of headroom)
+ok    player start (44,29,245): floor top y=28, 34 blocks of water above, floor flat within 12 blocks
+ok    outer 10-block ring is exactly the flat world (stone to y=28, water 29..62, air above)
+ok    layer y=28 is all stone
