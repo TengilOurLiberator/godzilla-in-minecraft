@@ -47,12 +47,14 @@ public class VehicleRenderer extends EntityRenderer<VehicleEntity, VehicleModels
 
 	@Override
 	public void extractRenderState(VehicleEntity e, VehicleModels.State s, float partialTicks) {
+		long t0 = System.nanoTime();
 		super.extractRenderState(e, s, partialTicks);
 		s.yRot = Mth.rotLerp(partialTicks, e.yRotO, e.getYRot());
 		s.style = e.style();
 		s.color = e.color();
 		s.flags = e.flags();
 		s.tickCount = e.tickCount;
+		PopulationClient.renderNanos += System.nanoTime() - t0;
 	}
 
 	private Identifier texture(int style, int color, int variant) {
@@ -72,6 +74,7 @@ public class VehicleRenderer extends EntityRenderer<VehicleEntity, VehicleModels
 
 	@Override
 	public void submit(VehicleModels.State s, PoseStack poseStack, SubmitNodeCollector collector, CameraRenderState camera) {
+		long t0 = System.nanoTime();
 		int variant = 0;
 		boolean lit = false;
 		if (s.style == VehicleEntity.STYLE_POLICE && (s.flags & VehicleEntity.FLAG_SIREN) != 0) {
@@ -102,5 +105,6 @@ public class VehicleRenderer extends EntityRenderer<VehicleEntity, VehicleModels
 		collector.submitModel(model, s, poseStack, texture(s.style, s.color, variant), lit ? FULL_BRIGHT : s.lightCoords,
 				OverlayTexture.NO_OVERLAY, s.outlineColor);
 		poseStack.popPose();
+		PopulationClient.renderNanos += System.nanoTime() - t0;
 	}
 }

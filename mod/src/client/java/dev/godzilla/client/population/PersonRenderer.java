@@ -41,6 +41,7 @@ public class PersonRenderer extends EntityRenderer<PersonEntity, PersonModel.Sta
 
 	@Override
 	public void extractRenderState(PersonEntity e, PersonModel.State s, float partialTicks) {
+		long t0 = System.nanoTime();
 		super.extractRenderState(e, s, partialTicks);
 		s.yRot = Mth.rotLerp(partialTicks, e.yRotO, e.getYRot());
 		s.walkPhase = Mth.lerp(partialTicks, e.walkPhaseO, e.walkPhase);
@@ -48,10 +49,12 @@ public class PersonRenderer extends EntityRenderer<PersonEntity, PersonModel.Sta
 		s.panic = e.panicking();
 		s.flung = e.flung();
 		s.outfit = e.outfit();
+		PopulationClient.renderNanos += System.nanoTime() - t0;
 	}
 
 	@Override
 	public void submit(PersonModel.State s, PoseStack poseStack, SubmitNodeCollector collector, CameraRenderState camera) {
+		long t0 = System.nanoTime();
 		poseStack.pushPose();
 		poseStack.rotateDegrees(Axis.YP, 180.0F - s.yRot);
 		poseStack.scale(SCALE, SCALE, SCALE);
@@ -65,5 +68,6 @@ public class PersonRenderer extends EntityRenderer<PersonEntity, PersonModel.Sta
 		poseStack.translate(0.0F, -1.501F, 0.0F);
 		collector.submitModel(model, s, poseStack, TEXTURES[s.outfit % TEXTURES.length], s.lightCoords, OverlayTexture.NO_OVERLAY, s.outlineColor);
 		poseStack.popPose();
+		PopulationClient.renderNanos += System.nanoTime() - t0;
 	}
 }

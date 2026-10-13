@@ -148,6 +148,7 @@ final class Train {
 			supportCheck = 0;
 			for (VehicleEntity v : cars) {
 				if (!Terrain.solidAt(level, v.getX(), v.getY() - 0.45, v.getZ())) {
+					Population.log("no support under a car at " + v.position());
 					derail(p, level, Cause.COLLAPSE, Vec3.ZERO);
 					return;
 				}
@@ -161,6 +162,7 @@ final class Train {
 		}
 		derailed = true;
 		p.derailments++;
+		Population.log("train derails: " + cause + " at c=" + c + " speed=" + speed + " cars=" + cars.size());
 		double tx = 0, tz = 0;
 		if (!cars.isEmpty()) {
 			sample(c, tmp);

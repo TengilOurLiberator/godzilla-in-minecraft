@@ -297,7 +297,7 @@ public class VehicleEntity extends Entity implements Smashable {
 			setFlag(FLAG_BRAKE, braking);
 		}
 
-		setPos(getX() + fx * speed, r.y[ea], getZ() + fz * speed);
+		setPos(getX() + fx * speed, r.y[ea] + (r.y[eb] - r.y[ea]) * Mth.clamp(s / len, 0, 1), getZ() + fz * speed);
 
 		// along-edge progress, edge change at the node
 		s = (getX() - ax) * dx + (getZ() - az) * dz;

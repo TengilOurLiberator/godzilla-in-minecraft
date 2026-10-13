@@ -200,9 +200,12 @@ def car(name, base, kind, variant):
     for i in (0, 10):
         body.rectf("back", i, 1, 3, 2, tl)
     body.rectf("back", 5, 3, 3, 1, rgb(240, 240, 240))
-    if lit:  # hazard flashers on the sides, front and back
+    if lit:  # hazard flashers on the sides, front and back, and big amber squares on the hood and boot (seen from above)
         body.side_rect(0, 1, 2, 2, rgb(255, 170, 0))
         body.side_rect(22, 1, 2, 2, rgb(255, 170, 0))
+        for (ti, tj) in ((0, 20), (9, 20), (0, 0), (9, 0)):
+            body.rectf("top", ti, tj, 4, 4, rgb(255, 150, 0))
+            body.rectf("top", ti + 1, tj + 1, 2, 2, rgb(255, 255, 150))
     # cabin
     cabin.fill(b)
     cabin.face_fill("top", shade(b, 1.2))

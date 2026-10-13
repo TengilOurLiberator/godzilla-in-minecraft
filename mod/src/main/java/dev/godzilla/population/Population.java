@@ -71,7 +71,7 @@ public final class Population {
 	private long nextRiseTrainCheck;
 
 	// ---- stats
-	long deaths, explosions, derailments;
+	long deaths, explosions, derailments, screams, honks, skids, crowdLoops, alarms, sirens;
 	double msEma;
 	double msMax;
 	int nearPeople;
@@ -122,17 +122,20 @@ public final class Population {
 		grid.clear();
 		java.util.Arrays.fill(trainRespawn, 0);
 		activeSince = -1;
-		alert = false;
-		deaths = explosions = derailments = 0;
+		deaths = explosions = derailments = screams = honks = skids = crowdLoops = alarms = sirens = 0;
 		msEma = msMax = 0;
 		// leftovers in the world (an entity added behind our back, or surviving a lost reference)
-		ServerLevel lvl = Gz.game().level();
-		if (lvl != null) {
-			for (net.minecraft.world.entity.Entity e : lvl.getAllEntities()) {
-				if (e instanceof PersonEntity || e instanceof VehicleEntity) {
-					e.discard();
+		try {
+			ServerLevel lvl = Gz.game().level();
+			if (lvl != null && lvl.getServer().isRunning()) {
+				for (net.minecraft.world.entity.Entity e : lvl.getAllEntities()) {
+					if (e instanceof PersonEntity || e instanceof VehicleEntity) {
+						e.discard();
+					}
 				}
 			}
+		} catch (RuntimeException e) {
+			Population.log("reset: could not sweep leftovers: " + e);
 		}
 	}
 
@@ -142,10 +145,6 @@ public final class Population {
 	}
 
 	private void onPhase(GzEvents.PhaseChange c) {
-		alert = c.to() == Game.Phase.RAMPAGE || c.to() == Game.Phase.MOTHRA;
-		if (c.to() == Game.Phase.RAMPAGE) {
-			nextSirenAt = now;
-		}
 		if (c.to() == Game.Phase.RISE || (c.from() == Game.Phase.IDLE && c.to().playing())) {
 			activeSince = now;
 		}
@@ -339,6 +338,7 @@ public final class Population {
 			return;
 		}
 		screamTok -= 1;
+		screams++;
 		lvl.playSound(null, pe.getX(), pe.getY() + 0.4, pe.getZ(), GodzillaSounds.PEOPLE_SCREAM, SoundSource.NEUTRAL,
 				2.6F, 0.8F + rnd.nextFloat() * 0.85F);
 	}
@@ -356,6 +356,7 @@ public final class Population {
 			return;
 		}
 		honkTok -= 1;
+		honks++;
 		lvl.playSound(null, v.getX(), v.getY() + 0.5, v.getZ(), GodzillaSounds.CAR_HORN, SoundSource.NEUTRAL, 3.2F,
 				v.style() == VehicleEntity.STYLE_BUS || v.style() == VehicleEntity.STYLE_TRUCK ? 0.7F : 0.9F + rnd.nextFloat() * 0.4F);
 	}
@@ -365,6 +366,7 @@ public final class Population {
 			return;
 		}
 		honkTok -= 1;
+		skids++;
 		lvl.playSound(null, v.getX(), v.getY() + 0.3, v.getZ(), GodzillaSounds.CAR_SKID, SoundSource.NEUTRAL, 3.0F, 0.9F + rnd.nextFloat() * 0.3F);
 	}
 
@@ -381,6 +383,7 @@ public final class Population {
 			return false;
 		}
 		alarmTok -= 1;
+		alarms++;
 		return true;
 	}
 
@@ -389,6 +392,7 @@ public final class Population {
 			return false;
 		}
 		sirenTok -= 1;
+		sirens++;
 		return true;
 	}
 
@@ -606,6 +610,12 @@ public final class Population {
 			return;
 		}
 		boolean active = active();
+		Game.Phase ph = Gz.game().phase();
+		boolean wantAlert = ph == Game.Phase.RAMPAGE || ph == Game.Phase.MOTHRA;
+		if (wantAlert && !alert) {
+			nextSirenAt = now; // the city siren starts when the rampage begins
+		}
+		alert = wantAlert;
 		if (!active && people.isEmpty() && vehicles.isEmpty()) {
 			return;
 		}
@@ -717,7 +727,7 @@ public final class Population {
 		}
 		// ---- people
 		boolean surge = activeSince >= 0 && now - activeSince < 120;
-		int quota = surge ? 40 : 8;
+		int quota = surge ? 20 : 8;
 		List<BlockPos> spawns = Gz.city().data().sidewalkSpawns();
 		if (!spawns.isEmpty() && nearPeople < targetPeople && people.size() < maxPeople) {
 			for (int tries = 0; tries < 60 && quota > 0; tries++) {
@@ -844,6 +854,7 @@ public final class Population {
 			Long last = crowdLast.get(e.getKey());
 			if (last == null || now - last >= 118) {
 				crowdLast.put(e.getKey(), now);
+				crowdLoops++;
 				lvl.playSound(null, x, Gz.city().data().groundY() + 1.5, z, GodzillaSounds.PEOPLE_CROWD_PANIC_LOOP, SoundSource.NEUTRAL,
 						Math.min(4.0F, 2.0F + c[0] / 20.0F), 1.0F);
 			}
@@ -864,10 +875,15 @@ public final class Population {
 				flung++;
 			}
 		}
-		int driving = 0, parked = 0, flying = 0, alarm = 0, trainCars = 0;
+		int driving = 0, parked = 0, flying = 0, alarm = 0, trainCars = 0, stopped = 0;
 		for (VehicleEntity v : vehicles) {
 			switch (v.mode) {
-				case DRIVE -> driving++;
+				case DRIVE -> {
+					driving++;
+					if (v.speed < 0.02) {
+						stopped++;
+					}
+				}
 				case PARKED -> {
 					parked++;
 					if ((v.flags() & VehicleEntity.FLAG_ALARM) != 0) {
@@ -878,9 +894,9 @@ public final class Population {
 				case TRAIN -> trainCars++;
 			}
 		}
-		return "people %d (near %d, panicking %d, flung %d) | vehicles driving %d, parked %d (alarm %d), flying %d | trains %d (%d cars) | threats %d | deaths %d, explosions %d, derailments %d | population %.3f ms/tick avg, %.2f max | server %.2f ms/tick | phase %s"
-				.formatted(people.size(), nearPeople, panic, flung, driving, parked, alarm, flying, trains.size(), trainCars, threats.size(),
-						deaths, explosions, derailments, msEma, msMax, server.getAverageTickTimeNanos() / 1e6, Gz.game().phase());
+		return "people %d (near %d, panicking %d, flung %d) | vehicles driving %d (stopped %d), parked %d (alarm %d), flying %d | trains %d (%d cars) | threats %d | deaths %d, explosions %d, derailments %d | sounds: screams %d, honks %d, skids %d, alarms %d, police sirens %d, crowd loops %d | population %.3f ms/tick avg, %.2f max | server %.2f ms/tick | phase %s"
+				.formatted(people.size(), nearPeople, panic, flung, driving, stopped, parked, alarm, flying, trains.size(), trainCars, threats.size(),
+						deaths, explosions, derailments, screams, honks, skids, alarms, sirens, crowdLoops, msEma, msMax, server.getAverageTickTimeNanos() / 1e6, Gz.game().phase());
 	}
 
 	void panicAll(double x, double z, double radius, int ttl) {
