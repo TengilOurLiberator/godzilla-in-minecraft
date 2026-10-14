@@ -21,7 +21,7 @@
 * **BreathGauge**: `client.game.BreathGauge.setSource(client.player.BreathGauge::value)` in `PlayerClient.init`.
 * **Mothra**: only hands, tail and the beam hurt her (BODY and FOOT are ignored: a passive Godzilla was swatting her out of the sky by standing
   there); her gust only blows civilians (it exploded vehicles and killed units, and the score of all of that went to the player); max hit
-  points 850; her damage to Godzilla is `GameImpl.DAMAGE_SCALE` (1.3) plus `DAMAGE_RAMP_PER_MINUTE` (0.3) per minute of the fight.
+  points 850; her damage to Godzilla is `GameImpl.DAMAGE_SCALE` (1.0) plus `DAMAGE_RAMP_PER_MINUTE` (0.25) per minute of the fight.
 * **Score**: rank thresholds 0 / 40k / 120k / 260k / 480k / 780k. A scripted player that walks through the valuable buildings and swipes
   and breathes all the time makes 750k to 880k; an unskilled player should land in the middle ranks.
 * **Budgets**: `core.GodzillaConfig` reads `config/godzilla.properties` (client and server folders each): debris cap, adaptive debris, pieces

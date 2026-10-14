@@ -11,7 +11,14 @@ $root = $PSScriptRoot
 $python = "D:\voice-assistant\.venv\Scripts\python.exe"
 $rcon = Join-Path $root "tools\rcon.py"
 
-function Test-Server { & $python -I $rcon "list" *> $null; return ($LASTEXITCODE -eq 0) }
+function Test-Server {
+    $old = $ErrorActionPreference
+    $ErrorActionPreference = "Continue"      # the RCON script writes to stderr while the server is still starting
+    & $python -I $rcon "list" 2> $null | Out-Null
+    $ok = ($LASTEXITCODE -eq 0)
+    $ErrorActionPreference = $old
+    return $ok
+}
 
 if (Test-Server) {
     Write-Host "A Godzilla server already answers on RCON (port 25577). Close its window (or run tools\server.ps1 -Stop) before starting another."
@@ -48,13 +55,13 @@ do {
     if ((Get-Date) -gt $deadline) { throw "the server did not answer within 5 minutes; look at its window and server\logs\latest.log" }
 } until (Test-Server)
 
-# RCON answers a moment before the city is in the world: wait for the stamp (or the note that the world already has it)
+# RCON answers a moment before the city is in the world: wait for the game module's ready line (after the stamp or restore)
 $log = Join-Path $root "server\logs\latest.log"
 $deadline = (Get-Date).AddMinutes(3)
 do {
     Start-Sleep -Seconds 1
     $text = if (Test-Path $log) { Get-Content $log -Raw -ErrorAction SilentlyContinue } else { "" }
-} until ($text -match "godzilla city: (stamped|this world already holds)" -or (Get-Date) -gt $deadline)
+} until ($text -match "godzilla game: ready" -or (Get-Date) -gt $deadline)
 
 Write-Host ""
 Write-Host "Server is up ($(if ($Offline) { 'OFFLINE mode, test clients only' } else { 'online mode' })), port 25567."

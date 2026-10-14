@@ -31,9 +31,9 @@ import java.util.UUID;
 public final class GameImpl implements Game {
 	public static final float MAX_HEALTH = 100f;
 	/** Everything Mothra does to Godzilla is multiplied by this (tuned so a passive player falls after about two minutes). */
-	public static final float DAMAGE_SCALE = 1.3f;
+	public static final float DAMAGE_SCALE = 1.0f;
 	/** The longer the fight lasts, the harder she hits (added to the scale per minute of the MOTHRA phase), so a passive player does fall. */
-	public static final float DAMAGE_RAMP_PER_MINUTE = 0.3f;
+	public static final float DAMAGE_RAMP_PER_MINUTE = 0.25f;
 	/** A combo breaks after this many ticks without destruction. */
 	public static final int COMBO_QUIET_TICKS = 50;
 	/** Chain value needed for multiplier 1, 2, 3 ... */
@@ -85,11 +85,36 @@ public final class GameImpl implements Game {
 	public void serverStarted(MinecraftServer s) {
 		server = s;
 		BestScore.load(s);
+		// the last run left the city wrecked in the saved world: put it back before anybody joins
+		java.nio.file.Path dirty = s.getWorldPath(net.minecraft.world.level.storage.LevelResource.ROOT).resolve("data").resolve("godzilla_dirty");
+		if (java.nio.file.Files.exists(dirty)) {
+			try {
+				Gz.city().stamp(s.overworld());
+				java.nio.file.Files.deleteIfExists(dirty);
+			} catch (Exception e) {
+				GodzillaMod.LOGGER.warn("godzilla game: could not restore the city", e);
+			}
+		}
+		GodzillaMod.LOGGER.info("godzilla game: ready");
 		// sweep entities of ours that an earlier crash may have written to the world
 		for (net.minecraft.world.entity.Entity e : s.overworld().getAllEntities()) {
 			if (e instanceof SmashSign || e instanceof Popups.PopupText) {
 				e.discard();
 			}
+		}
+	}
+
+	/** A run is on: the saved world no longer holds the clean city (see serverStarted). */
+	private void markDirty() {
+		if (server == null) {
+			return;
+		}
+		try {
+			java.nio.file.Path f = server.getWorldPath(net.minecraft.world.level.storage.LevelResource.ROOT).resolve("data").resolve("godzilla_dirty");
+			java.nio.file.Files.createDirectories(f.getParent());
+			java.nio.file.Files.writeString(f, "1");
+		} catch (Exception e) {
+			GodzillaMod.LOGGER.warn("godzilla game: cannot write the dirty flag", e);
 		}
 	}
 
@@ -242,6 +267,7 @@ public final class GameImpl implements Game {
 		GzEvents.RESET.fire(this);
 		popups.clear();
 		Gz.city().stamp(level);
+		markDirty();
 		CityData.Start st = Gz.city().data().playerStart();
 		player.teleportTo(level, st.pos().x, st.pos().y, st.pos().z, Set.<Relative>of(), st.yaw(), 0f, true);
 		player.setDeltaMovement(Vec3.ZERO);
