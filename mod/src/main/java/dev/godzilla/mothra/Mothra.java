@@ -38,7 +38,7 @@ import java.util.List;
  */
 public class Mothra extends Entity implements Smashable {
 	// ---- tuning --------------------------------------------------------------------------------------------------
-	public static final float MAX_HP = 700f;
+	public static final float MAX_HP = 850f;
 	static final double CIRCLE_RADIUS = 44;
 	static final double CIRCLE_SPEED = 0.95; // blocks per tick along the circle
 	static final float BEAM_DAMAGE_PER_POWER = 0.85f;

@@ -31,9 +31,9 @@ import java.util.UUID;
 public final class GameImpl implements Game {
 	public static final float MAX_HEALTH = 100f;
 	/** Everything Mothra does to Godzilla is multiplied by this (tuned so a passive player falls after about two minutes). */
-	public static final float DAMAGE_SCALE = 1.4f;
+	public static final float DAMAGE_SCALE = 1.3f;
 	/** The longer the fight lasts, the harder she hits (added to the scale per minute of the MOTHRA phase), so a passive player does fall. */
-	public static final float DAMAGE_RAMP_PER_MINUTE = 0.5f;
+	public static final float DAMAGE_RAMP_PER_MINUTE = 0.3f;
 	/** A combo breaks after this many ticks without destruction. */
 	public static final int COMBO_QUIET_TICKS = 50;
 	/** Chain value needed for multiplier 1, 2, 3 ... */

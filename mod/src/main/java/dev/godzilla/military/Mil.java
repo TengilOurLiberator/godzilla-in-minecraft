@@ -128,10 +128,21 @@ public final class Mil {
 	 *
 	 * @param strength 0..1 as for {@link dev.godzilla.api.Fx#hitFlash}
 	 */
+	private static long lastFlashTick = -1000;
+	private static long lastShakeTick = -1000;
+
 	public static void hitBody(ServerLevel level, ServerPlayer g, Vec3 point, Vec3 from, float strength, boolean heavy) {
 		hitsOnBody++;
-		Gz.fx().hitFlash(g, from, strength);
-		Gz.fx().shake(g, Math.min(1.0F, strength * 0.6F), heavy ? 10 : 4);
+		// hundreds of shells hit him in a run: a flash at most every 0.7 s (maser beams excepted), shake at most every quarter second
+		long gt = level.getGameTime();
+		if (gt - lastFlashTick >= 14 || strength >= 0.8F) {
+			lastFlashTick = gt;
+			Gz.fx().hitFlash(g, from, strength);
+		}
+		if (gt - lastShakeTick >= 5) {
+			lastShakeTick = gt;
+			Gz.fx().shake(g, Math.min(1.0F, strength * 0.6F), heavy ? 10 : 4);
+		}
 		if (heavy) {
 			sound(level, point, GodzillaSounds.MIL_SHELL_HIT, 120, 0.85F + level.getRandom().nextFloat() * 0.3F);
 		} else {
